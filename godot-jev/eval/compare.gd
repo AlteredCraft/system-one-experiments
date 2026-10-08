@@ -8,7 +8,25 @@ extends RefCounted
 
 const Session := preload("res://tools/session.gd")
 const World := preload("res://demo/world.gd")
+const JevNode := preload("res://addons/jev/jev.gd")
 const WORLD := "res://demo/world.json"
+
+
+## The backends to compare, name -> HttpDecider settings: TypeSafe Jev and the
+## Open Jev server at OPENJEV_URL, then one more Open Jev server for each
+## `--openjev name=url`. Returns {} when one of those can't be read.
+static func backends(args: PackedStringArray, env: Dictionary) -> Dictionary:
+	var out := {"typesafe": JevNode.backend_config("typesafe", env), "openjev": JevNode.backend_config("openjev", env)}
+	for i in args.size():
+		if args[i] != "--openjev":
+			continue
+		var spec := args[i + 1].split("=", true, 1) if i + 1 < args.size() else PackedStringArray()
+		if spec.size() != 2 or spec[0].is_empty() or spec[1].is_empty() or out.has(spec[0]):
+			return {}
+		var config := JevNode.backend_config("openjev", {"OPENJEV_URL": spec[1], "OPENJEV_TOKEN": env.get("OPENJEV_TOKEN", "")})
+		config.label = "Open Jev %s" % spec[0]
+		out[spec[0]] = config
+	return out
 
 
 ## `parsers` maps a backend name to a Parser. Returns one row per line, round
@@ -37,6 +55,7 @@ static func _row(backend: String, round: int, line: Dictionary, room: String, re
 		"options": result.get("options", []).map(func(o): return o.id),
 		"confidence": result.get("confidence", 0.0), "ms": ms,
 		"top": ranked[0][0] if not ranked.is_empty() else "", "ranked": ranked,
+		"offered": stats.get("offered", 0),
 		"model": stats.get("model", ""), "reason": result.get("reason", ""),
 		"landed": landed(line.means, result),
 	}
@@ -82,6 +101,15 @@ static func agreement(rows: Array, a: String, b: String) -> Array:
 			total += 1
 			same += int(b_tops[key] == r.top)
 	return [same, total]
+
+
+## agreement() for every pair of `names`, keyed "a|b".
+static func agreements(rows: Array, names: Array) -> Dictionary:
+	var out := {}
+	for i in names.size():
+		for j in range(i + 1, names.size()):
+			out["%s|%s" % [names[i], names[j]]] = agreement(rows, names[i], names[j])
+	return out
 
 
 ## Nearest rank: the smallest value with at least p% of values at or below it.

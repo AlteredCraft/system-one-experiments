@@ -10,9 +10,11 @@ folder `/docs`.
 | Path | What it is |
 | --- | --- |
 | `index.html` | Landing page: what System One models are, the four experiments, the protocol, the notebook log |
-| `assets/` | Shared styles (`site.css`) and the theme toggle (`site.js`) |
-| `model-router/` | The 2026-10-08 model-router run: `index.html`, `results.css`, `app.js`, and generated `data.js` |
+| `assets/` | Shared by every page: styles (`site.css`) and the theme toggle (`site.js`). Shared by the results pages: `results.css`, and `results.js` (tooltips, chart helpers, the side contents) |
+| `model-router/` | The 2026-10-08 model-router run: `index.html`, `app.js`, and generated `data.js` |
+| `godot-jev/` | The 2026-10-08 three-model godot-jev run: `index.html`, `page.css`, `app.js`, a screenshot of the game, and generated `data.js` |
 | `tools/build-model-router-data.mjs` | Builds `model-router/data.js` |
+| `tools/build-godot-jev-data.gd` | Builds `godot-jev/data.js` |
 
 `model-router/data.js` is generated, not written by hand. The script reads the three recorded runs in
 `model-router/eval/results-2026-10-08T*.json`, routes every answer with model-router's own policy
@@ -21,6 +23,17 @@ ones each run saved. After a change to those runs or to the policy, regenerate i
 
 ```bash
 node docs/tools/build-model-router-data.mjs
+```
+
+`godot-jev/data.js` is generated the same way, by a Godot script, because the policy it replays is
+the game's parser. It reads `godot-jev/eval/results-2026-10-08T134205.json`, puts every recorded
+answer back through `demo/parser.gd` in the game state where it was asked, at the run's thresholds
+and at every setting the page's sliders reach, and refuses to write if an outcome or a summary
+differs from what the run saved:
+
+```bash
+godot --headless --path godot-jev --import
+godot --headless --path godot-jev --script ../docs/tools/build-godot-jev-data.gd
 ```
 
 To preview locally: `python3 -m http.server --directory docs`.

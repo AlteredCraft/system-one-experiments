@@ -254,7 +254,7 @@
       /* Specimen cards */
       .specimens {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 20px;
       }
       .specimen {
@@ -346,21 +346,15 @@
         margin-top: 6px;
         line-height: 1.4;
       }
-      @media (max-width: 1000px) {
-        .specimens {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-        .specimens > .specimen:last-child {
-          grid-column: 1 / -1;
-        }
+      .timing-note {
+        margin: 0;
+        font-size: 0.78rem;
+        color: var(--muted);
       }
       @media (max-width: 860px) {
         .specimens,
         .specimen.featured .grid {
           grid-template-columns: 1fr;
-        }
-        .specimens > .specimen:last-child {
-          grid-column: auto;
         }
       }
       @media (max-width: 480px) {
@@ -532,7 +526,7 @@
           <a class="hide-sm" href="#experiments">Experiments</a>
           <a class="hide-sm" href="#protocol">Protocol</a>
           <a class="hide-sm" href="#notebook">Notebook</a>
-          <a href="model-router/">Latest results</a>
+          <a href="godot-jev/">Latest results</a>
           <a class="hide-sm" href="https://github.com/AlteredCraft/system-one-experiments">GitHub</a>
           <button class="theme-toggle" type="button" aria-label="Switch theme">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -555,8 +549,9 @@
               for a parser, a grader, a release manager, or the choice of which model to call.
             </p>
             <div class="ctas">
-              <a class="cta primary" href="model-router/">Read the latest results →</a>
-              <a class="cta" href="#experiments">See all four experiments</a>
+              <a class="cta primary" href="godot-jev/">Read the latest results →</a>
+              <a class="cta" href="model-router/">Routing results</a>
+              <a class="cta" href="#experiments">All four experiments</a>
             </div>
           </div>
 
@@ -575,7 +570,8 @@
               </div>
             </div>
             <figcaption class="src" id="inst-cap">
-              Replaying real answers from TypeSafe Jev (<code>jev-1.13.0</code>), model-router run of 2026-10-08.
+              Replaying real answers from TypeSafe Jev (<code>jev-1.13.0</code>),
+              <a href="model-router/">model-router run of 2026-10-08</a>.
             </figcaption>
           </figure>
         </div>
@@ -669,9 +665,10 @@
                     </div>
                     <div class="finding">
                       <div class="n">93<small style="font-size: 0.5em"> ms</small></div>
-                      <div class="t">median decision, TypeSafe Jev (Flash 9B 181, 27B 567)</div>
+                      <div class="t">median decision, TypeSafe Jev hosted (on one laptop: Flash 9B 181, 27B 567)</div>
                     </div>
                   </div>
+                  <p class="timing-note">Timings describe this setup, <a href="#limits">not how fast the models are</a>.</p>
                   <div class="links">
                     <a class="cta primary" href="model-router/">Walk through the results →</a>
                     <a class="cta" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/model-router">Code</a>
@@ -680,28 +677,45 @@
               </div>
             </article>
 
-            <article class="card specimen reveal">
+            <article class="card specimen featured reveal">
               <div class="head">
                 <span class="label">EXP-02 · godot-jev · Godot 4.7</span>
-                <span class="stamp live">Live · 2 models</span>
+                <span class="stamp live">Live · 3 models</span>
               </div>
-              <h3>The Sunken Crypt</h3>
-              <p class="idea">
-                A dungeon crawl whose parser understands whatever you type but can only choose moves the author wrote.
-                Each turn, the possible moves become one Choice, plus "none of these".
-              </p>
-              <blockquote>
-                Players type naturally with few dead ends, the game stays fully authored, and it's fast enough to feel
-                like a parser, not a chat.
-              </blockquote>
-              <dl>
-                <dt>2026-09-30</dt>
-                <dd>TypeSafe Jev and Open Jev both landed 48 of 48 turns and ranked the same move first on all 48.</dd>
-                <dt>Speed</dt>
-                <dd>p95 502 ms hosted, 683 ms local. Neither met the 500 ms bar.</dd>
-              </dl>
-              <div class="links">
-                <a class="btn" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/godot-jev">README &amp; code</a>
+              <div class="grid">
+                <div>
+                  <h3>The Sunken Crypt</h3>
+                  <p class="idea" style="margin-top: 10px">
+                    A dungeon crawl whose parser understands whatever you type but can only choose moves the author
+                    wrote. Each turn, the possible moves become one Choice, plus "none of these".
+                  </p>
+                  <blockquote style="margin-top: 14px">
+                    Players type naturally with few dead ends, the game stays fully authored, and it's fast enough to
+                    feel like a parser, not a chat.
+                  </blockquote>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <span class="label">Three-model run · 2026-10-08 · 16 lines × 3 rounds</span>
+                  <div class="finding-row">
+                    <div class="finding">
+                      <div class="n">0</div>
+                      <div class="t">wrong moves in 144 turns, by any of the three decision models</div>
+                    </div>
+                    <div class="finding">
+                      <div class="n">6</div>
+                      <div class="t">turns where the game asked "did you mean?", all Flash 9B, on 2 lines</div>
+                    </div>
+                    <div class="finding">
+                      <div class="n">165<small style="font-size: 0.5em"> ms</small></div>
+                      <div class="t">median turn, TypeSafe Jev hosted (on one laptop: Flash 9B 185, 27B 579)</div>
+                    </div>
+                  </div>
+                  <p class="timing-note">Timings describe this setup, <a href="#limits">not how fast the models are</a>.</p>
+                  <div class="links">
+                    <a class="cta primary" href="godot-jev/">Walk through the results →</a>
+                    <a class="cta" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/godot-jev">Code</a>
+                  </div>
+                </div>
               </div>
             </article>
 
@@ -803,15 +817,22 @@
             <li class="key">
               <time datetime="2026-10-08">2026-10-08</time><span class="node"></span>
               <div class="what">
+                <a href="godot-jev/">The Sunken Crypt on three decision models</a>
+                <small>TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B parse the same 16 lines, three rounds each. No wrong move in 144 turns; Flash 9B is less sure, so the game asks on two lines.</small>
+              </div>
+            </li>
+            <li class="key">
+              <time datetime="2026-10-08">2026-10-08</time><span class="node"></span>
+              <div class="what">
                 <a href="model-router/">model-router's first live run</a>
-                <small>TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B route 24 sub-agent tasks. None goes too low; the three differ in how sure they are and how fast.</small>
+                <small>TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B route 24 sub-agent tasks. None goes too low; the three differ in how sure they are.</small>
               </div>
             </li>
             <li>
               <time datetime="2026-09-30">2026-09-30</time><span class="node"></span>
               <div class="what">
                 The Sunken Crypt on TypeSafe Jev and Open Jev
-                <small>Same 16 lines, three rounds each. Both 48 of 48. p50 213 ms hosted, 600 ms local.</small>
+                <small>Same 16 lines, three rounds each. Both 48 of 48. p50 213 ms hosted, 600 ms for the 27B run locally.</small>
               </div>
             </li>
             <li>
@@ -862,6 +883,13 @@
             <li>It can't count or compare dates. That's why arithmetic and thresholds live in code.</li>
             <li>Text inside the state can argue for an answer: a learner, a commit author, a player or an orchestrating model can write "this is trivial".</li>
             <li>Where the state comes from someone with a reason to game it, keep the stakes of any automatic action low, or keep a human in the loop.</li>
+            <li>
+              <em>The latencies for the local models are not a statement of how fast those models are.</em> They were
+              measured on 4-bit MLX builds on one Apple M5 Pro laptop, running macOS, a desktop operating system and
+              not a server, with other applications open. Server hardware, another quantisation or another runtime
+              would give different numbers. The hosted figures include a network round trip from that laptop. Read
+              every timing here as what a decision cost in this setup.
+            </li>
           </ul>
         </div>
       </section>

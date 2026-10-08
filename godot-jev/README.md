@@ -146,8 +146,9 @@ don't need separate art; the scene dims the room's image at runtime.
 | `tools/session.gd` | A scripted player: 16 lines that solve the dungeon, typed at a human pace |
 | `tools/record_session.gd` | Plays `session.gd` under Movie Maker to record a video, or rehearses it headless |
 | `tools/trailer.py` | Cuts a short trailer, with zooms, captions and spotlights, from a 2× recording |
-| `eval/compare_backends.gd` | Asks TypeSafe Jev and Open Jev the session's lines in the same game states and compares them (`eval/compare.gd`) |
-| `tests/` | A headless runner and 62 tests; a script error inside a test counts as a failure |
+| `eval/compare_backends.gd` | Asks TypeSafe Jev and one or more Open Jev servers the session's lines in the same game states and compares them (`eval/compare.gd`) |
+| `eval/results-2026-10-08.md` | The three-model run written up: every line, the thresholds replayed, and latency |
+| `tests/` | A headless runner and 67 tests; a script error inside a test counts as a failure |
 
 Using the add-on in any game:
 
@@ -192,6 +193,26 @@ the game stays fully authored, and it's fast enough to feel like a parser, not a
    from about 455 ms in the first rooms to 600–700 ms once the player carries items (more options
    and a longer state per question). TypeSafe's median was lower, with network outliers (952 and 1144 ms).
    Neither meets p95 ≤ 500 ms on this run; TypeSafe missed by 2 ms.
+
+   **TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B, 2026-10-08** (the same lines and rounds,
+   with `--openjev flash9b=http://127.0.0.1:3003` for the third model). All three landed 48 of 48
+   and ranked the same move first on all 48. TypeSafe Jev and the 27B acted on every line that
+   means a move. Flash 9B was less sure (mean confidence 0.83, against 0.95 and 0.98) and asked
+   "Did you mean:" on two lines, offering the right move first.
+
+   | Backend | Served model | act / clarify / unknown | p50 | p95 | max |
+   | --- | --- | --- | --- | --- | --- |
+   | TypeSafe Jev (hosted) | `jev-1.13.0` | 45 / 0 / 3 | 165 ms | 200 ms | 213 ms |
+   | Open Jev Flash 9B (local) | `OpenJev-Flash-9B-MLX-4bit`, shim `81a22f1b` | 39 / 6 / 3 | 185 ms | 200 ms | 228 ms |
+   | Open Jev 27B (local) | `openjev-MLX-4bit`, shim `81a22f1b` | 45 / 0 / 3 | 579 ms | 620 ms | 634 ms |
+
+   TypeSafe Jev and Flash 9B meet p95 ≤ 500 ms on this run and the 27B misses by 120 ms. The local
+   figures are not a statement of how fast those models are: they are 4-bit MLX builds on one
+   Apple M5 Pro laptop running macOS, with both models loaded at once and other applications
+   open, and the hosted figure includes the network round trip. The write-up, with every line and
+   the thresholds replayed, is [`eval/results-2026-10-08.md`](eval/results-2026-10-08.md), and the
+   [docs site](https://alteredcraft.github.io/system-one-experiments/godot-jev/) has it as an
+   interactive page. Not evidence for check 1: 16 lines in one voice, with one impossible request.
 3. **Nothing invented.** The options offered are exactly the possible actions plus `none`, for
    every state of the demo. `[pass]` by construction: `test_options_are_exactly_the_possible_actions_plus_none`.
 4. **Shippable.** An exported build works with no key in the client, through a small proxy.
@@ -223,20 +244,24 @@ server listens on IPv4 only unless started with `--host`. The start menu names t
 Jev answers with the model it was started with, whatever the request asks for; its full model
 string, with calibration settings, is in each response and in the comparison results.
 
-### Comparing the two
+### Comparing backends
 
 ```bash
 export TYPESAFE_API_KEY=sk-... TYPESAFE_DEFAULT_MODEL=jev-1.13.0   # and a running Open Jev server
 godot --headless --path . --script res://eval/compare_backends.gd -- --rounds 3
+godot --headless --path . --script res://eval/compare_backends.gd -- --rounds 3 --openjev flash9b=http://127.0.0.1:3003
 ```
 
+It compares TypeSafe Jev with the Open Jev server at `OPENJEV_URL`. Each `--openjev name=url` adds
+another Open Jev server, for a second local model on its own port.
+
 It walks the session route (`tools/session.gd`) by the moves each line means, so a miss by one
-backend doesn't change what either is asked next. Each line goes to both backends through the
+backend doesn't change what any is asked next. Each line goes to every backend through the
 game's own parser and thresholds. It prints a row per line and round, then per backend how many
 lines landed (the intended move, a clarify that offers it, or `unknown` for the gin line), the
-outcome counts and p50/p95/max latency, and how often both ranked the same move first. Every row,
-with the top three candidates, goes to `eval/results-<time>.json` (gitignored; `git add -f` one
-that's evidence for a check). One untimed request to each backend first keeps a TLS handshake or
+outcome counts and p50/p95/max latency, and how often each pair ranked the same move first. Every
+row, with the top three candidates and the number of options offered, goes to
+`eval/results-<time>.json` (gitignored; `git add -f` one that's evidence for a check). One untimed request to each backend first keeps a TLS handshake or
 a cold model out of the numbers.
 
 ## Recording a session

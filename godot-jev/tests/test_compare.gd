@@ -69,3 +69,40 @@ func test_the_summary_counts_lines_landed_and_latency() -> void:
 	var deaf := Compare.summary(rows, "deaf")
 	eq(deaf.landed, 1, "only the line that means nothing")
 	eq(Compare.agreement(rows, "sharp", "deaf"), [1, Session.LINES.size()], "same top choice on the gin line only")
+
+
+func test_each_row_says_how_many_options_were_offered() -> void:
+	var rows: Array = await Compare.play(_parsers(), 1)
+	var world: Object = Compare.World.from_file(Compare.WORLD)
+	eq(rows[0].offered, world.possible_actions().size() + 1, "the opening room's moves, plus none")
+
+
+func test_typesafe_and_open_jev_are_compared_by_default() -> void:
+	var backends := Compare.backends(PackedStringArray(["--rounds", "3"]), {"OPENJEV_URL": "http://127.0.0.1:4000"})
+	eq(backends.keys(), ["typesafe", "openjev"])
+	eq(backends.openjev.base_url, "http://127.0.0.1:4000")
+
+
+func test_each_openjev_argument_adds_another_open_jev_server() -> void:
+	var args := PackedStringArray(["--openjev", "flash9b=http://127.0.0.1:3003", "--rounds", "3", "--openjev", "tiny=http://127.0.0.1:3004"])
+	var backends := Compare.backends(args, {})
+	eq(backends.keys(), ["typesafe", "openjev", "flash9b", "tiny"])
+	eq(backends.openjev.base_url, "http://127.0.0.1:3002", "the default server keeps its URL")
+	eq(backends.flash9b.base_url, "http://127.0.0.1:3003")
+	eq(backends.flash9b.label, "Open Jev flash9b")
+	check(not backends.flash9b.key_required, "an Open Jev server needs no key")
+
+
+func test_an_openjev_argument_that_cannot_be_read_stops_the_comparison() -> void:
+	eq(Compare.backends(PackedStringArray(["--openjev", "http://127.0.0.1:3003"]), {}), {}, "no name")
+	eq(Compare.backends(PackedStringArray(["--openjev", "flash9b="]), {}), {}, "no URL")
+	eq(Compare.backends(PackedStringArray(["--openjev", "openjev=http://127.0.0.1:3003"]), {}), {}, "a name already taken")
+	eq(Compare.backends(PackedStringArray(["--openjev"]), {}), {}, "no value")
+
+
+func test_agreement_is_counted_for_every_pair_of_backends() -> void:
+	var parsers := _parsers()
+	parsers["echo"] = parsers.sharp
+	var rows: Array = await Compare.play(parsers, 1)
+	var n := Session.LINES.size()
+	eq(Compare.agreements(rows, ["sharp", "deaf", "echo"]), {"sharp|deaf": [1, n], "sharp|echo": [n, n], "deaf|echo": [1, n]})

@@ -1,7 +1,8 @@
 /* model-router results page. Draws window.MR_DATA (data.js), which
    docs/tools/build-model-router-data.mjs generates from the recorded runs
    with model-router's own policy code. Nothing here re-decides a route:
-   routes at any bar come from rows[].routeAt. */
+   routes at any bar come from rows[].routeAt. Tooltips and chart helpers
+   are in ../assets/results.js. */
 
 (function () {
   "use strict";
@@ -17,15 +18,11 @@
   const ref = runs[0]; // TypeSafe Jev: the reference for deltas
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const $ = (sel) => document.querySelector(sel);
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  const f2 = (x) => x.toFixed(2);
+  const { $, esc, f2, mColor, swatch, tipAttr, lin, widthOf, scoreCards, laneChart, tocAndProgress, redrawOnResize } = window.S1X;
   const ms = (x) => `${Math.round(x)} ms`;
-  const mColor = (run) => `var(--m-${run.id})`;
   const rColor = (l) => `var(--r-${l})`;
   const rInk = (l) => `var(--r-ink-${l})`;
   const pct = (n) => `${Math.round((n / N) * 100)}%`;
-  const swatch = (run) => `<span class="sw" style="--c:${mColor(run)}"></span>`;
   const summaryAt = (run, bar) => run.summaries.find((s) => Math.abs(s.bar - bar) < 1e-9);
   const atDefault = (run) => summaryAt(run, D.defaultBar);
 
@@ -36,47 +33,6 @@
   const GLYPH = { agree: "✓", high: "▲", low: "▼" };
   const OUT_WORD = { agree: "as labelled", high: "too high", low: "too low" };
 
-  /* ---------- tooltip ---------- */
-  const tip = $("#tip");
-  const tipAttr = (html) => `data-tip="${esc(html)}" tabindex="0"`;
-  function placeTip(x, y) {
-    const pad = 14;
-    const w = tip.offsetWidth;
-    const h = tip.offsetHeight;
-    let left = x + pad;
-    let top = y + pad;
-    if (left + w > innerWidth - 8) left = Math.max(8, x - w - pad);
-    if (top + h > innerHeight - 8) top = Math.max(8, y - h - pad);
-    tip.style.left = `${left}px`;
-    tip.style.top = `${top}px`;
-  }
-  function showTip(el, x, y) {
-    tip.innerHTML = el.dataset.tip;
-    tip.hidden = false;
-    if (x == null) {
-      const r = el.getBoundingClientRect();
-      x = r.left + r.width / 2;
-      y = r.bottom;
-    }
-    placeTip(x, y);
-  }
-  document.addEventListener("pointerover", (e) => {
-    const el = e.target.closest("[data-tip]");
-    if (el) showTip(el, e.clientX, e.clientY);
-  });
-  document.addEventListener("pointermove", (e) => {
-    if (!tip.hidden && e.target.closest("[data-tip]")) placeTip(e.clientX, e.clientY);
-  });
-  document.addEventListener("pointerout", (e) => {
-    if (e.target.closest("[data-tip]") && !e.relatedTarget?.closest?.("[data-tip]")) tip.hidden = true;
-  });
-  document.addEventListener("focusin", (e) => {
-    const el = e.target.closest("[data-tip]");
-    if (el) showTip(el);
-  });
-  document.addEventListener("focusout", () => (tip.hidden = true));
-  addEventListener("scroll", () => (tip.hidden = true), { passive: true });
-
   function taskTip(n, run) {
     const row = run.rows[n - 1];
     const o = outcome(row.route, row.label);
@@ -86,10 +42,6 @@
       `<span class="tm">label ${ids[row.label]} · likeliest ${ids[row.likeliest]} · at ${D.defaultBar}: ${ids[row.route]} (${OUT_WORD[o]})${row.escalated ? ", moved up by the rule" : ""}</span>`
     );
   }
-
-  /* ---------- small SVG helpers ---------- */
-  const lin = (d0, d1, r0, r1) => (v) => r0 + ((v - d0) / (d1 - d0)) * (r1 - r0);
-  const widthOf = (el) => Math.max(280, el.clientWidth);
 
   /* ---------- hero ---------- */
   function hero() {
@@ -103,7 +55,7 @@
       <div class="stat"><div class="v">${sameOff ? pct(offTop[0]) : offTop.map(pct).join(" / ")}</div><div class="k">of tasks kept off the most capable model${sameOff ? ", by all three" : ""}. ${misses} miss in ${N * runs.length} decisions.</div></div>
       <div class="stat"><div class="v lat">${runs
         .map((r) => `<span>${swatch(r)}${Math.round(r.latency.p50)}</span>`)
-        .join("")}<small>ms</small></div><div class="k">median time per decision: TypeSafe, Flash 9B, 27B</div></div>`;
+        .join("")}<small>ms</small></div><div class="k">median time per decision in this run: TypeSafe hosted, then Flash 9B and 27B on one laptop. <a href="#speed">Not the models' speed</a>.</div></div>`;
     $("#legend-models").innerHTML = runs
       .map((r) => `<span>${swatch(r)}<b>${esc(r.name)}</b>&nbsp;· ${r.where === "Local" ? `local, ${esc(r.size)}` : "hosted"}</span>`)
       .join("");
@@ -159,7 +111,7 @@
             <dt>Served model</dt><dd><code>${esc(r.servedModel)}</code></dd>
             <dt>Size</dt><dd>${esc(r.size)}</dd>
             ${r.temperature ? `<dt>Calibration</dt><dd>T=${esc(r.temperature)}</dd>` : ""}
-            <dt>Median</dt><dd>${ms(r.latency.p50)} per decision</dd>
+            <dt>Median</dt><dd>${ms(r.latency.p50)} per decision${r.where === "Local" ? ", on this laptop" : ", network included"}</dd>
           </dl>
           <p>${esc(r.note)}</p>
         </article>`,
@@ -291,34 +243,10 @@
       { k: "Mean probability on the label", v: (r) => r.meanOnLabel, f: f2, better: 1, frac: true },
       { k: "Moved up by the rule", v: (r) => r.escalatedCount, f: String, better: 0 },
       { k: "Too low if it took the biggest number", v: (r) => r.likeliestWrongLow, f: String, better: -1 },
-      { k: "Median per decision", v: (r) => r.latency.p50, f: ms, better: -1, ratio: true },
-      { k: "p95 per decision", v: (r) => r.latency.p95, f: ms, better: -1, ratio: true },
+      { k: "Median per decision, this setup", v: (r) => r.latency.p50, f: ms, better: -1, ratio: true },
+      { k: "p95 per decision, this setup", v: (r) => r.latency.p95, f: ms, better: -1, ratio: true },
     ];
-    $("#scoreboard").innerHTML = runs
-      .map((r) => {
-        const rows = metrics
-          .map((m) => {
-            const v = m.v(r);
-            let d = "";
-            let worse = false;
-            if (r !== ref) {
-              const rv = m.v(ref);
-              if (m.ratio) {
-                d = `×${(v / rv).toFixed(1)}`;
-                worse = v > rv;
-              } else {
-                const diff = v - rv;
-                const near = Math.abs(diff) < (m.frac ? 0.005 : 0.5);
-                d = near ? "=" : `${diff > 0 ? "+" : "−"}${m.frac ? f2(Math.abs(diff)) : Math.abs(diff)}`;
-                worse = !near && m.better !== 0 && Math.sign(diff) === -m.better;
-              }
-            }
-            return `<div class="r${m.key ? " key" : ""}"><span class="k">${m.k}</span><span class="v">${m.f(v)}</span><span class="d${worse ? " worse" : ""}">${d}</span></div>`;
-          })
-          .join("");
-        return `<article class="score" style="--c:${mColor(r)}"><h3>${esc(r.name)}${r === ref ? '<span class="ref">reference</span>' : ""}</h3><div class="rows">${rows}</div></article>`;
-      })
-      .join("");
+    $("#scoreboard").innerHTML = scoreCards(runs, ref, metrics);
 
     const s = runs.map(atDefault);
     const missRuns = runs.filter((r, i) => s[i].over + s[i].under > 0);
@@ -335,7 +263,7 @@
         .join(" ")}`,
       `<b>They differ in certainty.</b> Tasks where a model put ≥ ${D.sureAt} on one route: ${sureText}, out of ${N}.`,
       `<b>Flash 9B's ${s[runs.indexOf(flash)].agree} of ${N} depends on the routing rule.</b> Its biggest number would have sent ${flash.likeliestWrongLow} tasks to too weak a model; the rule moved them up. For the other two the rule changed nothing.`,
-      `<b>${fastest.name} was fastest</b>, network round trip included. Of the local models, ${local[0].short} answered ×${(local[1].latency.p50 / local[0].latency.p50).toFixed(1)} faster than the ${local[1].short}, at about a third of the download (${local[0].size} against ${local[1].size}).`,
+      `<b>${fastest.name} was fastest</b>, network round trip included. Of the local models, ${local[0].short} answered ×${(local[1].latency.p50 / local[0].latency.p50).toFixed(1)} faster than the ${local[1].short}, at about a third of the download (${local[0].size} against ${local[1].size}). These are timings from one laptop in ordinary use, and <a href="#speed">not a measure of how fast the models are</a>.`,
     ]
       .map((t) => `<li>${t}</li>`)
       .join("");
@@ -619,40 +547,12 @@
 
   /* ---------- §9 latency ---------- */
   function latChart() {
-    const el = $("#lat-chart");
-    const W = widthOf(el);
-    const narrow = W < 560;
-    const rowH = 84;
-    const m = { l: narrow ? 70 : 130, r: 16, t: 26, b: 36 };
-    const H = m.t + rowH * runs.length + m.b;
-    const maxMs = Math.ceil(Math.max(...runs.map((r) => r.latency.max), D.speedCheckMs) / 100) * 100;
-    const x = lin(0, maxMs, m.l, W - m.r);
-    let g = "";
-    for (let t = 0; t <= maxMs; t += 100) {
-      g += `<line class="grid" x1="${x(t)}" x2="${x(t)}" y1="${m.t}" y2="${H - m.b}"/><text class="tick-text" x="${x(t)}" y="${H - m.b + 16}" text-anchor="middle">${t}</text>`;
-    }
-    g += `<text x="${W - m.r}" y="${H - 4}" text-anchor="end">ms per decision →</text>`;
-    g += `<line class="check-line" x1="${x(D.speedCheckMs)}" x2="${x(D.speedCheckMs)}" y1="${m.t - 10}" y2="${H - m.b}"/><text class="ann" x="${x(D.speedCheckMs) - 6}" y="${m.t - 12}" text-anchor="end">check 2: p95 ≤ ${D.speedCheckMs} ms</text>`;
-    let body = "";
-    runs.forEach((run, k) => {
-      const cy = m.t + rowH * k + rowH / 2;
-      body += `<text class="ann-strong" x="${m.l - 12}" y="${cy + 4}" text-anchor="end">${esc(narrow ? run.short : run.name)}</text>`;
-      body += `<line class="axis" x1="${m.l}" x2="${W - m.r}" y1="${cy + rowH / 2}" y2="${cy + rowH / 2}" style="stroke:var(--rule)"/>`;
-      run.rows.forEach((row, i) => {
-        const jitter = ((i * 7) % 5) - 2;
-        body += `<circle class="dot" cx="${x(row.latencyMs)}" cy="${cy + jitter * 4}" r="4.5" style="fill:${mColor(run)};fill-opacity:.8" ${tipAttr(
-          `<b>Task ${i + 1}</b> · ${esc(run.name)}<br>${ms(row.latencyMs)}<span class="tm">${esc(D.tasks[i])}</span>`,
-        )}/>`;
-      });
-      // p50 labelled above its tick, p95 below, so close ticks don't collide.
-      for (const [k2, v, ty] of [
-        ["p50", run.latency.p50, cy - 24],
-        ["p95", run.latency.p95, cy + 32],
-      ]) {
-        body += `<line x1="${x(v)}" x2="${x(v)}" y1="${cy - 20}" y2="${cy + 20}" style="stroke:var(--ink);pointer-events:none" stroke-width="2"/><text class="ann" x="${x(v)}" y="${ty}" text-anchor="middle" style="font-size:10px">${k2}</text>`;
-      }
+    laneChart($("#lat-chart"), runs, {
+      time: (row) => row.latencyMs,
+      tip: (run, row, i) => `<b>Task ${i + 1}</b> · ${esc(run.name)}<br>${ms(row.latencyMs)}<span class="tm">${esc(D.tasks[i])}</span>`,
+      per: "decision",
+      checkMs: D.speedCheckMs,
     });
-    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Latency per decision for each model">${g}${body}</svg>`;
   }
   function latTable() {
     $("#lat-table tbody").innerHTML = runs
@@ -689,22 +589,6 @@
       taskGrid();
     });
   }
-  function tocAndProgress() {
-    const links = [...document.querySelectorAll("#toc a")];
-    const secs = links.map((a) => document.querySelector(a.getAttribute("href")));
-    const bar = $("#progress");
-    const onScroll = () => {
-      const h = document.documentElement;
-      bar.style.width = `${(h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight)) * 100}%`;
-      let active = -1;
-      secs.forEach((s, i) => {
-        if (s.getBoundingClientRect().top < innerHeight * 0.35) active = i;
-      });
-      links.forEach((a, i) => a.classList.toggle("active", i === active));
-    };
-    addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-  }
 
   /* Charts sized to their container; redrawn when the width changes. */
   function drawCharts() {
@@ -731,12 +615,5 @@
   drawCharts();
   tocAndProgress();
 
-  let rt;
-  let lastW = innerWidth;
-  addEventListener("resize", () => {
-    if (innerWidth === lastW) return;
-    lastW = innerWidth;
-    clearTimeout(rt);
-    rt = setTimeout(drawCharts, 150);
-  });
+  redrawOnResize(drawCharts);
 })();

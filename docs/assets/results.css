@@ -1,4 +1,4 @@
-/* model-router results page. Shared tokens are in ../assets/site.css. */
+/* Shared by the results pages in docs/. Tokens are in site.css. */
 
 @media (max-width: 520px) {
   .hide-xs {
@@ -1208,6 +1208,37 @@ input[type="range"] {
   .bar-charts {
     grid-template-columns: 1fr;
   }
+}
+
+/* A note the reader needs before the figures beside it. */
+.callout {
+  background: color-mix(in srgb, var(--warning) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--warning) 45%, var(--rule));
+  border-left-width: 3px;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 0 0 20px;
+  max-width: 900px;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+}
+.callout .label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--warning-text);
+}
+.callout p {
+  margin: 0 0 0.6em;
+}
+.callout p:last-child {
+  margin-bottom: 0;
+}
+.callout b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.hero-stats .k a {
+  white-space: nowrap;
 }
 
 /* Caveats and details */
