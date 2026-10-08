@@ -1,0 +1,148 @@
+/* Builds docs/model-router/data.js from model-router's recorded eval runs.
+
+     node docs/tools/build-model-router-data.mjs
+
+   Every number the results page shows comes from here: the raw answers in
+   model-router/eval/results-*.json, routed by model-router's own policy
+   (src/policy.mjs) and summarised by its own eval code (eval/summary.mjs).
+   The page only draws them. Before writing, the summaries are checked
+   against the ones each run recorded, so the page can't drift from the run. */
+
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { deepStrictEqual } from "node:assert/strict";
+import { decisionFrom } from "../../model-router/src/policy.mjs";
+import { percentile, summarise, modelName } from "../../model-router/eval/summary.mjs";
+
+const here = (p) => fileURLToPath(new URL(p, import.meta.url));
+const evalDir = here("../../model-router/eval/");
+
+// The runs written up in model-router/eval/results-2026-10-08.md, in its order.
+const RUNS = [
+  {
+    id: "typesafe",
+    file: "results-2026-10-08T18-51-11-416Z.json",
+    name: "TypeSafe Jev",
+    short: "TypeSafe",
+    where: "Hosted",
+    size: "Hosted API",
+    note: "Pinned to jev-1.13.0, what jev-latest served on the day. Latency includes the network round trip.",
+  },
+  {
+    id: "flash",
+    file: "results-2026-10-08T18-41-32-335Z.json",
+    name: "Open Jev Flash 9B",
+    short: "Flash 9B",
+    where: "Local",
+    size: "5 GB",
+    note: "Released the day before the run. MLX 4-bit on an Apple M5 Pro.",
+  },
+  {
+    id: "27b",
+    file: "results-2026-10-08T16-41-27-867Z.json",
+    name: "Open Jev 27B",
+    short: "27B",
+    where: "Local",
+    size: "14 GB",
+    note: "MLX 4-bit on an Apple M5 Pro.",
+  },
+];
+
+const BARS = [0.05, 0.1, 0.15, 0.25, 0.35, 0.5]; // the bars eval/run.mjs tries
+const SLIDER = Array.from({ length: 61 }, (_, i) => i / 100); // 0.00 to 0.60
+const SURE = 0.95; // "put 0.95 or more on one route"
+
+const tasks = (await readFile(`${evalDir}tasks.jsonl`, "utf8")).split("\n").filter(Boolean).map((l) => JSON.parse(l));
+
+const runs = [];
+for (const meta of RUNS) {
+  const raw = JSON.parse(await readFile(`${evalDir}${meta.file}`, "utf8"));
+  const { config } = raw;
+  const ids = config.routes.map((r) => r.id);
+  const level = Object.fromEntries(ids.map((id, i) => [id, i]));
+
+  raw.rows.forEach((row, i) => {
+    if (row.task !== tasks[i]?.task) throw new Error(`${meta.file} row ${i + 1} is not task ${i + 1} of tasks.jsonl`);
+  });
+
+  // The page must show exactly what the run recorded.
+  deepStrictEqual(BARS.map((bar) => summarise(config, raw.rows, bar)), raw.summaries, `${meta.file}: summaries differ`);
+
+  const rows = raw.rows.map((row) => {
+    const p = ids.map((_, l) => row.answer.probabilities[l]);
+    const d = decisionFrom(config, row.answer);
+    return {
+      p,
+      label: level[row.label],
+      likeliest: level[d.likeliest],
+      route: level[d.route],
+      escalated: d.escalated,
+      risk: ids.map((_, l) => p.slice(l + 1).reduce((a, b) => a + b, 0)),
+      latencyMs: Math.round(row.latencyMs * 10) / 10,
+      // The route at each slider bar, from the experiment's own policy.
+      routeAt: SLIDER.map((bar) => level[decisionFrom({ ...config, maxUnderRouteRisk: bar }, row.answer).route]),
+    };
+  });
+
+  const ms = rows.map((r) => r.latencyMs);
+  const top = rows.map((r) => Math.max(...r.p));
+  runs.push({
+    ...meta,
+    servedModel: modelName(raw.rows[0].model),
+    temperature: /\bT=([\d.]+)/.exec(raw.rows[0].model)?.[1] ?? null,
+    rows,
+    summaries: raw.summaries,
+    latency: {
+      min: Math.min(...ms),
+      p50: percentile(ms, 50),
+      mean: ms.reduce((a, b) => a + b, 0) / ms.length,
+      p95: percentile(ms, 95),
+      max: Math.max(...ms),
+    },
+    sure: top.filter((t) => t >= SURE).length,
+    meanOnLabel: rows.reduce((a, r) => a + r.p[r.label], 0) / rows.length,
+    escalatedCount: rows.filter((r) => r.escalated).length,
+    likeliestWrongLow: rows.filter((r) => r.likeliest < r.label).length,
+  });
+}
+
+// How often each pair of decision models chose the same route, and ranked the same route first.
+const pairs = [];
+for (let a = 0; a < runs.length; a++) {
+  for (let b = a + 1; b < runs.length; b++) {
+    const same = (field) => runs[a].rows.filter((r, i) => r[field] === runs[b].rows[i][field]).length;
+    pairs.push({ a: runs[a].id, b: runs[b].id, sameRoute: same("route"), sameLikeliest: same("likeliest") });
+  }
+}
+
+const config = JSON.parse(await readFile(`${evalDir}${RUNS[0].file}`, "utf8")).config;
+const data = {
+  generatedFrom: RUNS.map((r) => `model-router/eval/${r.file}`),
+  date: "2026-10-08",
+  defaultBar: config.maxUnderRouteRisk,
+  bars: BARS,
+  slider: SLIDER,
+  sureAt: SURE,
+  speedCheckMs: 500,
+  routes: config.routes,
+  tasks: tasks.map((t) => t.task),
+  runs,
+  pairs,
+};
+
+const out = here("../model-router/data.js");
+await mkdir(here("../model-router/"), { recursive: true });
+await writeFile(
+  out,
+  `/* Generated by docs/tools/build-model-router-data.mjs from model-router's eval runs. Don't edit. */\n` +
+    `window.MR_DATA = ${JSON.stringify(data)};\n`,
+);
+console.log(`wrote ${out}`);
+for (const r of runs) {
+  const s = r.summaries.find((x) => x.bar === data.defaultBar);
+  console.log(
+    `${r.name.padEnd(18)} agree ${s.agree}/${s.n}  low ${s.under}  high ${s.over}  sure ${r.sure}  ` +
+      `escalated ${r.escalatedCount}  p50 ${r.latency.p50.toFixed(0)} ms  p95 ${r.latency.p95.toFixed(0)} ms`,
+  );
+}
+for (const p of pairs) console.log(`${p.a} vs ${p.b}: same route ${p.sameRoute}/24, same likeliest ${p.sameLikeliest}/24`);

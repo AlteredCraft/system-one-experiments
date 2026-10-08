@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Routing With Jev</title>
+    <meta
+      name="description"
+      content="model-router's first live run: TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B each choose the model for 24 sub-agent tasks. What they agreed on, and where they differed."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/site.css" />
+    <link rel="stylesheet" href="results.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b1a17'/%3E%3Crect x='7' y='18' width='4' height='7' fill='%23f6f3ea'/%3E%3Crect x='14' y='8' width='4' height='17' fill='%23f6f3ea'/%3E%3Crect x='21' y='14' width='4' height='11' fill='%23f6f3ea'/%3E%3C/svg%3E"
+    />
+    <script src="../assets/site.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="brand" href="../" aria-label="System One experiments, home">
+          <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="6" fill="currentColor" />
+            <rect x="7" y="18" width="4" height="7" fill="var(--paper)" />
+            <rect x="14" y="8" width="4" height="17" fill="var(--paper)" />
+            <rect x="21" y="14" width="4" height="11" fill="var(--paper)" />
+          </svg>
+          SYSTEM&nbsp;ONE / <span class="hide-xs">EXPERIMENTS /&nbsp;</span>EXP-04
+        </a>
+        <nav aria-label="Site">
+          <a class="hide-sm" href="../#experiments">All experiments</a>
+          <a class="hide-sm" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/model-router">Code</a>
+          <a href="https://github.com/AlteredCraft/system-one-experiments/blob/main/model-router/eval/results-2026-10-08.md">Write-up</a>
+          <button class="theme-toggle" type="button" aria-label="Switch theme">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" />
+            </svg>
+          </button>
+        </nav>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+    </header>
+
+    <nav class="toc" aria-label="On this page" id="toc">
+      <a href="#orient"><span>01</span>The problem</a>
+      <a href="#hypothesis"><span>02</span>Hypothesis</a>
+      <a href="#models"><span>03</span>The three Jevs</a>
+      <a href="#question"><span>04</span>The question</a>
+      <a href="#policy"><span>05</span>Answer → route</a>
+      <a href="#result"><span>06</span>Result</a>
+      <a href="#deltas"><span>07</span>The deltas</a>
+      <a href="#bar"><span>08</span>Move the bar</a>
+      <a href="#speed"><span>09</span>Speed</a>
+      <a href="#caveats"><span>10</span>Caveats</a>
+      <a href="#details"><span>11</span>Reproduce</a>
+    </nav>
+
+    <main>
+      <div class="hero graph-paper">
+        <div class="wrap">
+          <div class="eyebrow"><span class="dot"></span>EXP-04 · model-router · first live run · 2026-10-08</div>
+          <h1>Three Jevs pick the model for <em>24 sub-agent tasks.</em></h1>
+          <p class="sub">
+            One request to a System One model decides whether a sub-agent runs on Haiku, Sonnet or Opus. We asked
+            three different Jevs, a hosted one and two running on a laptop, to make that call for the same tasks. On
+            the scoreboard they nearly tie. Underneath, they differ a lot in how sure they are and how fast they
+            answer.
+          </p>
+          <div class="hero-stats" id="hero-stats"></div>
+          <div class="legend-models" id="legend-models"></div>
+        </div>
+      </div>
+
+      <!-- 1 -->
+      <section id="orient">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 1</div>
+            <div>
+              <h2>The problem: every sub-agent gets the same model</h2>
+              <p class="lede">
+                An agent harness spawns sub-agents all the time: find the callers of a function, add a flag, chase down
+                a memory leak. Either the orchestrator spends its own tokens deciding which model each one gets, or
+                everything runs on the most capable model. model-router makes that choice with one call, just before
+                the spawn.
+              </p>
+            </div>
+          </div>
+
+          <div class="pipeline reveal" role="img" aria-label="The routing pipeline: a task is checked for a pinned model, then config rules, then one Jev Score question, then the policy picks a model.">
+            <div class="stage">
+              <span class="label">in</span>
+              <b>Orchestrator spawns a task</b>
+              <code>"Checkout intermittently double-charges customers. Find the cause."</code>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage muted">
+              <span class="label">1 · code</span>
+              <b>Pinned?</b>
+              <span>The task names a model → use it, ask nothing.</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage muted">
+              <span class="label">2 · code</span>
+              <b>A rule?</b>
+              <span>e.g. agent type <code>Explore</code> → lookup.</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage jev">
+              <span class="label">3 · Jev</span>
+              <b>One Score question</b>
+              <span>A probability for each kind of work.</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage">
+              <span class="label">4 · code</span>
+              <b>Policy</b>
+              <span>The cheapest route whose risk ≤ the bar.</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage out">
+              <span class="label">out</span>
+              <b>A model from the config</b>
+              <span class="chips"><i style="--c: var(--r-0)"></i>haiku <i style="--c: var(--r-1)"></i>sonnet <i style="--c: var(--r-2)"></i>opus</span>
+            </div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 1</b>This run skipped steps 1 and 2 so that every task was judged by the model. If the decision
+            model fails or times out, the router returns the config's fallback route and never throws.
+          </p>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section id="hypothesis">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 2</div>
+            <div>
+              <h2>Hypothesis, and what would confirm it</h2>
+            </div>
+          </div>
+          <blockquote class="hypothesis reveal">
+            <span class="label">Hypothesis</span>
+            One Jev call over the text of a sub-agent task chooses a model tier well enough that a harness can move
+            <mark>a large share of sub-agent work off its most capable model</mark>, while
+            <mark>rarely sending a task to a model too weak for it</mark>, at a latency that is
+            <mark>small next to starting the sub-agent</mark>.
+          </blockquote>
+          <div class="table-wrap reveal">
+            <table class="checks" id="checks-table">
+              <thead>
+                <tr>
+                  <th>Check</th>
+                  <th>Done when</th>
+                  <th class="m-col"><span class="sw" style="--c: var(--m-typesafe)"></span>TypeSafe</th>
+                  <th class="m-col"><span class="sw" style="--c: var(--m-flash)"></span>Flash 9B</th>
+                  <th class="m-col"><span class="sw" style="--c: var(--m-27b)"></span>27B</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="figcap">
+            <b>Table 1</b>Checks from the model-router README, with this run's numbers at the default bar of 0.25.
+            Check 1 needs ≥ 100 labelled tasks from real harness sessions. This run had 24 starter tasks, so its
+            routing numbers are not evidence for it yet.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section id="models">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 3</div>
+            <div>
+              <h2>The three decision models</h2>
+              <p class="lede">
+                Same API, same question, same 24 tasks, each asked once. One model is hosted by TypeSafe; two are
+                <a href="https://huggingface.co/openjev">Open Jev</a> models running 4-bit on an Apple M5 Pro laptop.
+                Flash 9B was released the day before this run.
+              </p>
+            </div>
+          </div>
+          <div class="model-cards" id="model-cards"></div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section id="question">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 4</div>
+            <div>
+              <h2>What Jev was asked</h2>
+              <p class="lede">
+                Each request carries the task text and one Score question. The levels describe kinds of work, cheapest
+                first. Each maps to a model in the router's config, and <strong>Jev never sees a model name</strong>:
+                it can judge what a task asks for, but knows nothing about what <code>claude-haiku-5-5</code> is good
+                at.
+              </p>
+            </div>
+          </div>
+          <div class="question reveal">
+            <p class="qtext">Which description fits the work that <code>task</code> asks a sub-agent to do?</p>
+            <ol class="levels-list" id="levels-list" start="0"></ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 -->
+      <section id="policy">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 5</div>
+            <div>
+              <h2>How an answer becomes a route</h2>
+              <p class="lede">
+                Jev returns three probabilities that add up to 1. The obvious policy takes the biggest. The router asks
+                something different of each route: <em>if the task is sent here, how likely is it that it needed a more
+                capable model?</em> That's the sum of everything above it. It takes the cheapest route where that risk
+                is at or under <strong>the bar</strong>. Sending a task too low costs a failed run and a retry; too high
+                only costs money.
+              </p>
+            </div>
+          </div>
+
+          <div class="explorer figure reveal" id="explorer">
+            <div class="ex-controls">
+              <div class="presets" role="group" aria-label="Examples" id="presets"></div>
+              <div class="pickers">
+                <label>
+                  <span class="label">Decision model</span>
+                  <select id="ex-model"></select>
+                </label>
+                <label>
+                  <span class="label">Task</span>
+                  <select id="ex-task"></select>
+                </label>
+              </div>
+            </div>
+            <p class="ex-task" id="ex-tasktext"></p>
+            <div class="ex-grid">
+              <div>
+                <span class="label">Jev's answer</span>
+                <div class="stackbar big" id="ex-stack"></div>
+                <div class="ex-likeliest" id="ex-likeliest"></div>
+              </div>
+              <div>
+                <div class="ex-bar-head">
+                  <span class="label">The bar</span>
+                  <output id="ex-bar-out">0.25</output>
+                </div>
+                <input type="range" id="ex-bar" min="0" max="60" step="1" value="25" aria-label="Risk bar" />
+                <div class="ladder" id="ex-ladder"></div>
+              </div>
+            </div>
+            <div class="ex-verdict" id="ex-verdict" aria-live="polite"></div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 2</b>Pick an example, or any task and model. Risk for each route is the probability that the task
+            belonged higher. The most capable route always passes, since nothing is above it. Routes come from
+            model-router's own policy code, replayed at each bar; no new requests are made.
+          </p>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section id="result">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 6</div>
+            <div>
+              <h2>Result: a near tie on the scoreboard</h2>
+              <p class="lede">At the default bar of 0.25, with differences shown against TypeSafe Jev.</p>
+            </div>
+          </div>
+          <div class="scoreboard reveal" id="scoreboard"></div>
+          <ul class="findings reveal" id="findings"></ul>
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section id="deltas">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 7</div>
+            <div>
+              <h2>The deltas between the Jevs</h2>
+              <p class="lede">
+                Same routes, different paths to them. The three differ in how much probability they put on an answer,
+                which tasks they hesitated over, and how much they depend on the routing rule to land.
+              </p>
+            </div>
+          </div>
+
+          <h3 class="sub-h reveal"><span>7a</span>How sure each model was</h3>
+          <div class="figure reveal">
+            <div class="fig-toolbar">
+              <div role="group" aria-label="Measure" id="sure-toggle">
+                <button class="btn" aria-pressed="true" data-k="top">On its likeliest route</button>
+                <button class="btn" aria-pressed="false" data-k="label">On the labelled route</button>
+              </div>
+            </div>
+            <div id="sure-chart" class="chart"></div>
+          </div>
+          <p class="figcap" id="sure-cap">
+            <b>Fig. 3</b>Each dot is one task. Hover or tap a dot for the task and the full answer.
+          </p>
+
+          <h3 class="sub-h reveal"><span>7b</span>Every task, side by side</h3>
+          <div class="figure reveal">
+            <div class="fig-toolbar">
+              <div role="group" aria-label="Filter tasks" id="grid-filter">
+                <button class="btn" aria-pressed="false" data-f="all">All 24</button>
+                <button class="btn" aria-pressed="true" data-f="differ">Where they differ</button>
+                <button class="btn" aria-pressed="false" data-f="unsure">Where any was unsure</button>
+              </div>
+              <div class="route-key" id="route-key"></div>
+            </div>
+            <div class="taskgrid" id="taskgrid"></div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 4</b>Each bar is one model's answer, split lookup / standard / open_ended. A mark at the right
+            gives the outcome at the bar of 0.25: <span class="o-agree">✓</span> as labelled,
+            <span class="o-high">▲</span> too high, <span class="o-low">▼</span> too low, and
+            <span class="o-up">↑</span> when the rule moved a task above its likeliest route. "Unsure" means some model
+            put less than 0.70 on its likeliest route.
+          </p>
+
+          <div class="delta-notes reveal" id="delta-notes"></div>
+
+          <h3 class="sub-h reveal"><span>7c</span>How often each pair agreed</h3>
+          <div class="pairs reveal" id="pairs"></div>
+          <p class="figcap">
+            <b>Fig. 5</b>Out of 24 tasks. "Same route" is after the policy at 0.25; "same likeliest" is what each
+            model ranked first before the policy. The rule closes Flash 9B's gap to the others.
+          </p>
+        </div>
+      </section>
+
+      <!-- 8 -->
+      <section id="bar">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 8</div>
+            <div>
+              <h2>Move the bar</h2>
+              <p class="lede">
+                The bar is arithmetic on answers already returned, so it can be tuned after the fact. Drag it and watch
+                where each model's tasks go. For a sure model it barely matters; for an unsure one it decides the
+                result.
+              </p>
+            </div>
+          </div>
+          <div class="figure reveal">
+            <div class="bar-control">
+              <button class="btn" id="bar-play" aria-pressed="false">▶ Sweep</button>
+              <input type="range" id="bar-range" min="0" max="60" step="1" value="25" aria-label="Risk bar" />
+              <output id="bar-out" class="bar-out">0.25</output>
+              <button class="btn" id="bar-reset">Default 0.25</button>
+            </div>
+            <div class="bar-panels" id="bar-panels"></div>
+            <div class="bar-charts">
+              <div>
+                <span class="label">Tasks routed too low</span>
+                <div class="chart" id="low-chart"></div>
+              </div>
+              <div>
+                <span class="label">Tasks routed too high</span>
+                <div class="chart" id="high-chart"></div>
+              </div>
+            </div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 6</b>Panels: the 24 tasks in rows by their label, each cell shaded by the route it was sent to at
+            this bar. Charts: how many tasks go too low or too high as the bar moves from 0 to 0.60, one line per
+            model; the vertical rule follows the slider.
+          </p>
+          <ul class="findings reveal" id="bar-notes"></ul>
+        </div>
+      </section>
+
+      <!-- 9 -->
+      <section id="speed">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 9</div>
+            <div>
+              <h2>Speed: one model per lane</h2>
+              <p class="lede">
+                Check 2 asks for p95 ≤ 500 ms per routing decision. Measured around each request, one at a time, after
+                one untimed warm-up.
+              </p>
+            </div>
+          </div>
+          <div class="figure reveal">
+            <div class="chart" id="lat-chart"></div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 7</b>Each dot is one request. Ticks mark p50 and p95. The hosted figure includes the network round
+            trip from the laptop; the local models ran on that laptop in ordinary use, and the three runs were spread
+            over two hours. A rough indication of what a routing decision costs, not a benchmark.
+          </p>
+          <div class="table-wrap reveal">
+            <table id="lat-table">
+              <thead>
+                <tr>
+                  <th>Decision model</th>
+                  <th class="num">min</th>
+                  <th class="num">p50</th>
+                  <th class="num">mean</th>
+                  <th class="num">p95</th>
+                  <th class="num">max</th>
+                  <th>Check 2</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10 -->
+      <section id="caveats">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 10</div>
+            <div>
+              <h2>What this does and doesn't show</h2>
+              <p class="lede">Read it as "the mechanism works", not as a measured accuracy.</p>
+            </div>
+          </div>
+          <div class="caveats reveal">
+            <div class="card">
+              <span class="label">It shows</span>
+              <ul>
+                <li>The request works end to end on all three decision models.</li>
+                <li>A Score over route descriptions separates clear cases.</li>
+                <li>A model a third of the size can do the job in a third of the time, when the routing rule allows for its doubt.</li>
+                <li>The policy can be tuned after the fact without asking again.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <span class="label">It doesn't show</span>
+              <ul>
+                <li><b>24 tasks, asked once each.</b> One task is 4 percentage points.</li>
+                <li><b>One author wrote everything.</b> The tasks, their labels and the route descriptions came from one sitting, so tasks echo the wording they're judged against ("find the cause" against "a failure with an unknown cause").</li>
+                <li><b>Labels are opinions.</b> Nobody ran these tasks on the three Claude models to see which was enough. That needs a harness (check 4).</li>
+                <li><b>Flash 9B's 24 of 24 has little margin.</b> On tasks 13 to 16 it was close to an even split between two routes.</li>
+                <li><b>The tasks don't separate the models.</b> All three are at or near 24 of 24, so this says nothing about which decides best.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="next card reveal">
+            <span class="label">Next, from the README's Open list</span>
+            <ol>
+              <li>Replace the starter tasks with ≥ 100 sub-agent prompts from real harness sessions, labelled by the model that turned out to be enough.</li>
+              <li>Wire it into a harness's spawn path and log each decision with the sub-agent's outcome.</li>
+              <li>Try a second question for work the tiers don't order, such as "the task needs to read images".</li>
+              <li>Compare with the orchestrator choosing the model itself: agreement, and the tokens it spends deciding.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 -->
+      <section id="details">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">§ 11</div>
+            <div>
+              <h2>Run details and reproducing it</h2>
+            </div>
+          </div>
+          <div class="details-grid reveal">
+            <div class="table-wrap">
+              <table id="run-table">
+                <tbody>
+                  <tr><th>Date</th><td>2026-10-08</td></tr>
+                  <tr><th>TypeSafe Jev</th><td><code>jev-1.13.0</code>, pinned (what <code>jev-latest</code> served on the day), hosted API</td></tr>
+                  <tr><th>Open Jev 27B</th><td><code>openjev/openjev-MLX-4bit</code> (MLX, 4-bit, 14 GB), T=0.85</td></tr>
+                  <tr><th>Open Jev Flash 9B</th><td><code>openjev/OpenJev-Flash-9B-MLX-4bit</code> (MLX, 4-bit, 5 GB), T=1.07</td></tr>
+                  <tr><th>Open Jev helper</th><td><code>shim.py</code> <code>81a22f1b</code> for both, with each model card's calibration settings</td></tr>
+                  <tr><th>Hardware</th><td>Apple M5 Pro, 64 GB, macOS 27.2 (local models)</td></tr>
+                  <tr><th>Tasks</th><td><code>eval/tasks.jsonl</code>: 24, eight per route</td></tr>
+                  <tr><th>Requests</th><td>One per task, sequential, plus one untimed warm-up. Rules and pinned models skipped.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+<pre><code>cd model-router
+TYPESAFE_API_KEY=sk-... TYPESAFE_DEFAULT_MODEL=jev-1.13.0 node eval/run.mjs
+JEV_BACKEND=openjev node eval/run.mjs
+JEV_BACKEND=openjev OPENJEV_URL=http://127.0.0.1:3003 node eval/run.mjs
+node eval/compare.mjs eval/results-*.json</code></pre>
+              <p class="small">
+                Every number on this page is generated from the three recorded runs by
+                <code>docs/tools/build-model-router-data.mjs</code>, using model-router's own policy and summary code,
+                and checked against the summaries each run saved. Sources:
+                <span id="sources"></span>. The written report is
+                <a href="https://github.com/AlteredCraft/system-one-experiments/blob/main/model-router/eval/results-2026-10-08.md">results-2026-10-08.md</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap">
+        <span><a href="../">← System One experiments</a></span>
+        <span>model-router · results of 2026-10-08</span>
+      </div>
+    </footer>
+
+    <div class="tip" id="tip" role="tooltip" hidden></div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
