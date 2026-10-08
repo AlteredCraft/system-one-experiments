@@ -26,8 +26,8 @@
   display: none;
   flex-direction: column;
   gap: 2px;
-  font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 500;
   z-index: 5;
 }
 .toc a {
@@ -39,6 +39,8 @@
   gap: 8px;
 }
 .toc a span {
+  font-family: var(--mono);
+  font-size: 0.7rem;
   color: var(--rule-strong);
 }
 .toc a.active {
@@ -63,10 +65,11 @@
   max-width: 18ch;
 }
 .hero h1 em {
-  color: var(--stamp);
+  color: var(--muted);
+  font-weight: inherit;
 }
 .hero .sub {
-  font-size: 1.18rem;
+  font-size: 1.12rem;
   color: var(--ink-2);
   max-width: 62ch;
   margin-bottom: 32px;
@@ -75,9 +78,10 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--rule);
   border-radius: var(--radius);
   background: var(--surface);
+  box-shadow: var(--shadow);
   overflow: hidden;
 }
 .hero-stats .stat {
@@ -89,10 +93,10 @@
   border-right: 0;
 }
 .hero-stats .v {
-  font-family: var(--serif);
-  font-size: 2.4rem;
+  font-size: 2.1rem;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
 }
 .hero-stats .v small {
   font-size: 0.45em;
@@ -108,8 +112,9 @@
 .hero-stats .lat {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: 4px 10px;
   flex-wrap: wrap;
+  font-size: 1.8rem;
 }
 .hero-stats .lat span {
   display: inline-flex;
@@ -178,8 +183,9 @@
   flex: 1 1 0;
   min-width: 140px;
   background: var(--surface);
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--rule);
   border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: 14px;
   font-family: var(--sans);
   font-size: 0.8rem;
@@ -189,9 +195,8 @@
   gap: 6px;
 }
 .pipeline .stage b {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 1.02rem;
+  font-weight: 600;
+  font-size: 0.95rem;
   color: var(--ink);
   line-height: 1.25;
 }
@@ -201,11 +206,16 @@
 }
 .pipeline .stage.muted {
   border-style: dashed;
+  border-color: var(--rule-strong);
   background: transparent;
+  box-shadow: none;
 }
 .pipeline .stage.jev {
-  border-color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
+  border-color: color-mix(in srgb, var(--stamp) 55%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--stamp) 12%, transparent), var(--shadow);
+}
+.pipeline .stage.jev .label {
+  color: var(--accent-ink);
 }
 .pipeline .arrow {
   flex: 0 0 22px;
@@ -279,11 +289,14 @@
   margin: 0 0 28px;
   padding: 28px 32px;
   background: var(--surface);
-  border: 1px solid var(--rule-strong);
-  border-left: 4px solid var(--stamp);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--stamp);
   border-radius: var(--radius);
-  font-size: clamp(1.15rem, 2.3vw, 1.45rem);
-  line-height: 1.5;
+  box-shadow: var(--shadow);
+  font-size: clamp(1.08rem, 2vw, 1.3rem);
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.55;
   max-width: 900px;
 }
 .hypothesis .label {
@@ -296,8 +309,7 @@
   }
 }
 .checks td:first-child {
-  font-family: var(--serif);
-  font-size: 1rem;
+  font-weight: 500;
   color: var(--ink);
   white-space: nowrap;
 }
@@ -336,23 +348,22 @@
 .model-card {
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-top: 4px solid var(--c);
+  border-top: 3px solid var(--c);
   border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: 20px;
   font-family: var(--sans);
   font-size: 0.85rem;
   color: var(--ink-2);
 }
 .model-card h3 {
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   margin-bottom: 4px;
   color: var(--ink);
 }
 .model-card .where {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--muted);
 }
 .model-card dl {
@@ -383,12 +394,15 @@
 /* The question */
 .question {
   background: var(--surface);
-  border: 1px solid var(--rule-strong);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--rule);
   border-radius: var(--radius);
   padding: 24px;
 }
 .qtext {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.012em;
   margin-bottom: 18px;
 }
 .levels-list {
@@ -416,7 +430,7 @@
   font-size: 0.85rem;
 }
 .levels-list .desc {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--ink-2);
 }
 .levels-list .map {
@@ -575,8 +589,8 @@ input[type="range"] {
   border: 1px solid transparent;
 }
 .rung.chosen {
-  border-color: var(--ink);
-  background: var(--surface-2);
+  border-color: color-mix(in srgb, var(--stamp) 45%, transparent);
+  background: color-mix(in srgb, var(--stamp) 6%, var(--surface));
 }
 .rung .rid {
   font-family: var(--mono);
@@ -629,13 +643,15 @@ input[type="range"] {
 .ex-verdict {
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px dashed var(--rule);
-  font-size: 1.05rem;
+  border-top: 1px solid var(--rule);
+  font-size: 1rem;
+  font-weight: 500;
 }
 .ex-verdict .note {
   display: block;
   color: var(--ink-2);
-  font-size: 0.95rem;
+  font-weight: 400;
+  font-size: 0.92rem;
   margin-top: 4px;
 }
 
@@ -651,7 +667,7 @@ input[type="range"] {
   color: var(--good-text);
 }
 .o-high {
-  color: var(--warning);
+  color: var(--warning-text);
 }
 .o-low {
   color: var(--critical);
@@ -670,24 +686,24 @@ input[type="range"] {
 .score {
   background: var(--surface);
   border: 1px solid var(--rule);
-  border-top: 4px solid var(--c);
+  border-top: 3px solid var(--c);
   border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: 18px 20px;
   font-family: var(--sans);
 }
 .score h3 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-bottom: 12px;
 }
 .score .ref {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 500;
   color: var(--muted);
-  border: 1px solid var(--rule-strong);
-  border-radius: 3px;
-  padding: 1px 6px;
+  border: 1px solid var(--rule);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 2px 8px;
   margin-left: 6px;
   vertical-align: 3px;
 }
@@ -722,7 +738,7 @@ input[type="range"] {
   font-variant-numeric: tabular-nums;
 }
 .score .r .d.worse {
-  color: var(--stamp);
+  color: var(--warning-text);
 }
 .score .r.key .v {
   font-size: 1rem;
@@ -744,6 +760,11 @@ input[type="range"] {
 .findings li {
   padding-left: 22px;
   position: relative;
+  color: var(--ink-2);
+}
+.findings li b {
+  color: var(--ink);
+  font-weight: 600;
 }
 .findings li::before {
   content: "";
@@ -760,9 +781,9 @@ input[type="range"] {
 .sub-h {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  margin-top: 36px;
-  font-size: 1.45rem;
+  gap: 10px;
+  margin-top: 44px;
+  font-size: 1.25rem;
 }
 .sub-h span {
   font-family: var(--mono);
@@ -859,7 +880,7 @@ input[type="range"] {
   stroke-dasharray: 4 3;
 }
 .chart .cursor {
-  stroke: var(--stamp);
+  stroke: var(--ink);
   stroke-width: 1.5;
 }
 .chart .default-line {
@@ -884,10 +905,8 @@ input[type="range"] {
   border-bottom: 1px solid var(--rule);
 }
 .tg-head {
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--muted);
   border-bottom-color: var(--rule-strong);
 }
@@ -930,7 +949,7 @@ input[type="range"] {
   white-space: nowrap;
 }
 .tg-row.differs {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--highlight) 40%, transparent), transparent 60%);
+  background: linear-gradient(90deg, var(--highlight), transparent 70%);
 }
 .tg-row.enter {
   animation: rowin 0.35s ease both;
@@ -985,13 +1004,13 @@ input[type="range"] {
   margin-bottom: 6px;
 }
 .delta-note h4 {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  font-size: 1.02rem;
   margin: 0 0 8px;
 }
 .delta-note p {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--ink-2);
   margin: 0 0 12px;
 }
@@ -1055,7 +1074,7 @@ input[type="range"] {
 }
 .pair .track i {
   flex: 1;
-  background: var(--ink-2);
+  background: var(--rule-strong);
   border-radius: 1px;
 }
 .pair .track i.off {
@@ -1108,9 +1127,8 @@ input[type="range"] {
 }
 .bp h4 {
   margin: 0 0 10px;
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 1.05rem;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 .bp .lane {
   display: grid;
@@ -1159,9 +1177,9 @@ input[type="range"] {
   flex-direction: column;
 }
 .bp .counts b {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: 1.25rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
@@ -1174,7 +1192,7 @@ input[type="range"] {
   color: var(--critical);
 }
 .bp .counts .warn b {
-  color: var(--stamp);
+  color: var(--warning-text);
 }
 @media (max-width: 960px) {
   .bar-panels {
@@ -1202,7 +1220,12 @@ input[type="range"] {
 .next ol {
   margin: 10px 0 0;
   padding-left: 1.1em;
-  font-size: 0.98rem;
+  font-size: 0.92rem;
+  color: var(--ink-2);
+}
+.caveats li b {
+  color: var(--ink);
+  font-weight: 600;
 }
 .caveats li,
 .next li {
@@ -1242,6 +1265,7 @@ input[type="range"] {
 /* Tooltip */
 .tip {
   position: fixed;
+  border: 1px solid color-mix(in srgb, var(--paper) 15%, transparent);
   z-index: 50;
   max-width: 320px;
   background: var(--ink);

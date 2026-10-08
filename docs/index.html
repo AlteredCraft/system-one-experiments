@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/site.css" />
@@ -33,11 +33,11 @@
         align-items: center;
       }
       .hero h1 em {
-        font-style: italic;
-        color: var(--stamp);
+        color: var(--muted);
+        font-weight: inherit;
       }
       .hero .sub {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         color: var(--ink-2);
         max-width: 40ch;
         margin-bottom: 28px;
@@ -48,21 +48,27 @@
         gap: 10px;
       }
       .cta {
-        font-family: var(--mono);
-        font-size: 0.8rem;
+        font-size: 0.875rem;
+        font-weight: 500;
         text-decoration: none;
-        padding: 11px 18px;
-        border-radius: 999px;
-        border: 1px solid var(--ink);
+        padding: 9px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--rule);
+        background: var(--surface);
         color: var(--ink);
+        box-shadow: var(--shadow);
       }
       .cta.primary {
         background: var(--ink);
-        color: var(--paper);
+        border-color: var(--ink);
+        color: var(--surface);
       }
       .cta:hover {
         text-decoration: none;
-        opacity: 0.88;
+        background: var(--surface-2);
+      }
+      .cta.primary:hover {
+        background: color-mix(in srgb, var(--ink) 86%, var(--surface));
       }
       @media (max-width: 900px) {
         .hero .wrap {
@@ -74,11 +80,9 @@
       /* The instrument: a live readout replaying real answers. */
       .instrument {
         background: var(--surface);
-        border: 1px solid var(--rule-strong);
-        border-radius: 10px;
-        box-shadow:
-          0 1px 0 var(--rule),
-          0 18px 40px -24px rgba(40, 30, 10, 0.35);
+        border: 1px solid var(--rule);
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
         font-family: var(--sans);
         overflow: hidden;
       }
@@ -224,7 +228,7 @@
         margin-left: auto;
       }
       .type p {
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         color: var(--ink-2);
       }
       .type .ex {
@@ -267,7 +271,7 @@
         gap: 12px;
       }
       .specimen h3 {
-        font-size: 1.55rem;
+        font-size: 1.3rem;
         margin: 0;
       }
       .specimen .idea {
@@ -276,10 +280,10 @@
       }
       .specimen blockquote {
         margin: 0;
-        padding: 10px 0 10px 16px;
+        padding: 2px 0 2px 14px;
         border-left: 2px solid var(--rule-strong);
-        font-style: italic;
-        font-size: 0.98rem;
+        color: var(--ink-2);
+        font-size: 0.92rem;
       }
       .specimen dl {
         display: grid;
@@ -290,12 +294,10 @@
         font-size: 0.82rem;
       }
       .specimen dt {
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 500;
         color: var(--muted);
-        padding-top: 2px;
+        padding-top: 1px;
       }
       .specimen dd {
         margin: 0;
@@ -312,7 +314,7 @@
         grid-column: 1 / -1;
         border-color: var(--rule-strong);
         background:
-          radial-gradient(circle at 100% 0, color-mix(in srgb, var(--highlight) 45%, transparent), transparent 45%),
+          radial-gradient(80% 120% at 100% 0, color-mix(in srgb, var(--stamp) 7%, transparent), transparent 60%),
           var(--surface);
       }
       .specimen.featured .grid {
@@ -333,8 +335,9 @@
         font-family: var(--sans);
       }
       .finding .n {
-        font-family: var(--serif);
-        font-size: 2rem;
+        font-size: 1.9rem;
+        font-weight: 600;
+        letter-spacing: -0.03em;
         line-height: 1;
       }
       .finding .t {
@@ -369,6 +372,9 @@
       /* Protocol */
       .protocol {
         counter-reset: step;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 0;
@@ -395,7 +401,7 @@
         font-size: 1.15rem;
       }
       .protocol p {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: var(--ink-2);
         margin: 0;
       }
@@ -460,12 +466,14 @@
         border-color: var(--stamp);
       }
       .log .what {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        font-weight: 500;
       }
       .log .what small {
         display: block;
         color: var(--ink-2);
-        font-size: 0.9rem;
+        font-size: 0.88rem;
+        font-weight: 400;
       }
       @media (max-width: 560px) {
         .log::before {
@@ -518,7 +526,7 @@
             <rect x="14" y="8" width="4" height="17" fill="var(--paper)" />
             <rect x="21" y="14" width="4" height="11" fill="var(--paper)" />
           </svg>
-          SYSTEM&nbsp;ONE / EXPERIMENTS
+          System One Experiments
         </a>
         <nav aria-label="Site">
           <a class="hide-sm" href="#experiments">Experiments</a>
@@ -576,7 +584,7 @@
       <section id="system-one">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">§ 1</div>
+            <div class="sec-num">01</div>
             <div>
               <h2>Three kinds of question, no prose</h2>
               <p class="lede">
@@ -619,7 +627,7 @@
       <section id="experiments">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">§ 2</div>
+            <div class="sec-num">02</div>
             <div>
               <h2>The experiments</h2>
               <p class="lede">
@@ -700,7 +708,7 @@
             <article class="card specimen reveal">
               <div class="head">
                 <span class="label">EXP-01 · misconception-gates · Node</span>
-                <span class="stamp">Skeleton</span>
+                <span class="stamp idle">Skeleton</span>
               </div>
               <h3>Grade the misunderstanding</h3>
               <p class="idea">
@@ -723,7 +731,7 @@
             <article class="card specimen reveal">
               <div class="head">
                 <span class="label">EXP-03 · semver-judge · Python</span>
-                <span class="stamp">Skeleton</span>
+                <span class="stamp idle">Skeleton</span>
               </div>
               <h3>The next version number</h3>
               <p class="idea">
@@ -749,7 +757,7 @@
       <section id="protocol">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">§ 3</div>
+            <div class="sec-num">03</div>
             <div>
               <h2>Protocol</h2>
               <p class="lede">
@@ -785,7 +793,7 @@
       <section id="notebook">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">§ 4</div>
+            <div class="sec-num">04</div>
             <div>
               <h2>Notebook</h2>
               <p class="lede">Dated entries, newest first. Each experiment's README records its evidence the same way.</p>
@@ -842,7 +850,7 @@
         <div class="wrap limits">
           <div class="reveal">
             <div class="sec-head" style="grid-template-columns: 1fr; margin-bottom: 0">
-              <div class="sec-num" style="width: 48px; margin-bottom: 10px">§ 5</div>
+              <div class="sec-num" style="width: 48px; margin-bottom: 10px">05</div>
               <div>
                 <h2>Read before trusting</h2>
                 <p class="lede">Limits that apply to every experiment here.</p>
