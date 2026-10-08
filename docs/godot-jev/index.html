@@ -56,7 +56,7 @@
       <a href="#question"><span>04</span>The question</a>
       <a href="#policy"><span>05</span>Answer → turn</a>
       <a href="#result"><span>06</span>Result</a>
-      <a href="#deltas"><span>07</span>The deltas</a>
+      <a href="#deltas"><span>07</span>Differences</a>
       <a href="#bar"><span>08</span>Move the thresholds</a>
       <a href="#speed"><span>09</span>Speed</a>
       <a href="#caveats"><span>10</span>Caveats</a>
@@ -70,10 +70,11 @@
           <h1>Three Jevs parse <em>16 lines of player slang.</em></h1>
           <p class="sub">
             <em>The Sunken Crypt</em> is a dungeon crawl whose parser sends whatever the player typed to a System One
-            model, with the moves possible right now as the options of one Choice. We gave three Jevs, a hosted one
+            model, with the moves possible right now as the options of one Choice. I gave three Jevs, one hosted
             and two running on a laptop, the same 16 lines in the same game states, three times each. All three got
             the player to the crown without a wrong move. They differ in how sure they were, how often the game had
-            to ask what the player meant, and how long a turn took on this setup.
+            to ask what the player meant, and how long a turn took on this setup. This is a gut check on a small,
+            hand-written set of lines, not a benchmark: <a href="#caveats">what it does and doesn't show</a>.
           </p>
           <div class="hero-stats" id="hero-stats"></div>
           <div class="legend-models" id="legend-models"></div>
@@ -329,7 +330,7 @@
           <div class="sec-head reveal">
             <div class="sec-num">07</div>
             <div>
-              <h2>The deltas between the Jevs</h2>
+              <h2>Where the three models differ</h2>
               <p class="lede">
                 Same top choice on every turn, different confidence in it. That difference is what the player would
                 notice: a model that is less sure makes the game ask more often.
@@ -370,10 +371,6 @@
           </p>
 
           <div class="delta-notes reveal" id="delta-notes"></div>
-
-          <h3 class="sub-h reveal"><span>7c</span>How often each pair agreed</h3>
-          <div class="pairs reveal" id="pairs"></div>
-          <p class="figcap" id="pairs-cap"></p>
         </div>
       </section>
 
@@ -417,7 +414,7 @@
             </div>
           </div>
           <p class="figcap">
-            <b>Fig. 8</b>Panels: one row per round, one cell per line in route order, shaded by what the game did at
+            <b>Fig. 7</b>Panels: one row per round, one cell per line in route order, shaded by what the game did at
             these thresholds. Charts: how many of each model's 48 turns ask, or dead-end, as one threshold moves and
             the other stays where its slider is; the vertical rule follows the slider. A dead end is a line that
             means a move and comes back unknown.
@@ -450,7 +447,7 @@
             </p>
             <p>
               The TypeSafe figure is a round trip over the network from that laptop to a hosted API, so it mixes
-              their serving time with our connection. Read all three as what a turn cost in this setup, on this day.
+              their serving time with my connection. Read all three as what a turn cost in this setup, on this day.
             </p>
           </div>
           <div class="figure reveal">
@@ -470,9 +467,7 @@
                 <tr>
                   <th>Decision model</th>
                   <th>Run</th>
-                  <th class="num">min</th>
                   <th class="num">p50</th>
-                  <th class="num">mean</th>
                   <th class="num">p95</th>
                   <th class="num">max</th>
                   <th>Check 2</th>
@@ -492,7 +487,10 @@
             <div class="sec-num">10</div>
             <div>
               <h2>What this does and doesn't show</h2>
-              <p class="lede">Read it as "the mechanism works on three models", not as a measured accuracy.</p>
+              <p class="lede">
+                This was a gut check. Read it as "the mechanism works on three models, on lines written to solve the dungeon",
+                not as a measured accuracy.
+              </p>
             </div>
           </div>
           <div class="caveats reveal">
@@ -500,7 +498,7 @@
               <span class="label">It shows</span>
               <ul>
                 <li>The same game, parser and thresholds work unchanged on all three decision models.</li>
-                <li>A Choice over the possible moves maps heavy slang to the right authored move.</li>
+                <li>A Choice over the possible moves mapped these 16 lines of heavy slang to the right authored move.</li>
                 <li>When a model is less sure, the thresholds turn that into a question, not a wrong move.</li>
                 <li>The thresholds can be tried after the fact without asking again.</li>
               </ul>
@@ -514,7 +512,7 @@
                 <li><b>No typos, no indirect requests</b>, and nothing ambiguous between two moves in the same room.</li>
                 <li><b>Short option lists.</b> Between 6 and 13 options a turn, against the 255 a Choice can take.</li>
                 <li><b>The lines don't separate the models.</b> All three landed 48 of 48, so this says nothing about which understands best.</li>
-                <li><b>How fast the models are.</b> The local timings come from 4-bit builds on one laptop running a desktop OS and other applications; the hosted one includes the network. See <a href="#latency-note">the note under Speed</a>.</li>
+                <li><b>How fast the models are.</b> See <a href="#latency-note">the note under Speed</a>.</li>
               </ul>
             </div>
           </div>

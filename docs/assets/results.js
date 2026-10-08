@@ -58,8 +58,8 @@ window.S1X = (function () {
   const widthOf = (el) => Math.max(280, el.clientWidth);
 
   /* One card per run, each metric beside its difference from `ref`. A metric is
-     { k, v(run), f(value), better: 1 | -1 | 0 } with optional key, frac
-     (a fraction, shown to two places) and ratio (shown as a multiple of ref). */
+     { k, v(run), f(value), better: 1 | -1 } with optional key and ratio.
+     v is a count, or with ratio a time shown as a multiple of ref's. */
   function scoreCards(runs, ref, metrics) {
     return runs
       .map((r) => {
@@ -75,9 +75,8 @@ window.S1X = (function () {
                 worse = v > rv;
               } else {
                 const diff = v - rv;
-                const near = Math.abs(diff) < (m.frac ? 0.005 : 0.5);
-                d = near ? "=" : `${diff > 0 ? "+" : "−"}${m.frac ? f2(Math.abs(diff)) : Math.abs(diff)}`;
-                worse = !near && m.better !== 0 && Math.sign(diff) === -m.better;
+                d = diff === 0 ? "=" : `${diff > 0 ? "+" : "−"}${Math.abs(diff)}`;
+                worse = Math.sign(diff) === -m.better;
               }
             }
             return `<div class="r${m.key ? " key" : ""}"><span class="k">${m.k}</span><span class="v">${m.f(v)}</span><span class="d${worse ? " worse" : ""}">${d}</span></div>`;

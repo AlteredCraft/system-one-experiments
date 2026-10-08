@@ -6,7 +6,7 @@
     <title>System One Experiments</title>
     <meta
       name="description"
-      content="A lab notebook of experiments with System One models: models that answer typed questions with calibrated probabilities instead of writing text."
+      content="A gut check on System One models, which answer typed questions with probabilities instead of writing text: four small experiments, two with recorded runs."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -490,6 +490,10 @@
         }
       }
 
+      .sec-head .lede + .lede {
+        margin-top: 0.9em;
+      }
+
       .limits {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -577,10 +581,38 @@
         </div>
       </div>
 
-      <section id="system-one">
+      <section id="why">
         <div class="wrap">
           <div class="sec-head reveal">
             <div class="sec-num">01</div>
+            <div>
+              <h2>Why I ran these</h2>
+              <p class="lede">
+                I wanted a quick, reasonably informed gut check on whether this class of model is viable. The jobs I
+                had in mind are small decisions that fixed rules can't make: which move a player meant, which model a
+                sub-agent task needs, which misconception an answer shows.
+              </p>
+              <p class="lede">
+                Each experiment follows the same method. It states a hypothesis and the checks that would confirm it,
+                pins the model version, records every answer, and builds its results page from those records. The
+                rigor still stops well short of a study. The samples are small and hand-written, the labels are one
+                person's opinion, and most of the checks are open. <a href="#limits">The limits are listed below.</a>
+              </p>
+              <p class="lede">
+                So far two of the four experiments have live runs. In both, a hosted model and two running on a laptop
+                handled a small set of mostly clear cases without a costly mistake, and differed in how sure they
+                were. That tells me the mechanism works. It doesn't give an accuracy figure. If one of these is close
+                to a problem you have, the code is there to run against your own data.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="system-one">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">02</div>
             <div>
               <h2>Three kinds of question, no prose</h2>
               <p class="lede">
@@ -623,7 +655,7 @@
       <section id="experiments">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">02</div>
+            <div class="sec-num">03</div>
             <div>
               <h2>The experiments</h2>
               <p class="lede">
@@ -771,11 +803,11 @@
       <section id="protocol">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">03</div>
+            <div class="sec-num">04</div>
             <div>
               <h2>Protocol</h2>
               <p class="lede">
-                Every experiment is built the same way. It keeps the model replaceable and the tests honest.
+                Every experiment is built the same way, so the model can be swapped and no test needs the network.
               </p>
             </div>
           </div>
@@ -807,7 +839,7 @@
       <section id="notebook">
         <div class="wrap">
           <div class="sec-head reveal">
-            <div class="sec-num">04</div>
+            <div class="sec-num">05</div>
             <div>
               <h2>Notebook</h2>
               <p class="lede">Dated entries, newest first. Each experiment's README records its evidence the same way.</p>
@@ -832,7 +864,7 @@
               <time datetime="2026-09-30">2026-09-30</time><span class="node"></span>
               <div class="what">
                 The Sunken Crypt on TypeSafe Jev and Open Jev
-                <small>Same 16 lines, three rounds each. Both 48 of 48. p50 213 ms hosted, 600 ms for the 27B run locally.</small>
+                <small>Same 16 lines, three rounds each. Both landed 48 of 48.</small>
               </div>
             </li>
             <li>
@@ -871,24 +903,28 @@
         <div class="wrap limits">
           <div class="reveal">
             <div class="sec-head" style="grid-template-columns: 1fr; margin-bottom: 0">
-              <div class="sec-num" style="width: 48px; margin-bottom: 10px">05</div>
+              <div class="sec-num" style="width: 48px; margin-bottom: 10px">06</div>
               <div>
                 <h2>Read before trusting</h2>
-                <p class="lede">Limits that apply to every experiment here.</p>
+                <p class="lede">Limits of the evidence, and of the models, that apply to every experiment here.</p>
               </div>
             </div>
           </div>
           <ul class="reveal">
+            <li>
+              <em>The evidence is thin.</em> The two live runs cover 24 tasks and 16 lines, hand-written for these
+              experiments, and most are clear cases. Nobody else has checked the labels, and nothing has been run on
+              input from real users.
+            </li>
             <li>Jev takes text only and reads instructions literally.</li>
             <li>It can't count or compare dates. That's why arithmetic and thresholds live in code.</li>
             <li>Text inside the state can argue for an answer: a learner, a commit author, a player or an orchestrating model can write "this is trivial".</li>
             <li>Where the state comes from someone with a reason to game it, keep the stakes of any automatic action low, or keep a human in the loop.</li>
             <li>
-              <em>The latencies for the local models are not a statement of how fast those models are.</em> They were
-              measured on 4-bit MLX builds on one Apple M5 Pro laptop, running macOS, a desktop operating system and
-              not a server, with other applications open. Server hardware, another quantisation or another runtime
-              would give different numbers. The hosted figures include a network round trip from that laptop. Read
-              every timing here as what a decision cost in this setup.
+              <em>The latencies for the local models are not a statement of how fast those models are.</em> They come
+              from 4-bit MLX builds on one Apple M5 Pro laptop with other applications open. Server hardware, another
+              quantisation or another runtime would give different numbers. The hosted figures include a network
+              round trip from that laptop. Read every timing here as what a decision cost in this setup.
             </li>
           </ul>
         </div>

@@ -1032,65 +1032,6 @@ input[type="range"] {
   }
 }
 
-/* Pairs */
-.pairs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-.pair {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  font-family: var(--sans);
-  font-size: 0.82rem;
-}
-.pair .who {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 6px;
-  margin-bottom: 12px;
-  color: var(--ink);
-  font-weight: 600;
-}
-.pair .who .vs {
-  color: var(--muted);
-  font-weight: 400;
-}
-.pair .m {
-  display: grid;
-  grid-template-columns: 100px minmax(0, 1fr) 44px;
-  gap: 8px;
-  align-items: center;
-  margin-top: 6px;
-  color: var(--ink-2);
-}
-.pair .track {
-  display: flex;
-  gap: 1px;
-  height: 12px;
-}
-.pair .track i {
-  flex: 1;
-  background: var(--rule-strong);
-  border-radius: 1px;
-}
-.pair .track i.off {
-  background: var(--stamp);
-}
-.pair .m b {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-@media (max-width: 860px) {
-  .pairs {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Move the bar */
 .bar-control {
   display: grid;

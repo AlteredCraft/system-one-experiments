@@ -110,8 +110,6 @@
           <dl>
             <dt>Served model</dt><dd><code>${esc(r.servedModel)}</code></dd>
             <dt>Size</dt><dd>${esc(r.size)}</dd>
-            ${r.temperature ? `<dt>Calibration</dt><dd>T=${esc(r.temperature)}</dd>` : ""}
-            <dt>Median</dt><dd>${ms(r.latency.p50)} per decision${r.where === "Local" ? ", on this laptop" : ", network included"}</dd>
           </dl>
           <p>${esc(r.note)}</p>
         </article>`,
@@ -240,11 +238,8 @@
       { k: "Routed too high", v: (r) => atDefault(r).over, f: String, better: -1 },
       { k: "Kept off the top model", v: (r) => N - atDefault(r).routes[ids[TOP]], f: (v) => `${v} (${pct(v)})`, better: 1 },
       { k: `Sure (≥ ${D.sureAt} on one route)`, v: (r) => r.sure, f: (v) => `${v} of ${N}`, better: 1 },
-      { k: "Mean probability on the label", v: (r) => r.meanOnLabel, f: f2, better: 1, frac: true },
-      { k: "Moved up by the rule", v: (r) => r.escalatedCount, f: String, better: 0 },
       { k: "Too low if it took the biggest number", v: (r) => r.likeliestWrongLow, f: String, better: -1 },
       { k: "Median per decision, this setup", v: (r) => r.latency.p50, f: ms, better: -1, ratio: true },
-      { k: "p95 per decision, this setup", v: (r) => r.latency.p95, f: ms, better: -1, ratio: true },
     ];
     $("#scoreboard").innerHTML = scoreCards(runs, ref, metrics);
 
@@ -263,7 +258,7 @@
         .join(" ")}`,
       `<b>They differ in certainty.</b> Tasks where a model put ≥ ${D.sureAt} on one route: ${sureText}, out of ${N}.`,
       `<b>Flash 9B's ${s[runs.indexOf(flash)].agree} of ${N} depends on the routing rule.</b> Its biggest number would have sent ${flash.likeliestWrongLow} tasks to too weak a model; the rule moved them up. For the other two the rule changed nothing.`,
-      `<b>${fastest.name} was fastest</b>, network round trip included. Of the local models, ${local[0].short} answered ×${(local[1].latency.p50 / local[0].latency.p50).toFixed(1)} faster than the ${local[1].short}, at about a third of the download (${local[0].size} against ${local[1].size}). These are timings from one laptop in ordinary use, and <a href="#speed">not a measure of how fast the models are</a>.`,
+      `<b>${fastest.name} was fastest</b>, network round trip included. Of the local models, ${local[0].short} answered ×${(local[1].latency.p50 / local[0].latency.p50).toFixed(1)} faster than the ${local[1].short}, at about a third of the download (${local[0].size} against ${local[1].size}). <a href="#latency-note">These timings describe this setup, not the models</a>.`,
     ]
       .map((t) => `<li>${t}</li>`)
       .join("");
@@ -378,23 +373,6 @@
         <p>Flash 9B split all three between lookup and standard, with lookup slightly ahead (${[13, 14, 15].map((i) => f2(flash.rows[i].p[0])).join(", ")}). The rule moved each up to standard. The 27B was sure of all three; TypeSafe Jev was sure of 14 and 15 and less sure of 16, the README task (${f2(ts16.p[1])} on standard).</p>
         <div class="mini">${[14, 15, 16].map((n) => `<div class="label" style="margin-top:4px">Task ${n}</div>${mini(n, runs)}`).join("")}</div>
       </article>`;
-  }
-
-  /* ---------- §7c pairs ---------- */
-  function pairs() {
-    $("#pairs").innerHTML = D.pairs
-      .map((p) => {
-        const a = byId[p.a];
-        const b = byId[p.b];
-        const track = (field) =>
-          a.rows.map((r, i) => `<i class="${r[field] === b.rows[i][field] ? "" : "off"}" ${tipAttr(`Task ${i + 1}: ${a.short} ${ids[r[field]]}, ${b.short} ${ids[b.rows[i][field]]}`)}></i>`).join("");
-        return `<div class="pair">
-          <div class="who">${swatch(a)}${esc(a.short)} <span class="vs">vs</span> ${swatch(b)}${esc(b.short)}</div>
-          <div class="m"><span>Same route</span><span class="track">${track("route")}</span><b>${p.sameRoute}/${N}</b></div>
-          <div class="m"><span>Same likeliest</span><span class="track">${track("likeliest")}</span><b>${p.sameLikeliest}/${N}</b></div>
-        </div>`;
-      })
-      .join("");
   }
 
   /* ---------- §8 move the bar ---------- */
@@ -559,7 +537,7 @@
       .map((r) => {
         const L = r.latency;
         const pass = L.p95 <= D.speedCheckMs;
-        return `<tr><td>${swatch(r)}${esc(r.name)}</td>${[L.min, L.p50, L.mean, L.p95, L.max].map((v) => `<td class="num">${ms(v)}</td>`).join("")}<td><span class="${pass ? "mark-pass" : "mark-fail"}">${pass ? "pass" : `misses by ${Math.round(L.p95 - D.speedCheckMs)} ms`}</span></td></tr>`;
+        return `<tr><td>${swatch(r)}${esc(r.name)}</td>${[L.p50, L.p95, L.max].map((v) => `<td class="num">${ms(v)}</td>`).join("")}<td><span class="${pass ? "mark-pass" : "mark-fail"}">${pass ? "pass" : `misses by ${Math.round(L.p95 - D.speedCheckMs)} ms`}</span></td></tr>`;
       })
       .join("");
   }
@@ -606,7 +584,6 @@
   routeKey();
   taskGrid();
   deltaNotes();
-  pairs();
   sources();
   latTable();
   barNotes();

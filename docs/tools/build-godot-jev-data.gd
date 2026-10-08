@@ -97,16 +97,13 @@ func _run() -> void:
 		var ms: Array = rows.map(func(r): return r.ms)
 		var confidences: Array = rows.map(func(r): return r.confidence)
 		var served: String = raw.backends[meta.backend].served
-		var temperature := RegEx.create_from_string("\\bT=([\\d.]+)").search(served)
 		var run: Dictionary = meta.duplicate()
 		run.merge({
 			"servedModel": served.get_slice(" ", 0),
-			"temperature": temperature.get_string(1) if temperature else "",
 			"rows": rows,
 			"summary": _ints(raw.summary[meta.backend]),
 			"latency": {
-				"min": ms.min(), "p50": Compare.percentile(ms, 50), "mean": _mean(ms),
-				"p95": Compare.percentile(ms, 95), "max": ms.max(),
+				"p50": Compare.percentile(ms, 50), "p95": Compare.percentile(ms, 95), "max": ms.max(),
 			},
 			"sure": confidences.filter(func(c): return c >= SURE).size(),
 			"meanConfidence": _mean(confidences),
@@ -114,15 +111,6 @@ func _run() -> void:
 			"sameEveryRound": _same_every_round(rows, rounds),
 		})
 		runs.append(run)
-
-	var pairs := []
-	for a in runs.size():
-		for b in range(a + 1, runs.size()):
-			var same_kind := 0
-			for i in runs[a].rows.size():
-				same_kind += int(runs[a].rows[i].kind == runs[b].rows[i].kind)
-			var agree: Array = Compare.agreement(raw.rows, runs[a].backend, runs[b].backend)
-			pairs.append({"a": runs[a].id, "b": runs[b].id, "sameTop": agree[0], "sameKind": same_kind, "turns": agree[1]})
 
 	var earlier: Dictionary = _read("res://eval/" + EARLIER)
 	var data := {
@@ -140,7 +128,6 @@ func _run() -> void:
 		"noneText": none_text,
 		"lines": lines,
 		"runs": runs,
-		"pairs": pairs,
 		"earlier": {
 			"when": earlier.when, "rounds": int(earlier.rounds),
 			"typesafe": _ints(earlier.summary.typesafe), "27b": _ints(earlier.summary.openjev),
@@ -162,8 +149,6 @@ func _run() -> void:
 		var s: Dictionary = run.summary
 		print("%-18s landed %d/%d  act %d  clarify %d  unknown %d  sure %d  mean confidence %.2f  p50 %d ms  p95 %d ms" % [
 			run.name, s.landed, s.turns, s.act, s.clarify, s.unknown, run.sure, run.meanConfidence, s.p50_ms, s.p95_ms])
-	for p in pairs:
-		print("%s vs %s: same top choice %d/%d, same outcome %d/%d" % [p.a, p.b, p.sameTop, p.turns, p.sameKind, p.turns])
 	quit(0)
 
 

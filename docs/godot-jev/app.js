@@ -139,8 +139,6 @@
           <dl>
             <dt>Served model</dt><dd><code>${esc(r.servedModel)}</code></dd>
             <dt>Size</dt><dd>${esc(r.size)}</dd>
-            ${r.temperature ? `<dt>Calibration</dt><dd>T=${esc(r.temperature)}</dd>` : ""}
-            <dt>Median</dt><dd>${ms(r.latency.p50)} per turn${r.where === "Local" ? ", on this laptop" : ", network included"}</dd>
             <dt>Rounds</dt><dd>${r.sameEveryRound ? "the same answer to a line every round" : "confidence moved a little between rounds"}</dd>
           </dl>
           <p>${esc(r.note)}</p>
@@ -340,12 +338,8 @@
       { k: "Wrong moves and dead ends", v: (r) => at(r).wrong + at(r).dead, f: String, better: -1, key: true },
       { k: "Acted at once", v: (r) => r.summary.act, f: String, better: 1 },
       { k: 'Asked "did you mean?"', v: (r) => r.summary.clarify, f: String, better: -1 },
-      { k: "Unknown (the gin line)", v: (r) => r.summary.unknown, f: String, better: 0 },
       { k: `Sure (confidence ≥ ${D.sureAt})`, v: (r) => r.sure, f: (v) => `${v} of ${N}`, better: 1 },
-      { k: "Mean confidence", v: (r) => r.meanConfidence, f: f2, better: 1, frac: true },
-      { k: "Lowest confidence in a move", v: (r) => r.lowestOnAMove, f: f2, better: 1, frac: true },
       { k: "Median per turn, this setup", v: (r) => r.latency.p50, f: ms, better: -1, ratio: true },
-      { k: "p95 per turn, this setup", v: (r) => r.latency.p95, f: ms, better: -1, ratio: true },
     ];
     $("#scoreboard").innerHTML = scoreCards(runs, ref, metrics);
 
@@ -364,7 +358,7 @@
       `<b>No wrong move in ${N * runs.length} turns.</b> Every model ranked the move the line means first on every turn, and chose "none of these" for the gin line every time.`,
       `<b>They differ in certainty.</b> Turns with a confidence of ${D.sureAt} or more: ${runs.map((r) => `${r.short} ${r.sure}`).join(", ")}, out of ${N}.`,
       `<b>Less certainty shows up as questions.</b> ${askText} The other two acted on every one.`,
-      `<b>On this setup the hosted model and ${local[0].short} took about the same time</b>, a median of ${ms(ref.latency.p50)} and ${ms(local[0].latency.p50)}, and the ${local[1].short} took about ${(local[1].latency.p50 / local[0].latency.p50).toFixed(1)} times as long as ${local[0].short}. These are timings from one laptop with other things running, and <a href="#latency-note">not a measure of how fast the models are</a>.`,
+      `<b>On this setup the hosted model and ${local[0].short} took about the same time</b>, a median of ${ms(ref.latency.p50)} and ${ms(local[0].latency.p50)}, and the ${local[1].short} took about ${(local[1].latency.p50 / local[0].latency.p50).toFixed(1)} times as long as ${local[0].short}. <a href="#latency-note">These timings describe this setup, not the models</a>.`,
     ]
       .map((t) => `<li>${t}</li>`)
       .join("");
@@ -478,35 +472,6 @@
         <p>All three chose "none of these", so the game printed an authored refusal. TypeSafe Jev put ${p("typesafe", 0)} on it and the 27B ${p("27b", 0)}. Flash 9B put ${p("flash", 0)}, with ${f2(gin.ranked[1][1])} on "${esc(textOf(0, gin.ranked[1][0]))}" and ${f2(gin.ranked[2][1])} on "${esc(textOf(0, gin.ranked[2][0]))}". The parser treats a choice of "none" as unknown at any confidence, so the thresholds played no part. One line is too few to say how often Flash 9B would pick a move here.</p>
         <div class="mini">${mini(0)}</div>
       </article>`;
-  }
-
-  /* ---------- §7c pairs ---------- */
-  function pairs() {
-    $("#pairs").innerHTML = D.pairs
-      .map((p) => {
-        const a = byId[p.a];
-        const b = byId[p.b];
-        const track = (same, say) =>
-          a.rows
-            .map((r, i) => `<i class="${same(r, b.rows[i]) ? "" : "off"}" ${tipAttr(`Line ${r.line + 1}, round ${r.round + 1}: ${esc(a.short)} ${say(r)}, ${esc(b.short)} ${say(b.rows[i])}`)}></i>`)
-            .join("");
-        return `<div class="pair">
-          <div class="who">${swatch(a)}${esc(a.short)} <span class="vs">vs</span> ${swatch(b)}${esc(b.short)}</div>
-          <div class="m"><span>Same top choice</span><span class="track">${track(
-            (r, s) => r.top === s.top,
-            (r) => esc(textOf(r.line, r.top)),
-          )}</span><b>${p.sameTop}/${p.turns}</b></div>
-          <div class="m"><span>Same outcome</span><span class="track">${track(
-            (r, s) => r.kind === s.kind,
-            (r) => r.kind,
-          )}</span><b>${p.sameKind}/${p.turns}</b></div>
-        </div>`;
-      })
-      .join("");
-    const allTop = D.pairs.every((p) => p.sameTop === p.turns);
-    $("#pairs-cap").innerHTML =
-      `<b>Fig. 7</b>Out of ${N} turns. "Same top choice" is the option each model ranked first; "same outcome" is whether the game acted, asked or said unknown at its thresholds. ` +
-      (allTop ? "Every pair ranked the same option first on every turn, so the only differences come from confidence." : "");
   }
 
   /* ---------- §8 move the thresholds ---------- */
@@ -678,7 +643,7 @@
       checkMs: D.speedCheckMs,
     });
     $("#lat-cap").innerHTML =
-      `<b>Fig. 9</b>Each dot is one turn: ${N} per model. Ticks mark p50 and p95. The three models were asked each line one after another, so they shared whatever else the laptop was doing at that moment. ` +
+      `<b>Fig. 8</b>Each dot is one turn: ${N} per model. Ticks mark p50 and p95. The three models were asked each line one after another, so they shared whatever else the laptop was doing at that moment. ` +
       `Times are taken in the game loop, which ticks about every 7 ms in a headless run, so dots line up in steps of that size.`;
   }
   function routeChart() {
@@ -726,7 +691,7 @@
       return `from about ${Math.round(first)} ms on line 1 to about ${Math.round(last)} ms on line ${L}`;
     };
     $("#route-cap").innerHTML =
-      `<b>Fig. 10</b>The same turns in route order, with the number of options each question offered. The local models take longer as the request grows, with more options and more items in the state: ` +
+      `<b>Fig. 9</b>The same turns in route order, with the number of options each question offered. The local models take longer as the request grows, with more options and more items in the state: ` +
       `the 27B ${span(byId["27b"])}, Flash 9B ${span(byId.flash)}. The hosted model shows no such trend at this size.`;
   }
   function latTable() {
@@ -737,13 +702,13 @@
     const day = (when) => when.slice(0, 10);
     const now = runs.map((r) => {
       const T = r.latency;
-      return `<tr><td>${swatch(r)}${esc(r.name)}</td><td>${day(D.when)}</td>${[T.min, T.p50, T.mean, T.p95, T.max].map((v) => `<td class="num">${ms(v)}</td>`).join("")}<td>${check(T.p95)}</td></tr>`;
+      return `<tr><td>${swatch(r)}${esc(r.name)}</td><td>${day(D.when)}</td>${[T.p50, T.p95, T.max].map((v) => `<td class="num">${ms(v)}</td>`).join("")}<td>${check(T.p95)}</td></tr>`;
     });
     const before = runs
       .filter((r) => D.earlier[r.id])
       .map((r) => {
         const s = D.earlier[r.id];
-        return `<tr><td>${swatch(r)}${esc(r.name)}</td><td>${day(D.earlier.when)}</td><td class="num">—</td><td class="num">${ms(s.p50_ms)}</td><td class="num">—</td><td class="num">${ms(s.p95_ms)}</td><td class="num">${ms(s.max_ms)}</td><td>${check(s.p95_ms)}</td></tr>`;
+        return `<tr><td>${swatch(r)}${esc(r.name)}</td><td>${day(D.earlier.when)}</td><td class="num">${ms(s.p50_ms)}</td><td class="num">${ms(s.p95_ms)}</td><td class="num">${ms(s.max_ms)}</td><td>${check(s.p95_ms)}</td></tr>`;
       });
     $("#lat-table tbody").innerHTML = [...now, ...before].join("");
     const e = D.earlier;
@@ -796,7 +761,6 @@
   routeKey();
   lineGrid();
   deltaNotes();
-  pairs();
   sources();
   latTable();
   barNotes();

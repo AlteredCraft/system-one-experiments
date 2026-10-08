@@ -9,7 +9,7 @@ folder `/docs`.
 
 | Path | What it is |
 | --- | --- |
-| `index.html` | Landing page: what System One models are, the four experiments, the protocol, the notebook log |
+| `index.html` | Landing page: why the experiments were run, what System One models are, the four experiments, the protocol, the notebook log, the limits |
 | `assets/` | Shared by every page: styles (`site.css`) and the theme toggle (`site.js`). Shared by the results pages: `results.css`, and `results.js` (tooltips, chart helpers, the side contents) |
 | `model-router/` | The 2026-10-08 model-router run: `index.html`, `app.js`, and generated `data.js` |
 | `godot-jev/` | The 2026-10-08 three-model godot-jev run: `index.html`, `page.css`, `app.js`, a screenshot of the game, and generated `data.js` |

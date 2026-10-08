@@ -89,30 +89,17 @@ for (const meta of RUNS) {
   runs.push({
     ...meta,
     servedModel: modelName(raw.rows[0].model),
-    temperature: /\bT=([\d.]+)/.exec(raw.rows[0].model)?.[1] ?? null,
     rows,
     summaries: raw.summaries,
     latency: {
-      min: Math.min(...ms),
       p50: percentile(ms, 50),
-      mean: ms.reduce((a, b) => a + b, 0) / ms.length,
       p95: percentile(ms, 95),
       max: Math.max(...ms),
     },
     sure: top.filter((t) => t >= SURE).length,
     meanOnLabel: rows.reduce((a, r) => a + r.p[r.label], 0) / rows.length,
-    escalatedCount: rows.filter((r) => r.escalated).length,
     likeliestWrongLow: rows.filter((r) => r.likeliest < r.label).length,
   });
-}
-
-// How often each pair of decision models chose the same route, and ranked the same route first.
-const pairs = [];
-for (let a = 0; a < runs.length; a++) {
-  for (let b = a + 1; b < runs.length; b++) {
-    const same = (field) => runs[a].rows.filter((r, i) => r[field] === runs[b].rows[i][field]).length;
-    pairs.push({ a: runs[a].id, b: runs[b].id, sameRoute: same("route"), sameLikeliest: same("likeliest") });
-  }
 }
 
 const config = JSON.parse(await readFile(`${evalDir}${RUNS[0].file}`, "utf8")).config;
@@ -127,7 +114,6 @@ const data = {
   routes: config.routes,
   tasks: tasks.map((t) => t.task),
   runs,
-  pairs,
 };
 
 const out = here("../model-router/data.js");
@@ -142,7 +128,6 @@ for (const r of runs) {
   const s = r.summaries.find((x) => x.bar === data.defaultBar);
   console.log(
     `${r.name.padEnd(18)} agree ${s.agree}/${s.n}  low ${s.under}  high ${s.over}  sure ${r.sure}  ` +
-      `escalated ${r.escalatedCount}  p50 ${r.latency.p50.toFixed(0)} ms  p95 ${r.latency.p95.toFixed(0)} ms`,
+      `escalated ${r.rows.filter((row) => row.escalated).length}  p50 ${r.latency.p50.toFixed(0)} ms  p95 ${r.latency.p95.toFixed(0)} ms`,
   );
 }
-for (const p of pairs) console.log(`${p.a} vs ${p.b}: same route ${p.sameRoute}/24, same likeliest ${p.sameLikeliest}/24`);
