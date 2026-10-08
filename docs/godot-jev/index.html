@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parsing With Jev</title>
+    <meta
+      name="description"
+      content="godot-jev's three-model run: TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B each parse the same 16 lines of player slang in The Sunken Crypt. What they agreed on, and where they differed."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/site.css" />
+    <link rel="stylesheet" href="../assets/results.css" />
+    <link rel="stylesheet" href="page.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b1a17'/%3E%3Crect x='7' y='18' width='4' height='7' fill='%23f6f3ea'/%3E%3Crect x='14' y='8' width='4' height='17' fill='%23f6f3ea'/%3E%3Crect x='21' y='14' width='4' height='11' fill='%23f6f3ea'/%3E%3C/svg%3E"
+    />
+    <script src="../assets/site.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="brand" href="../" aria-label="System One experiments, home">
+          <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="6" fill="currentColor" />
+            <rect x="7" y="18" width="4" height="7" fill="var(--paper)" />
+            <rect x="14" y="8" width="4" height="17" fill="var(--paper)" />
+            <rect x="21" y="14" width="4" height="11" fill="var(--paper)" />
+          </svg>
+          System One<span class="hide-xs">&nbsp;Experiments</span> <span class="crumb">/ EXP-02<span class="hide-xs"> godot-jev</span></span>
+        </a>
+        <nav aria-label="Site">
+          <a class="hide-sm" href="../#experiments">All experiments</a>
+          <a class="hide-sm" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/godot-jev">Code</a>
+          <a href="https://github.com/AlteredCraft/system-one-experiments/blob/main/godot-jev/eval/results-2026-10-08.md">Write-up</a>
+          <button class="theme-toggle" type="button" aria-label="Switch theme">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" />
+            </svg>
+          </button>
+        </nav>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+    </header>
+
+    <nav class="toc" aria-label="On this page" id="toc">
+      <a href="#orient"><span>01</span>The problem</a>
+      <a href="#hypothesis"><span>02</span>Hypothesis</a>
+      <a href="#models"><span>03</span>The three Jevs</a>
+      <a href="#question"><span>04</span>The question</a>
+      <a href="#policy"><span>05</span>Answer → turn</a>
+      <a href="#result"><span>06</span>Result</a>
+      <a href="#deltas"><span>07</span>The deltas</a>
+      <a href="#bar"><span>08</span>Move the thresholds</a>
+      <a href="#speed"><span>09</span>Speed</a>
+      <a href="#caveats"><span>10</span>Caveats</a>
+      <a href="#details"><span>11</span>Reproduce</a>
+    </nav>
+
+    <main>
+      <div class="hero graph-paper">
+        <div class="wrap">
+          <div class="eyebrow"><span class="dot"></span>EXP-02 · godot-jev · three-model run · 2026-10-08</div>
+          <h1>Three Jevs parse <em>16 lines of player slang.</em></h1>
+          <p class="sub">
+            <em>The Sunken Crypt</em> is a dungeon crawl whose parser sends whatever the player typed to a System One
+            model, with the moves possible right now as the options of one Choice. We gave three Jevs, a hosted one
+            and two running on a laptop, the same 16 lines in the same game states, three times each. All three got
+            the player to the crown without a wrong move. They differ in how sure they were, how often the game had
+            to ask what the player meant, and how long a turn took on this setup.
+          </p>
+          <div class="hero-stats" id="hero-stats"></div>
+          <div class="legend-models" id="legend-models"></div>
+        </div>
+      </div>
+
+      <!-- 1 -->
+      <section id="orient">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">01</div>
+            <div>
+              <h2>The problem: a parser that understands, and can't invent</h2>
+              <p class="lede">
+                Classic parser games failed on vocabulary: "I don't know the word 'grab'." Games driven by a
+                text-generating model fail the other way, inventing doors and items that don't exist. Here the author
+                writes every room, item and line. Each turn, the moves possible right now become the options of one
+                Choice, plus "none of these". The model can't pick a door that isn't there, because it isn't an
+                option.
+              </p>
+            </div>
+          </div>
+
+          <figure class="shot reveal">
+            <img
+              src="screenshot.png"
+              width="1280"
+              height="720"
+              alt="The game's hall of pillars: a skeleton guards the north arch, and the transcript shows the parser asking which torch action the player meant."
+            />
+          </figure>
+          <p class="figcap">
+            <b>Fig. 1</b>The game. Room art on the left, the transcript on the right, and under the art a panel that
+            shows what Jev heard: the outcome, the move, and a confidence meter with ticks at the two thresholds.
+          </p>
+
+          <div class="pipeline reveal" role="img" aria-label="A turn: the typed line and the possible moves go to one Jev Choice, and the confidence of the answer decides whether the game acts, asks or says the request isn't possible.">
+            <div class="stage">
+              <span class="label">in</span>
+              <b>The player types anything</b>
+              <code>"lay the smack down on Mr. Bones wit the blade"</code>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage">
+              <span class="label">1 · code</span>
+              <b>Possible moves</b>
+              <span>What the world allows in this room, with these items, right now.</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage jev">
+              <span class="label">2 · Jev</span>
+              <b>One Choice question</b>
+              <span>A probability for each move, and for "none of these".</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage">
+              <span class="label">3 · code</span>
+              <b>Two thresholds</b>
+              <span>Confidence ≥ 0.75 acts. ≥ 0.40 asks. Lower, or "none", is unknown.</span>
+            </div>
+            <div class="arrow"></div>
+            <div class="stage out">
+              <span class="label">out</span>
+              <b>Text the author wrote</b>
+              <span class="chips"><i style="--c: var(--r-2)"></i>act <i style="--c: var(--r-1)"></i>clarify <i style="--c: var(--r-0)"></i>unknown</span>
+            </div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 2</b>One turn. Acting applies the move and prints its authored response. Clarifying prints "Did you
+            mean:" with the two likeliest moves. Unknown prints one of three authored lines such as "Nothing here
+            answers to that." If the model can't be reached, the game says the parser is offline and nothing happens.
+          </p>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section id="hypothesis">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">02</div>
+            <div>
+              <h2>Hypothesis, and what would confirm it</h2>
+            </div>
+          </div>
+          <blockquote class="hypothesis reveal">
+            <span class="label">Hypothesis</span>
+            A Choice over the currently possible moves lets players
+            <mark>type naturally with few dead ends</mark>, while
+            <mark>the game stays fully authored</mark>, and it's
+            <mark>fast enough to feel like a parser, not a chat</mark>.
+          </blockquote>
+          <div class="table-wrap reveal">
+            <table class="checks" id="checks-table">
+              <thead>
+                <tr>
+                  <th>Check</th>
+                  <th>Done when</th>
+                  <th class="m-col"><span class="sw" style="--c: var(--m-typesafe)"></span>TypeSafe</th>
+                  <th class="m-col"><span class="sw" style="--c: var(--m-flash)"></span>Flash 9B</th>
+                  <th class="m-col"><span class="sw" style="--c: var(--m-27b)"></span>27B</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="figcap">
+            <b>Table 1</b>Checks from the godot-jev README, with this run's numbers at the game's thresholds. Check 1
+            needs a corpus of at least 100 player inputs with typos, indirect requests and impossible ones. This run
+            had 16 lines written to solve the dungeon, so its count of lines landed is not evidence for it yet.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section id="models">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">03</div>
+            <div>
+              <h2>The three decision models</h2>
+              <p class="lede">
+                Same API, same game states, same 16 lines. One model is hosted by TypeSafe; two are
+                <a href="https://huggingface.co/openjev">Open Jev</a> models running 4-bit on an Apple M5 Pro laptop.
+                The first run of these lines, on 2026-09-30, had two of the three. Flash 9B is new since then.
+              </p>
+            </div>
+          </div>
+          <div class="model-cards" id="model-cards"></div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section id="question">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">04</div>
+            <div>
+              <h2>What Jev was asked</h2>
+              <p class="lede">
+                Each request carries a small state, the player's words, and one Choice whose options are rebuilt every
+                turn from the world's rules. The option text is the author's ("attack the skeleton with the
+                shortsword"), and it is all the model has to match the player's words against. Step through the 16
+                lines to see the question change as the player moves and picks things up.
+              </p>
+            </div>
+          </div>
+          <div class="question reveal">
+            <div class="line-steps" id="q-steps" role="group" aria-label="Line"></div>
+            <p class="ex-task" id="q-say"></p>
+            <div class="q-grid">
+              <div>
+                <span class="label">State sent with it</span>
+                <pre><code id="q-state"></code></pre>
+              </div>
+              <div>
+                <span class="label">The question</span>
+                <p class="qtext" id="q-text"></p>
+                <ol class="options-list" id="q-options"></ol>
+              </div>
+            </div>
+          </div>
+          <p class="figcap" id="q-cap"></p>
+        </div>
+      </section>
+
+      <!-- 5 -->
+      <section id="policy">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">05</div>
+            <div>
+              <h2>How an answer becomes a turn</h2>
+              <p class="lede">
+                Jev returns a probability for every option and a confidence in the one it chose. The parser doesn't
+                just take the choice. At <strong>0.75</strong> or more it acts. From <strong>0.40</strong> it asks
+                "Did you mean:" and offers the two likeliest moves. Below that, or when the choice is "none of these",
+                the game says the request isn't possible. A wrong move changes the game's state; a question costs the
+                player one keypress.
+              </p>
+            </div>
+          </div>
+
+          <div class="explorer figure reveal" id="explorer">
+            <div class="ex-controls">
+              <div class="presets" role="group" aria-label="Examples" id="presets"></div>
+              <div class="pickers">
+                <label>
+                  <span class="label">Decision model</span>
+                  <select id="ex-model"></select>
+                </label>
+                <label>
+                  <span class="label">Line</span>
+                  <select id="ex-line"></select>
+                </label>
+                <label>
+                  <span class="label">Round</span>
+                  <select id="ex-round"></select>
+                </label>
+              </div>
+            </div>
+            <p class="ex-task" id="ex-tasktext"></p>
+            <div class="ex-grid">
+              <div>
+                <span class="label">Jev's answer: its three likeliest options</span>
+                <div class="stackbar big" id="ex-stack"></div>
+                <ul class="ex-top3" id="ex-top3"></ul>
+                <div class="ex-likeliest" id="ex-likeliest"></div>
+              </div>
+              <div>
+                <div class="ex-bar-head">
+                  <span class="label">Act at a confidence of at least</span>
+                  <output id="ex-act-out">0.75</output>
+                </div>
+                <input type="range" id="ex-act" min="0" max="100" step="1" value="75" aria-label="Act threshold" />
+                <div class="ex-bar-head">
+                  <span class="label">Ask at a confidence of at least</span>
+                  <output id="ex-clarify-out">0.40</output>
+                </div>
+                <input type="range" id="ex-clarify" min="0" max="100" step="1" value="40" aria-label="Clarify threshold" />
+                <div class="ladder" id="ex-ladder"></div>
+              </div>
+            </div>
+            <div class="ex-verdict" id="ex-verdict" aria-live="polite"></div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 4</b>Pick an example, or any line, model and round. The bar shows the three likeliest options as
+            the run recorded them; the pale remainder is every other option together. The outcome at each setting
+            comes from the game's own parser, replayed over the recorded answer; no new requests are made. The ask
+            threshold can't be above the act threshold, so moving one past the other carries it along.
+          </p>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section id="result">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">06</div>
+            <div>
+              <h2>Result: nobody made a wrong move</h2>
+              <p class="lede">At the game's thresholds of 0.75 and 0.40, with differences shown against TypeSafe Jev.</p>
+            </div>
+          </div>
+          <div class="scoreboard reveal" id="scoreboard"></div>
+          <ul class="findings reveal" id="findings"></ul>
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section id="deltas">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">07</div>
+            <div>
+              <h2>The deltas between the Jevs</h2>
+              <p class="lede">
+                Same top choice on every turn, different confidence in it. That difference is what the player would
+                notice: a model that is less sure makes the game ask more often.
+              </p>
+            </div>
+          </div>
+
+          <h3 class="sub-h reveal"><span>7a</span>How sure each model was</h3>
+          <div class="figure reveal">
+            <div class="fig-toolbar">
+              <div role="group" aria-label="Order" id="sure-toggle">
+                <button class="btn" aria-pressed="true" data-k="route">Along the route</button>
+                <button class="btn" aria-pressed="false" data-k="sorted">Sorted, most to least sure</button>
+              </div>
+            </div>
+            <div id="sure-chart" class="chart"></div>
+          </div>
+          <p class="figcap" id="sure-cap"></p>
+
+          <h3 class="sub-h reveal"><span>7b</span>Every line, side by side</h3>
+          <div class="figure reveal">
+            <div class="fig-toolbar">
+              <div role="group" aria-label="Filter lines" id="grid-filter">
+                <button class="btn" aria-pressed="true" data-f="all">All 16</button>
+                <button class="btn" aria-pressed="false" data-f="differ">Where outcomes differ</button>
+                <button class="btn" aria-pressed="false" data-f="unsure">Where any was under the act threshold</button>
+              </div>
+              <div class="route-key" id="route-key"></div>
+            </div>
+            <div class="taskgrid" id="taskgrid"></div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 6</b>Each bar is one model's first-round answer: its three likeliest options, shaded by what they
+            are. The mark gives the turn at the game's thresholds: <span class="o-agree">✓</span> acted on the move the
+            line means, or came back unknown for the line that means nothing; <span class="o-high">?</span> asked, with
+            the move among the two offered; <span class="o-low">▼</span> a dead end; <span class="o-low">✗</span> a
+            wrong move. Hover or tap a bar for the options and all three rounds.
+          </p>
+
+          <div class="delta-notes reveal" id="delta-notes"></div>
+
+          <h3 class="sub-h reveal"><span>7c</span>How often each pair agreed</h3>
+          <div class="pairs reveal" id="pairs"></div>
+          <p class="figcap" id="pairs-cap"></p>
+        </div>
+      </section>
+
+      <!-- 8 -->
+      <section id="bar">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">08</div>
+            <div>
+              <h2>Move the thresholds</h2>
+              <p class="lede">
+                The thresholds are two numbers in the parser, applied to answers already returned, so they can be
+                tried after the fact. Raise the act threshold and a less sure model asks about more lines. Raise the
+                ask threshold and its questions turn into dead ends.
+              </p>
+            </div>
+          </div>
+          <div class="figure reveal">
+            <div class="thresholds">
+              <span class="label">Act at ≥</span>
+              <input type="range" id="act-range" min="0" max="100" step="1" value="75" aria-label="Act threshold" />
+              <output id="act-out" class="bar-out">0.75</output>
+              <span class="label">Ask at ≥</span>
+              <input type="range" id="clarify-range" min="0" max="100" step="1" value="40" aria-label="Clarify threshold" />
+              <output id="clarify-out" class="bar-out">0.40</output>
+            </div>
+            <div class="threshold-buttons">
+              <button class="btn" id="bar-play" aria-pressed="false">▶ Sweep the act threshold</button>
+              <button class="btn" id="bar-reset">The game's 0.75 and 0.40</button>
+            </div>
+            <div class="bar-panels" id="bar-panels"></div>
+            <div class="bar-charts">
+              <div>
+                <span class="label">Turns answered with a question, by act threshold</span>
+                <div class="chart" id="ask-chart"></div>
+              </div>
+              <div>
+                <span class="label">Dead ends, by ask threshold</span>
+                <div class="chart" id="dead-chart"></div>
+              </div>
+            </div>
+          </div>
+          <p class="figcap">
+            <b>Fig. 8</b>Panels: one row per round, one cell per line in route order, shaded by what the game did at
+            these thresholds. Charts: how many of each model's 48 turns ask, or dead-end, as one threshold moves and
+            the other stays where its slider is; the vertical rule follows the slider. A dead end is a line that
+            means a move and comes back unknown.
+          </p>
+          <ul class="findings reveal" id="bar-notes"></ul>
+        </div>
+      </section>
+
+      <!-- 9 -->
+      <section id="speed">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">09</div>
+            <div>
+              <h2>Speed: one model per lane</h2>
+              <p class="lede">
+                Check 2 asks for p95 ≤ 500 ms per turn, from the player's Enter to the game's response. Measured in
+                the game loop around each parse, one request at a time, after one untimed warm-up per model.
+              </p>
+            </div>
+          </div>
+          <div class="callout reveal" id="latency-note">
+            <span class="label">Before reading these numbers</span>
+            <p>
+              <b>They are not a statement of how fast these models are.</b> The two Open Jev figures are what one
+              laptop measured: 4-bit MLX builds on an Apple M5 Pro running macOS, a desktop operating system and not a
+              server. Both local models were loaded at the same time, and an editor, a browser and other applications
+              were running. The same weights on server hardware, at another quantisation or under another runtime
+              would time differently.
+            </p>
+            <p>
+              The TypeSafe figure is a round trip over the network from that laptop to a hosted API, so it mixes
+              their serving time with our connection. Read all three as what a turn cost in this setup, on this day.
+            </p>
+          </div>
+          <div class="figure reveal">
+            <div class="chart" id="lat-chart"></div>
+          </div>
+          <p class="figcap" id="lat-cap"></p>
+
+          <h3 class="sub-h reveal"><span>9a</span>Time per turn along the route</h3>
+          <div class="figure reveal">
+            <div class="chart" id="route-chart"></div>
+          </div>
+          <p class="figcap" id="route-cap"></p>
+
+          <div class="table-wrap reveal">
+            <table id="lat-table">
+              <thead>
+                <tr>
+                  <th>Decision model</th>
+                  <th>Run</th>
+                  <th class="num">min</th>
+                  <th class="num">p50</th>
+                  <th class="num">mean</th>
+                  <th class="num">p95</th>
+                  <th class="num">max</th>
+                  <th>Check 2</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="figcap" id="lat-table-cap"></p>
+        </div>
+      </section>
+
+      <!-- 10 -->
+      <section id="caveats">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">10</div>
+            <div>
+              <h2>What this does and doesn't show</h2>
+              <p class="lede">Read it as "the mechanism works on three models", not as a measured accuracy.</p>
+            </div>
+          </div>
+          <div class="caveats reveal">
+            <div class="card">
+              <span class="label">It shows</span>
+              <ul>
+                <li>The same game, parser and thresholds work unchanged on all three decision models.</li>
+                <li>A Choice over the possible moves maps heavy slang to the right authored move.</li>
+                <li>When a model is less sure, the thresholds turn that into a question, not a wrong move.</li>
+                <li>The thresholds can be tried after the fact without asking again.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <span class="label">It doesn't show</span>
+              <ul>
+                <li><b>16 lines, in one voice.</b> They were written to solve the dungeon in order for a recording, not sampled from what players type. One line is 6 percentage points.</li>
+                <li><b>Three rounds are not three samples.</b> The two local models gave the same answer to a line every round, so Flash 9B's 6 questions are 2 lines asked 3 times.</li>
+                <li><b>One impossible request.</b> Check 1 needs many: wrong-room requests, items that aren't there, small talk. Flash 9B put only 0.60 on "none of these" for the one it got.</li>
+                <li><b>No typos, no indirect requests</b>, and nothing ambiguous between two moves in the same room.</li>
+                <li><b>Short option lists.</b> Between 6 and 13 options a turn, against the 255 a Choice can take.</li>
+                <li><b>The lines don't separate the models.</b> All three landed 48 of 48, so this says nothing about which understands best.</li>
+                <li><b>How fast the models are.</b> The local timings come from 4-bit builds on one laptop running a desktop OS and other applications; the hosted one includes the network. See <a href="#latency-note">the note under Speed</a>.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="next card reveal">
+            <span class="label">Next, from the README's Open list</span>
+            <ol>
+              <li>Write the check-1 corpus: at least 100 inputs with their game state and expected move, covering paraphrases, typos, wrong-room requests and "none" cases, and a headless script that plays it against each model.</li>
+              <li>D&amp;D mechanics that stay authored: hit points, and d20 checks whose outcomes are all written.</li>
+              <li>Creatures that react through Noul and Score questions about what they see, alongside the parser.</li>
+              <li>A small key-holding proxy, so an exported build ships without a key (check 4).</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 -->
+      <section id="details">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">11</div>
+            <div>
+              <h2>Run details and reproducing it</h2>
+            </div>
+          </div>
+          <div class="details-grid reveal">
+            <div class="table-wrap">
+              <table id="run-table">
+                <tbody>
+                  <tr><th>Date</th><td>2026-10-08, 20:42 UTC</td></tr>
+                  <tr><th>TypeSafe Jev</th><td><code>jev-1.13.0</code>, pinned, hosted API</td></tr>
+                  <tr><th>Open Jev 27B</th><td><code>openjev/openjev-MLX-4bit</code> (MLX, 4-bit, 14 GB), T=0.85</td></tr>
+                  <tr><th>Open Jev Flash 9B</th><td><code>openjev/OpenJev-Flash-9B-MLX-4bit</code> (MLX, 4-bit, 5 GB), T=1.07</td></tr>
+                  <tr><th>Open Jev helper</th><td><code>shim.py</code> <code>81a22f1b</code> for both, with each model card's calibration settings</td></tr>
+                  <tr><th>Hardware</th><td>Apple M5 Pro, 64 GB, macOS 27.2. Both local models loaded at once (ports 3002 and 3003), other applications running.</td></tr>
+                  <tr><th>Lines</th><td><code>tools/session.gd</code>: 16, of which one asks for something the author never wrote</td></tr>
+                  <tr><th>Requests</th><td>3 rounds. Each line goes to each model in turn, in the same game state, before the route moves on. First answer only, no retries. One untimed warm-up per model.</td></tr>
+                  <tr><th>Thresholds</th><td>Act at 0.75, clarify at 0.40, as in the game</td></tr>
+                  <tr><th>Timing</th><td>Godot 4.7.2, headless, around each parse. The loop ticks about every 7 ms, so times fall on steps of that size.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+<pre><code>cd godot-jev
+export TYPESAFE_API_KEY=sk-... TYPESAFE_DEFAULT_MODEL=jev-1.13.0
+# Open Jev 27B on :3002 and Flash 9B on :3003
+godot --headless --path . --import
+godot --headless --path . \
+  --script res://eval/compare_backends.gd -- \
+  --rounds 3 --openjev flash9b=http://127.0.0.1:3003</code></pre>
+              <p class="small">
+                Every number on this page is generated from the recorded run by
+                <code>docs/tools/build-godot-jev-data.gd</code>, which replays each answer through the game's own
+                parser and refuses to write if an outcome or a summary differs from what the run saved. Source:
+                <span id="sources"></span>. The written report is
+                <a href="https://github.com/AlteredCraft/system-one-experiments/blob/main/godot-jev/eval/results-2026-10-08.md">results-2026-10-08.md</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap">
+        <span><a href="../">← System One experiments</a></span>
+        <span>godot-jev · results of 2026-10-08</span>
+      </div>
+    </footer>
+
+    <div class="tip" id="tip" role="tooltip" hidden></div>
+
+    <script src="data.js"></script>
+    <script src="../assets/results.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -15,7 +15,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../assets/site.css" />
-    <link rel="stylesheet" href="results.css" />
+    <link rel="stylesheet" href="../assets/results.css" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b1a17'/%3E%3Crect x='7' y='18' width='4' height='7' fill='%23f6f3ea'/%3E%3Crect x='14' y='8' width='4' height='17' fill='%23f6f3ea'/%3E%3Crect x='21' y='14' width='4' height='11' fill='%23f6f3ea'/%3E%3C/svg%3E"
@@ -70,8 +70,8 @@
           <p class="sub">
             One request to a System One model decides whether a sub-agent runs on Haiku, Sonnet or Opus. We asked
             three different Jevs, a hosted one and two running on a laptop, to make that call for the same tasks. On
-            the scoreboard they nearly tie. Underneath, they differ a lot in how sure they are and how fast they
-            answer.
+            the scoreboard they nearly tie. Underneath, they differ a lot in how sure they are, and in how long an
+            answer took on this setup.
           </p>
           <div class="hero-stats" id="hero-stats"></div>
           <div class="legend-models" id="legend-models"></div>
@@ -403,13 +403,26 @@
               </p>
             </div>
           </div>
+          <div class="callout reveal" id="latency-note">
+            <span class="label">Before reading these numbers</span>
+            <p>
+              <b>They are not a statement of how fast these models are.</b> The two Open Jev figures are what one
+              laptop measured: 4-bit MLX builds on an Apple M5 Pro running macOS, a desktop operating system and not a
+              server, while the machine was in ordinary use with other applications running. The same weights on
+              server hardware, at another quantisation or under another runtime would time differently.
+            </p>
+            <p>
+              The TypeSafe figure is a round trip over the network from that laptop to a hosted API, so it mixes
+              their serving time with our connection. Read all three as what a routing decision cost in this setup,
+              on this day.
+            </p>
+          </div>
           <div class="figure reveal">
             <div class="chart" id="lat-chart"></div>
           </div>
           <p class="figcap">
-            <b>Fig. 7</b>Each dot is one request. Ticks mark p50 and p95. The hosted figure includes the network round
-            trip from the laptop; the local models ran on that laptop in ordinary use, and the three runs were spread
-            over two hours. A rough indication of what a routing decision costs, not a benchmark.
+            <b>Fig. 7</b>Each dot is one request. Ticks mark p50 and p95. The three runs were spread over two hours,
+            with one local model loaded at a time.
           </p>
           <div class="table-wrap reveal">
             <table id="lat-table">
@@ -446,7 +459,7 @@
               <ul>
                 <li>The request works end to end on all three decision models.</li>
                 <li>A Score over route descriptions separates clear cases.</li>
-                <li>A model a third of the size can do the job in a third of the time, when the routing rule allows for its doubt.</li>
+                <li>On the same laptop, a model a third of the size can do the job in a third of the time, when the routing rule allows for its doubt.</li>
                 <li>The policy can be tuned after the fact without asking again.</li>
               </ul>
             </div>
@@ -458,6 +471,7 @@
                 <li><b>Labels are opinions.</b> Nobody ran these tasks on the three Claude models to see which was enough. That needs a harness (check 4).</li>
                 <li><b>Flash 9B's 24 of 24 has little margin.</b> On tasks 13 to 16 it was close to an even split between two routes.</li>
                 <li><b>The tasks don't separate the models.</b> All three are at or near 24 of 24, so this says nothing about which decides best.</li>
+                <li><b>How fast the models are.</b> The local timings come from 4-bit builds on one laptop, running a desktop OS and other applications. The hosted timing includes the network. See <a href="#latency-note">the note under Speed</a>.</li>
               </ul>
             </div>
           </div>
@@ -526,6 +540,7 @@ node eval/compare.mjs eval/results-*.json</code></pre>
     <div class="tip" id="tip" role="tooltip" hidden></div>
 
     <script src="data.js"></script>
+    <script src="../assets/results.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -16,7 +16,7 @@ confirm it, and tests that run without an API key. The first three were picked f
 | Experiment | The idea | Stack | Status |
 | --- | --- | --- | --- |
 | [misconception-gates](misconception-gates/) | Grade a learner's free-text answer by *which misconception* it shows, and jump to the lesson section that fixes it | Node, no dependencies (drops into js-animation-sandbox) | Skeleton |
-| [godot-jev](godot-jev/) | A Godot 4 add-on for Jev, and a text adventure whose parser understands anything but can only choose moves the author wrote | Godot 4.7, GDScript | Live: TypeSafe Jev and Open Jev |
+| [godot-jev](godot-jev/) | A Godot 4 add-on for Jev, and a text adventure whose parser understands anything but can only choose moves the author wrote | Godot 4.7, GDScript | Live: TypeSafe Jev, Open Jev 27B and Flash 9B, on 16 scripted lines |
 | [semver-judge](semver-judge/) | Decide the next version from the commits since the last tag, flagging only the uncertain commits that could change the answer | Python, GitHub Action | Skeleton |
 | [model-router](model-router/) | Pick the model for a sub-agent task in an agent harness: rules first, then a Score over the configured routes, moving up when a weaker model is too likely to fall short | Node, no dependencies | Live: TypeSafe Jev, Open Jev 27B and Flash 9B, on starter tasks only |
 
@@ -53,8 +53,12 @@ cd model-router && node --test && node eval/run.mjs
 ```
 
 godot-jev and model-router can use a local Open Jev server instead (`JEV_BACKEND=openjev`).
-godot-jev's `eval/compare_backends.gd` asks both the same questions, and model-router's
-`eval/compare.mjs` puts runs side by side; see their READMEs.
+godot-jev's `eval/compare_backends.gd` asks every backend the same questions, and model-router's
+`eval/compare.mjs` puts runs side by side; see their READMEs. Both recorded runs are walked
+through on the [docs site](https://alteredcraft.github.io/system-one-experiments/).
+
+Latencies recorded for the local models describe one laptop (4-bit MLX builds on an Apple M5 Pro,
+macOS, other applications open), not how fast those models are.
 
 ## Limits that apply to all of them
 

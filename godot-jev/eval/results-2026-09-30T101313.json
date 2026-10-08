@@ -1,0 +1,2928 @@
+{
+  "backends": {
+    "openjev": {
+      "base_url": "http://127.0.0.1:3002",
+      "label": "Open Jev",
+      "model": "",
+      "served": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89"
+    },
+    "typesafe": {
+      "base_url": "https://api.typesafe.ai",
+      "label": "TypeSafe Jev",
+      "model": "jev-1.13.0",
+      "served": "jev-1.13.0"
+    }
+  },
+  "rounds": 3,
+  "rows": [
+    {
+      "action": "",
+      "backend": "typesafe",
+      "confidence": 0.95,
+      "kind": "unknown",
+      "landed": true,
+      "means": "",
+      "model": "jev-1.13.0",
+      "ms": 213,
+      "options": [],
+      "ranked": [
+        [
+          "none_of_these",
+          0.96
+        ],
+        [
+          "look__around",
+          0.03
+        ],
+        [
+          "take__torch",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "ayo where the gin and juice at, nephew?",
+      "top": "none_of_these"
+    },
+    {
+      "action": "",
+      "backend": "openjev",
+      "confidence": 0.974,
+      "kind": "unknown",
+      "landed": true,
+      "means": "",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 461,
+      "options": [],
+      "ranked": [
+        [
+          "none_of_these",
+          0.9783
+        ],
+        [
+          "take__torch",
+          0.0102
+        ],
+        [
+          "look__around",
+          0.0057
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "ayo where the gin and juice at, nephew?",
+      "top": "none_of_these"
+    },
+    {
+      "action": "",
+      "backend": "typesafe",
+      "confidence": 0.93,
+      "kind": "unknown",
+      "landed": true,
+      "means": "",
+      "model": "jev-1.13.0",
+      "ms": 186,
+      "options": [],
+      "ranked": [
+        [
+          "none_of_these",
+          0.95
+        ],
+        [
+          "look__around",
+          0.04
+        ],
+        [
+          "take__torch",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "ayo where the gin and juice at, nephew?",
+      "top": "none_of_these"
+    },
+    {
+      "action": "",
+      "backend": "openjev",
+      "confidence": 0.974,
+      "kind": "unknown",
+      "landed": true,
+      "means": "",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "none_of_these",
+          0.9783
+        ],
+        [
+          "take__torch",
+          0.0102
+        ],
+        [
+          "look__around",
+          0.0057
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "ayo where the gin and juice at, nephew?",
+      "top": "none_of_these"
+    },
+    {
+      "action": "",
+      "backend": "typesafe",
+      "confidence": 0.96,
+      "kind": "unknown",
+      "landed": true,
+      "means": "",
+      "model": "jev-1.13.0",
+      "ms": 178,
+      "options": [],
+      "ranked": [
+        [
+          "none_of_these",
+          0.97
+        ],
+        [
+          "look__around",
+          0.02
+        ],
+        [
+          "take__torch",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "ayo where the gin and juice at, nephew?",
+      "top": "none_of_these"
+    },
+    {
+      "action": "",
+      "backend": "openjev",
+      "confidence": 0.974,
+      "kind": "unknown",
+      "landed": true,
+      "means": "",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 456,
+      "options": [],
+      "ranked": [
+        [
+          "none_of_these",
+          0.9783
+        ],
+        [
+          "take__torch",
+          0.0102
+        ],
+        [
+          "look__around",
+          0.0057
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "ayo where the gin and juice at, nephew?",
+      "top": "none_of_these"
+    },
+    {
+      "action": "take__torch",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "take__torch",
+      "model": "jev-1.13.0",
+      "ms": 129,
+      "options": [],
+      "ranked": [
+        [
+          "take__torch",
+          1.0
+        ],
+        [
+          "go__north",
+          0.0
+        ],
+        [
+          "look__around",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "fo shizzle, scoop up that torch-izzle off the flo",
+      "top": "take__torch"
+    },
+    {
+      "action": "take__torch",
+      "backend": "openjev",
+      "confidence": 0.9999,
+      "kind": "act",
+      "landed": true,
+      "means": "take__torch",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 463,
+      "options": [],
+      "ranked": [
+        [
+          "take__torch",
+          0.9999
+        ],
+        [
+          "examine__torch",
+          0.0001
+        ],
+        [
+          "go__north",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "fo shizzle, scoop up that torch-izzle off the flo",
+      "top": "take__torch"
+    },
+    {
+      "action": "take__torch",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "take__torch",
+      "model": "jev-1.13.0",
+      "ms": 289,
+      "options": [],
+      "ranked": [
+        [
+          "take__torch",
+          1.0
+        ],
+        [
+          "inventory__self",
+          0.0
+        ],
+        [
+          "examine__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "fo shizzle, scoop up that torch-izzle off the flo",
+      "top": "take__torch"
+    },
+    {
+      "action": "take__torch",
+      "backend": "openjev",
+      "confidence": 0.9999,
+      "kind": "act",
+      "landed": true,
+      "means": "take__torch",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "take__torch",
+          0.9999
+        ],
+        [
+          "examine__torch",
+          0.0001
+        ],
+        [
+          "go__north",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "fo shizzle, scoop up that torch-izzle off the flo",
+      "top": "take__torch"
+    },
+    {
+      "action": "take__torch",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "take__torch",
+      "model": "jev-1.13.0",
+      "ms": 248,
+      "options": [],
+      "ranked": [
+        [
+          "take__torch",
+          1.0
+        ],
+        [
+          "examine__torch",
+          0.0
+        ],
+        [
+          "look__around",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "fo shizzle, scoop up that torch-izzle off the flo",
+      "top": "take__torch"
+    },
+    {
+      "action": "take__torch",
+      "backend": "openjev",
+      "confidence": 0.9999,
+      "kind": "act",
+      "landed": true,
+      "means": "take__torch",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "take__torch",
+          0.9999
+        ],
+        [
+          "examine__torch",
+          0.0001
+        ],
+        [
+          "go__north",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "fo shizzle, scoop up that torch-izzle off the flo",
+      "top": "take__torch"
+    },
+    {
+      "action": "light__torch",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "light__torch",
+      "model": "jev-1.13.0",
+      "ms": 185,
+      "options": [],
+      "ranked": [
+        [
+          "light__torch",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "drop__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "light that thang up in the brazier, ya dig",
+      "top": "light__torch"
+    },
+    {
+      "action": "light__torch",
+      "backend": "openjev",
+      "confidence": 0.9328,
+      "kind": "act",
+      "landed": true,
+      "means": "light__torch",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 462,
+      "options": [],
+      "ranked": [
+        [
+          "light__torch",
+          0.9424
+        ],
+        [
+          "none_of_these",
+          0.043
+        ],
+        [
+          "drop__torch",
+          0.0132
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "light that thang up in the brazier, ya dig",
+      "top": "light__torch"
+    },
+    {
+      "action": "light__torch",
+      "backend": "typesafe",
+      "confidence": 0.98,
+      "kind": "act",
+      "landed": true,
+      "means": "light__torch",
+      "model": "jev-1.13.0",
+      "ms": 179,
+      "options": [],
+      "ranked": [
+        [
+          "light__torch",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "light that thang up in the brazier, ya dig",
+      "top": "light__torch"
+    },
+    {
+      "action": "light__torch",
+      "backend": "openjev",
+      "confidence": 0.9328,
+      "kind": "act",
+      "landed": true,
+      "means": "light__torch",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "light__torch",
+          0.9424
+        ],
+        [
+          "none_of_these",
+          0.043
+        ],
+        [
+          "drop__torch",
+          0.0132
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "light that thang up in the brazier, ya dig",
+      "top": "light__torch"
+    },
+    {
+      "action": "light__torch",
+      "backend": "typesafe",
+      "confidence": 0.98,
+      "kind": "act",
+      "landed": true,
+      "means": "light__torch",
+      "model": "jev-1.13.0",
+      "ms": 213,
+      "options": [],
+      "ranked": [
+        [
+          "light__torch",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "light that thang up in the brazier, ya dig",
+      "top": "light__torch"
+    },
+    {
+      "action": "light__torch",
+      "backend": "openjev",
+      "confidence": 0.9328,
+      "kind": "act",
+      "landed": true,
+      "means": "light__torch",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "light__torch",
+          0.9424
+        ],
+        [
+          "none_of_these",
+          0.043
+        ],
+        [
+          "drop__torch",
+          0.0132
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "light that thang up in the brazier, ya dig",
+      "top": "light__torch"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.89,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 489,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.91
+        ],
+        [
+          "none_of_these",
+          0.08
+        ],
+        [
+          "look__around",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "roll on up north, cuz",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9898,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9915
+        ],
+        [
+          "none_of_these",
+          0.0077
+        ],
+        [
+          "look__around",
+          0.0005
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 0,
+      "say": "roll on up north, cuz",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.86,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 448,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.89
+        ],
+        [
+          "none_of_these",
+          0.09
+        ],
+        [
+          "look__around",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "roll on up north, cuz",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9898,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 455,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9915
+        ],
+        [
+          "none_of_these",
+          0.0077
+        ],
+        [
+          "look__around",
+          0.0005
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 1,
+      "say": "roll on up north, cuz",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.88,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 317,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9
+        ],
+        [
+          "none_of_these",
+          0.08
+        ],
+        [
+          "look__around",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "roll on up north, cuz",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9898,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 448,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9915
+        ],
+        [
+          "none_of_these",
+          0.0077
+        ],
+        [
+          "look__around",
+          0.0005
+        ]
+      ],
+      "reason": "",
+      "room": "stairs",
+      "round": 2,
+      "say": "roll on up north, cuz",
+      "top": "go__north"
+    },
+    {
+      "action": "go__east",
+      "backend": "typesafe",
+      "confidence": 0.88,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "jev-1.13.0",
+      "ms": 227,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9
+        ],
+        [
+          "none_of_these",
+          0.1
+        ],
+        [
+          "look__around",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "slide east to where the steel be stashed",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "openjev",
+      "confidence": 0.9645,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 483,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9685
+        ],
+        [
+          "none_of_these",
+          0.0284
+        ],
+        [
+          "go__west",
+          0.0015
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "slide east to where the steel be stashed",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "typesafe",
+      "confidence": 0.87,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "jev-1.13.0",
+      "ms": 400,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.88
+        ],
+        [
+          "none_of_these",
+          0.12
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "slide east to where the steel be stashed",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "openjev",
+      "confidence": 0.9645,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 468,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9685
+        ],
+        [
+          "none_of_these",
+          0.0284
+        ],
+        [
+          "go__west",
+          0.0015
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "slide east to where the steel be stashed",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "typesafe",
+      "confidence": 0.88,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "jev-1.13.0",
+      "ms": 289,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9
+        ],
+        [
+          "none_of_these",
+          0.1
+        ],
+        [
+          "go__west",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "slide east to where the steel be stashed",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "openjev",
+      "confidence": 0.9645,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 476,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9685
+        ],
+        [
+          "none_of_these",
+          0.0284
+        ],
+        [
+          "go__west",
+          0.0015
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "slide east to where the steel be stashed",
+      "top": "go__east"
+    },
+    {
+      "action": "take__sword",
+      "backend": "typesafe",
+      "confidence": 0.85,
+      "kind": "act",
+      "landed": true,
+      "means": "take__sword",
+      "model": "jev-1.13.0",
+      "ms": 952,
+      "options": [],
+      "ranked": [
+        [
+          "take__sword",
+          0.88
+        ],
+        [
+          "none_of_these",
+          0.11
+        ],
+        [
+          "examine__sword",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 0,
+      "say": "cop that shortsword, fo shizzle",
+      "top": "take__sword"
+    },
+    {
+      "action": "take__sword",
+      "backend": "openjev",
+      "confidence": 0.993,
+      "kind": "act",
+      "landed": true,
+      "means": "take__sword",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 648,
+      "options": [],
+      "ranked": [
+        [
+          "take__sword",
+          0.9937
+        ],
+        [
+          "none_of_these",
+          0.0028
+        ],
+        [
+          "take__vellum",
+          0.0024
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 0,
+      "say": "cop that shortsword, fo shizzle",
+      "top": "take__sword"
+    },
+    {
+      "action": "take__sword",
+      "backend": "typesafe",
+      "confidence": 0.81,
+      "kind": "act",
+      "landed": true,
+      "means": "take__sword",
+      "model": "jev-1.13.0",
+      "ms": 206,
+      "options": [],
+      "ranked": [
+        [
+          "take__sword",
+          0.84
+        ],
+        [
+          "none_of_these",
+          0.13
+        ],
+        [
+          "examine__sword",
+          0.02
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 1,
+      "say": "cop that shortsword, fo shizzle",
+      "top": "take__sword"
+    },
+    {
+      "action": "take__sword",
+      "backend": "openjev",
+      "confidence": 0.993,
+      "kind": "act",
+      "landed": true,
+      "means": "take__sword",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 579,
+      "options": [],
+      "ranked": [
+        [
+          "take__sword",
+          0.9937
+        ],
+        [
+          "none_of_these",
+          0.0028
+        ],
+        [
+          "take__vellum",
+          0.0024
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 1,
+      "say": "cop that shortsword, fo shizzle",
+      "top": "take__sword"
+    },
+    {
+      "action": "take__sword",
+      "backend": "typesafe",
+      "confidence": 0.86,
+      "kind": "act",
+      "landed": true,
+      "means": "take__sword",
+      "model": "jev-1.13.0",
+      "ms": 179,
+      "options": [],
+      "ranked": [
+        [
+          "take__sword",
+          0.88
+        ],
+        [
+          "none_of_these",
+          0.1
+        ],
+        [
+          "examine__sword",
+          0.02
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 2,
+      "say": "cop that shortsword, fo shizzle",
+      "top": "take__sword"
+    },
+    {
+      "action": "take__sword",
+      "backend": "openjev",
+      "confidence": 0.993,
+      "kind": "act",
+      "landed": true,
+      "means": "take__sword",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 585,
+      "options": [],
+      "ranked": [
+        [
+          "take__sword",
+          0.9937
+        ],
+        [
+          "none_of_these",
+          0.0028
+        ],
+        [
+          "take__vellum",
+          0.0024
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 2,
+      "say": "cop that shortsword, fo shizzle",
+      "top": "take__sword"
+    },
+    {
+      "action": "examine__vellum",
+      "backend": "typesafe",
+      "confidence": 0.95,
+      "kind": "act",
+      "landed": true,
+      "means": "examine__vellum",
+      "model": "jev-1.13.0",
+      "ms": 215,
+      "options": [],
+      "ranked": [
+        [
+          "examine__vellum",
+          0.96
+        ],
+        [
+          "none_of_these",
+          0.03
+        ],
+        [
+          "take__vellum",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 0,
+      "say": "what that lil paper say, homie?",
+      "top": "examine__vellum"
+    },
+    {
+      "action": "examine__vellum",
+      "backend": "openjev",
+      "confidence": 0.9948,
+      "kind": "act",
+      "landed": true,
+      "means": "examine__vellum",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 594,
+      "options": [],
+      "ranked": [
+        [
+          "examine__vellum",
+          0.9954
+        ],
+        [
+          "take__vellum",
+          0.0032
+        ],
+        [
+          "none_of_these",
+          0.001
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 0,
+      "say": "what that lil paper say, homie?",
+      "top": "examine__vellum"
+    },
+    {
+      "action": "examine__vellum",
+      "backend": "typesafe",
+      "confidence": 0.94,
+      "kind": "act",
+      "landed": true,
+      "means": "examine__vellum",
+      "model": "jev-1.13.0",
+      "ms": 234,
+      "options": [],
+      "ranked": [
+        [
+          "examine__vellum",
+          0.95
+        ],
+        [
+          "none_of_these",
+          0.04
+        ],
+        [
+          "take__vellum",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 1,
+      "say": "what that lil paper say, homie?",
+      "top": "examine__vellum"
+    },
+    {
+      "action": "examine__vellum",
+      "backend": "openjev",
+      "confidence": 0.9948,
+      "kind": "act",
+      "landed": true,
+      "means": "examine__vellum",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 662,
+      "options": [],
+      "ranked": [
+        [
+          "examine__vellum",
+          0.9954
+        ],
+        [
+          "take__vellum",
+          0.0032
+        ],
+        [
+          "none_of_these",
+          0.001
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 1,
+      "say": "what that lil paper say, homie?",
+      "top": "examine__vellum"
+    },
+    {
+      "action": "examine__vellum",
+      "backend": "typesafe",
+      "confidence": 0.94,
+      "kind": "act",
+      "landed": true,
+      "means": "examine__vellum",
+      "model": "jev-1.13.0",
+      "ms": 255,
+      "options": [],
+      "ranked": [
+        [
+          "examine__vellum",
+          0.95
+        ],
+        [
+          "none_of_these",
+          0.04
+        ],
+        [
+          "take__vellum",
+          0.01
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 2,
+      "say": "what that lil paper say, homie?",
+      "top": "examine__vellum"
+    },
+    {
+      "action": "examine__vellum",
+      "backend": "openjev",
+      "confidence": 0.9948,
+      "kind": "act",
+      "landed": true,
+      "means": "examine__vellum",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 634,
+      "options": [],
+      "ranked": [
+        [
+          "examine__vellum",
+          0.9954
+        ],
+        [
+          "take__vellum",
+          0.0032
+        ],
+        [
+          "none_of_these",
+          0.001
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 2,
+      "say": "what that lil paper say, homie?",
+      "top": "examine__vellum"
+    },
+    {
+      "action": "go__west",
+      "backend": "typesafe",
+      "confidence": 0.84,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "jev-1.13.0",
+      "ms": 227,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.87
+        ],
+        [
+          "none_of_these",
+          0.13
+        ],
+        [
+          "drop__sword",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 0,
+      "say": "bounce back west, ya heard",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "openjev",
+      "confidence": 0.9783,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 641,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.9805
+        ],
+        [
+          "none_of_these",
+          0.016
+        ],
+        [
+          "take__vellum",
+          0.0013
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 0,
+      "say": "bounce back west, ya heard",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "typesafe",
+      "confidence": 0.86,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "jev-1.13.0",
+      "ms": 200,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.88
+        ],
+        [
+          "none_of_these",
+          0.12
+        ],
+        [
+          "examine__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 1,
+      "say": "bounce back west, ya heard",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "openjev",
+      "confidence": 0.9783,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 634,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.9805
+        ],
+        [
+          "none_of_these",
+          0.016
+        ],
+        [
+          "take__vellum",
+          0.0013
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 1,
+      "say": "bounce back west, ya heard",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "typesafe",
+      "confidence": 0.81,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "jev-1.13.0",
+      "ms": 206,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.84
+        ],
+        [
+          "none_of_these",
+          0.16
+        ],
+        [
+          "look__around",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 2,
+      "say": "bounce back west, ya heard",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "openjev",
+      "confidence": 0.9783,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 607,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.9805
+        ],
+        [
+          "none_of_these",
+          0.016
+        ],
+        [
+          "take__vellum",
+          0.0013
+        ]
+      ],
+      "reason": "",
+      "room": "armory",
+      "round": 2,
+      "say": "bounce back west, ya heard",
+      "top": "go__west"
+    },
+    {
+      "action": "attack__skeleton",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "attack__skeleton",
+      "model": "jev-1.13.0",
+      "ms": 179,
+      "options": [],
+      "ranked": [
+        [
+          "attack__skeleton",
+          1.0
+        ],
+        [
+          "examine__sword",
+          0.0
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "lay the smack down on Mr. Bones wit the blade",
+      "top": "attack__skeleton"
+    },
+    {
+      "action": "attack__skeleton",
+      "backend": "openjev",
+      "confidence": 0.9726,
+      "kind": "act",
+      "landed": true,
+      "means": "attack__skeleton",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 627,
+      "options": [],
+      "ranked": [
+        [
+          "attack__skeleton",
+          0.9749
+        ],
+        [
+          "none_of_these",
+          0.0247
+        ],
+        [
+          "drop__sword",
+          0.0002
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "lay the smack down on Mr. Bones wit the blade",
+      "top": "attack__skeleton"
+    },
+    {
+      "action": "attack__skeleton",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "attack__skeleton",
+      "model": "jev-1.13.0",
+      "ms": 179,
+      "options": [],
+      "ranked": [
+        [
+          "attack__skeleton",
+          1.0
+        ],
+        [
+          "drop__sword",
+          0.0
+        ],
+        [
+          "look__around",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "lay the smack down on Mr. Bones wit the blade",
+      "top": "attack__skeleton"
+    },
+    {
+      "action": "attack__skeleton",
+      "backend": "openjev",
+      "confidence": 0.9726,
+      "kind": "act",
+      "landed": true,
+      "means": "attack__skeleton",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 654,
+      "options": [],
+      "ranked": [
+        [
+          "attack__skeleton",
+          0.9749
+        ],
+        [
+          "none_of_these",
+          0.0247
+        ],
+        [
+          "drop__sword",
+          0.0002
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "lay the smack down on Mr. Bones wit the blade",
+      "top": "attack__skeleton"
+    },
+    {
+      "action": "attack__skeleton",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "attack__skeleton",
+      "model": "jev-1.13.0",
+      "ms": 200,
+      "options": [],
+      "ranked": [
+        [
+          "attack__skeleton",
+          1.0
+        ],
+        [
+          "go__west",
+          0.0
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "lay the smack down on Mr. Bones wit the blade",
+      "top": "attack__skeleton"
+    },
+    {
+      "action": "attack__skeleton",
+      "backend": "openjev",
+      "confidence": 0.9726,
+      "kind": "act",
+      "landed": true,
+      "means": "attack__skeleton",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 655,
+      "options": [],
+      "ranked": [
+        [
+          "attack__skeleton",
+          0.9749
+        ],
+        [
+          "none_of_these",
+          0.0247
+        ],
+        [
+          "drop__sword",
+          0.0002
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "lay the smack down on Mr. Bones wit the blade",
+      "top": "attack__skeleton"
+    },
+    {
+      "action": "go__west",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "jev-1.13.0",
+      "ms": 207,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          1.0
+        ],
+        [
+          "go__south",
+          0.0
+        ],
+        [
+          "go__east",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "creep west into the dark, torch-izzle blazin",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "openjev",
+      "confidence": 0.9956,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 635,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.996
+        ],
+        [
+          "none_of_these",
+          0.0037
+        ],
+        [
+          "go__north",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "creep west into the dark, torch-izzle blazin",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "jev-1.13.0",
+      "ms": 185,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "go__north",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "creep west into the dark, torch-izzle blazin",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "openjev",
+      "confidence": 0.9956,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 621,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.996
+        ],
+        [
+          "none_of_these",
+          0.0037
+        ],
+        [
+          "go__north",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "creep west into the dark, torch-izzle blazin",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "jev-1.13.0",
+      "ms": 316,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "go__south",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "creep west into the dark, torch-izzle blazin",
+      "top": "go__west"
+    },
+    {
+      "action": "go__west",
+      "backend": "openjev",
+      "confidence": 0.9956,
+      "kind": "act",
+      "landed": true,
+      "means": "go__west",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 635,
+      "options": [],
+      "ranked": [
+        [
+          "go__west",
+          0.996
+        ],
+        [
+          "none_of_these",
+          0.0037
+        ],
+        [
+          "go__north",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "creep west into the dark, torch-izzle blazin",
+      "top": "go__west"
+    },
+    {
+      "action": "take__key",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "take__key",
+      "model": "jev-1.13.0",
+      "ms": 386,
+      "options": [],
+      "ranked": [
+        [
+          "take__key",
+          1.0
+        ],
+        [
+          "inventory__self",
+          0.0
+        ],
+        [
+          "examine__sword",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 0,
+      "say": "snatch that silver key off the altar, baby",
+      "top": "take__key"
+    },
+    {
+      "action": "take__key",
+      "backend": "openjev",
+      "confidence": 0.9997,
+      "kind": "act",
+      "landed": true,
+      "means": "take__key",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 627,
+      "options": [],
+      "ranked": [
+        [
+          "take__key",
+          0.9997
+        ],
+        [
+          "examine__key",
+          0.0001
+        ],
+        [
+          "none_of_these",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 0,
+      "say": "snatch that silver key off the altar, baby",
+      "top": "take__key"
+    },
+    {
+      "action": "take__key",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "take__key",
+      "model": "jev-1.13.0",
+      "ms": 303,
+      "options": [],
+      "ranked": [
+        [
+          "take__key",
+          1.0
+        ],
+        [
+          "go__east",
+          0.0
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 1,
+      "say": "snatch that silver key off the altar, baby",
+      "top": "take__key"
+    },
+    {
+      "action": "take__key",
+      "backend": "openjev",
+      "confidence": 0.9997,
+      "kind": "act",
+      "landed": true,
+      "means": "take__key",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 593,
+      "options": [],
+      "ranked": [
+        [
+          "take__key",
+          0.9997
+        ],
+        [
+          "examine__key",
+          0.0001
+        ],
+        [
+          "none_of_these",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 1,
+      "say": "snatch that silver key off the altar, baby",
+      "top": "take__key"
+    },
+    {
+      "action": "take__key",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "take__key",
+      "model": "jev-1.13.0",
+      "ms": 1144,
+      "options": [],
+      "ranked": [
+        [
+          "take__key",
+          1.0
+        ],
+        [
+          "drop__sword",
+          0.0
+        ],
+        [
+          "none_of_these",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 2,
+      "say": "snatch that silver key off the altar, baby",
+      "top": "take__key"
+    },
+    {
+      "action": "take__key",
+      "backend": "openjev",
+      "confidence": 0.9997,
+      "kind": "act",
+      "landed": true,
+      "means": "take__key",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 628,
+      "options": [],
+      "ranked": [
+        [
+          "take__key",
+          0.9997
+        ],
+        [
+          "examine__key",
+          0.0001
+        ],
+        [
+          "none_of_these",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 2,
+      "say": "snatch that silver key off the altar, baby",
+      "top": "take__key"
+    },
+    {
+      "action": "go__east",
+      "backend": "typesafe",
+      "confidence": 0.95,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "jev-1.13.0",
+      "ms": 502,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.96
+        ],
+        [
+          "none_of_these",
+          0.04
+        ],
+        [
+          "examine__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 0,
+      "say": "back east, back east",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "openjev",
+      "confidence": 0.9975,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 599,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9977
+        ],
+        [
+          "none_of_these",
+          0.0021
+        ],
+        [
+          "look__around",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 0,
+      "say": "back east, back east",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "typesafe",
+      "confidence": 0.98,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "jev-1.13.0",
+      "ms": 194,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.98
+        ],
+        [
+          "none_of_these",
+          0.02
+        ],
+        [
+          "examine__sword",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 1,
+      "say": "back east, back east",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "openjev",
+      "confidence": 0.9975,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 592,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9977
+        ],
+        [
+          "none_of_these",
+          0.0021
+        ],
+        [
+          "look__around",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 1,
+      "say": "back east, back east",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "typesafe",
+      "confidence": 0.97,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "jev-1.13.0",
+      "ms": 220,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.97
+        ],
+        [
+          "none_of_these",
+          0.03
+        ],
+        [
+          "examine__sword",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 2,
+      "say": "back east, back east",
+      "top": "go__east"
+    },
+    {
+      "action": "go__east",
+      "backend": "openjev",
+      "confidence": 0.9975,
+      "kind": "act",
+      "landed": true,
+      "means": "go__east",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 697,
+      "options": [],
+      "ranked": [
+        [
+          "go__east",
+          0.9977
+        ],
+        [
+          "none_of_these",
+          0.0021
+        ],
+        [
+          "look__around",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "ossuary",
+      "round": 2,
+      "say": "back east, back east",
+      "top": "go__east"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 193,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "drop__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "head north, the Doggfather got business",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9881,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 662,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.989
+        ],
+        [
+          "none_of_these",
+          0.0104
+        ],
+        [
+          "drop__key",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 0,
+      "say": "head north, the Doggfather got business",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 193,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "drop__key",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "head north, the Doggfather got business",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9881,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 683,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.989
+        ],
+        [
+          "none_of_these",
+          0.0104
+        ],
+        [
+          "drop__key",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 1,
+      "say": "head north, the Doggfather got business",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 220,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "head north, the Doggfather got business",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9881,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 716,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.989
+        ],
+        [
+          "none_of_these",
+          0.0104
+        ],
+        [
+          "drop__key",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "hall",
+      "round": 2,
+      "say": "head north, the Doggfather got business",
+      "top": "go__north"
+    },
+    {
+      "action": "unlock__door",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "unlock__door",
+      "model": "jev-1.13.0",
+      "ms": 173,
+      "options": [],
+      "ranked": [
+        [
+          "unlock__door",
+          1.0
+        ],
+        [
+          "examine__torch",
+          0.0
+        ],
+        [
+          "drop__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 0,
+      "say": "unlock that black door wit the key-izzle",
+      "top": "unlock__door"
+    },
+    {
+      "action": "unlock__door",
+      "backend": "openjev",
+      "confidence": 0.9988,
+      "kind": "act",
+      "landed": true,
+      "means": "unlock__door",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 600,
+      "options": [],
+      "ranked": [
+        [
+          "unlock__door",
+          0.9989
+        ],
+        [
+          "none_of_these",
+          0.001
+        ],
+        [
+          "drop__key",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 0,
+      "say": "unlock that black door wit the key-izzle",
+      "top": "unlock__door"
+    },
+    {
+      "action": "unlock__door",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "unlock__door",
+      "model": "jev-1.13.0",
+      "ms": 220,
+      "options": [],
+      "ranked": [
+        [
+          "unlock__door",
+          1.0
+        ],
+        [
+          "examine__torch",
+          0.0
+        ],
+        [
+          "inventory__self",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 1,
+      "say": "unlock that black door wit the key-izzle",
+      "top": "unlock__door"
+    },
+    {
+      "action": "unlock__door",
+      "backend": "openjev",
+      "confidence": 0.9988,
+      "kind": "act",
+      "landed": true,
+      "means": "unlock__door",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 598,
+      "options": [],
+      "ranked": [
+        [
+          "unlock__door",
+          0.9989
+        ],
+        [
+          "none_of_these",
+          0.001
+        ],
+        [
+          "drop__key",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 1,
+      "say": "unlock that black door wit the key-izzle",
+      "top": "unlock__door"
+    },
+    {
+      "action": "unlock__door",
+      "backend": "typesafe",
+      "confidence": 1.0,
+      "kind": "act",
+      "landed": true,
+      "means": "unlock__door",
+      "model": "jev-1.13.0",
+      "ms": 193,
+      "options": [],
+      "ranked": [
+        [
+          "unlock__door",
+          1.0
+        ],
+        [
+          "examine__key",
+          0.0
+        ],
+        [
+          "drop__sword",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 2,
+      "say": "unlock that black door wit the key-izzle",
+      "top": "unlock__door"
+    },
+    {
+      "action": "unlock__door",
+      "backend": "openjev",
+      "confidence": 0.9988,
+      "kind": "act",
+      "landed": true,
+      "means": "unlock__door",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 628,
+      "options": [],
+      "ranked": [
+        [
+          "unlock__door",
+          0.9989
+        ],
+        [
+          "none_of_these",
+          0.001
+        ],
+        [
+          "drop__key",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 2,
+      "say": "unlock that black door wit the key-izzle",
+      "top": "unlock__door"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 193,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "go__south",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 0,
+      "say": "roll north thru that door, it's time to get paid",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9771,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 614,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9792
+        ],
+        [
+          "none_of_these",
+          0.0185
+        ],
+        [
+          "go__south",
+          0.001
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 0,
+      "say": "roll north thru that door, it's time to get paid",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 200,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "drop__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 1,
+      "say": "roll north thru that door, it's time to get paid",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9771,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 593,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9792
+        ],
+        [
+          "none_of_these",
+          0.0185
+        ],
+        [
+          "go__south",
+          0.001
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 1,
+      "say": "roll north thru that door, it's time to get paid",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "typesafe",
+      "confidence": 0.99,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "jev-1.13.0",
+      "ms": 213,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.99
+        ],
+        [
+          "none_of_these",
+          0.01
+        ],
+        [
+          "examine__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 2,
+      "say": "roll north thru that door, it's time to get paid",
+      "top": "go__north"
+    },
+    {
+      "action": "go__north",
+      "backend": "openjev",
+      "confidence": 0.9771,
+      "kind": "act",
+      "landed": true,
+      "means": "go__north",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 600,
+      "options": [],
+      "ranked": [
+        [
+          "go__north",
+          0.9792
+        ],
+        [
+          "none_of_these",
+          0.0185
+        ],
+        [
+          "go__south",
+          0.001
+        ]
+      ],
+      "reason": "",
+      "room": "antechamber",
+      "round": 2,
+      "say": "roll north thru that door, it's time to get paid",
+      "top": "go__north"
+    },
+    {
+      "action": "take__crown",
+      "backend": "typesafe",
+      "confidence": 0.93,
+      "kind": "act",
+      "landed": true,
+      "means": "take__crown",
+      "model": "jev-1.13.0",
+      "ms": 248,
+      "options": [],
+      "ranked": [
+        [
+          "take__crown",
+          0.94
+        ],
+        [
+          "none_of_these",
+          0.06
+        ],
+        [
+          "examine__crown",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "vault",
+      "round": 0,
+      "say": "cop that crown, it's the Doggfather's now",
+      "top": "take__crown"
+    },
+    {
+      "action": "take__crown",
+      "backend": "openjev",
+      "confidence": 0.9993,
+      "kind": "act",
+      "landed": true,
+      "means": "take__crown",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 620,
+      "options": [],
+      "ranked": [
+        [
+          "take__crown",
+          0.9994
+        ],
+        [
+          "none_of_these",
+          0.0004
+        ],
+        [
+          "examine__crown",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "vault",
+      "round": 0,
+      "say": "cop that crown, it's the Doggfather's now",
+      "top": "take__crown"
+    },
+    {
+      "action": "take__crown",
+      "backend": "typesafe",
+      "confidence": 0.94,
+      "kind": "act",
+      "landed": true,
+      "means": "take__crown",
+      "model": "jev-1.13.0",
+      "ms": 221,
+      "options": [],
+      "ranked": [
+        [
+          "take__crown",
+          0.95
+        ],
+        [
+          "none_of_these",
+          0.05
+        ],
+        [
+          "examine__crown",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "vault",
+      "round": 1,
+      "say": "cop that crown, it's the Doggfather's now",
+      "top": "take__crown"
+    },
+    {
+      "action": "take__crown",
+      "backend": "openjev",
+      "confidence": 0.9993,
+      "kind": "act",
+      "landed": true,
+      "means": "take__crown",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 613,
+      "options": [],
+      "ranked": [
+        [
+          "take__crown",
+          0.9994
+        ],
+        [
+          "none_of_these",
+          0.0004
+        ],
+        [
+          "examine__crown",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "vault",
+      "round": 1,
+      "say": "cop that crown, it's the Doggfather's now",
+      "top": "take__crown"
+    },
+    {
+      "action": "take__crown",
+      "backend": "typesafe",
+      "confidence": 0.97,
+      "kind": "act",
+      "landed": true,
+      "means": "take__crown",
+      "model": "jev-1.13.0",
+      "ms": 365,
+      "options": [],
+      "ranked": [
+        [
+          "take__crown",
+          0.97
+        ],
+        [
+          "none_of_these",
+          0.03
+        ],
+        [
+          "examine__torch",
+          0.0
+        ]
+      ],
+      "reason": "",
+      "room": "vault",
+      "round": 2,
+      "say": "cop that crown, it's the Doggfather's now",
+      "top": "take__crown"
+    },
+    {
+      "action": "take__crown",
+      "backend": "openjev",
+      "confidence": 0.9993,
+      "kind": "act",
+      "landed": true,
+      "means": "take__crown",
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "ms": 620,
+      "options": [],
+      "ranked": [
+        [
+          "take__crown",
+          0.9994
+        ],
+        [
+          "none_of_these",
+          0.0004
+        ],
+        [
+          "examine__crown",
+          0.0001
+        ]
+      ],
+      "reason": "",
+      "room": "vault",
+      "round": 2,
+      "say": "cop that crown, it's the Doggfather's now",
+      "top": "take__crown"
+    }
+  ],
+  "same_top_choice": [
+    48,
+    48
+  ],
+  "summary": {
+    "openjev": {
+      "act": 45,
+      "clarify": 0,
+      "error": 0,
+      "landed": 48,
+      "max_ms": 716,
+      "p50_ms": 600,
+      "p95_ms": 683,
+      "turns": 48,
+      "unknown": 3
+    },
+    "typesafe": {
+      "act": 45,
+      "clarify": 0,
+      "error": 0,
+      "landed": 48,
+      "max_ms": 1144,
+      "p50_ms": 213,
+      "p95_ms": 502,
+      "turns": 48,
+      "unknown": 3
+    }
+  },
+  "when": "2026-09-30T17:13:13"
+}
