@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>System One Experiments</title>
+    <meta
+      name="description"
+      content="A lab notebook of experiments with System One models: models that answer typed questions with calibrated probabilities instead of writing text."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/site.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b1a17'/%3E%3Crect x='7' y='18' width='4' height='7' fill='%23f6f3ea'/%3E%3Crect x='14' y='8' width='4' height='17' fill='%23f6f3ea'/%3E%3Crect x='21' y='14' width='4' height='11' fill='%23f6f3ea'/%3E%3C/svg%3E"
+    />
+    <script src="assets/site.js"></script>
+    <style>
+      /* Hero */
+      .hero {
+        padding: 72px 0 64px;
+        border-bottom: 1px solid var(--rule);
+      }
+      .hero .wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+        gap: 56px;
+        align-items: center;
+      }
+      .hero h1 em {
+        color: var(--muted);
+        font-weight: inherit;
+      }
+      .hero .sub {
+        font-size: 1.15rem;
+        color: var(--ink-2);
+        max-width: 40ch;
+        margin-bottom: 28px;
+      }
+      .hero .ctas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .cta {
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        padding: 9px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--rule);
+        background: var(--surface);
+        color: var(--ink);
+        box-shadow: var(--shadow);
+      }
+      .cta.primary {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--surface);
+      }
+      .cta:hover {
+        text-decoration: none;
+        background: var(--surface-2);
+      }
+      .cta.primary:hover {
+        background: color-mix(in srgb, var(--ink) 86%, var(--surface));
+      }
+      @media (max-width: 900px) {
+        .hero .wrap {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+      }
+
+      /* The instrument: a live readout replaying real answers. */
+      .instrument {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
+        font-family: var(--sans);
+        overflow: hidden;
+      }
+      .instrument .bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--rule);
+        background: var(--surface-2);
+      }
+      .instrument .leds {
+        display: flex;
+        gap: 6px;
+      }
+      .instrument .leds i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--rule-strong);
+      }
+      .instrument .leds i.on {
+        background: var(--good);
+        box-shadow: 0 0 6px var(--good);
+      }
+      .instrument .body {
+        padding: 18px 18px 16px;
+      }
+      .instrument .task {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        line-height: 1.55;
+        min-height: 5.2em;
+        color: var(--ink);
+        margin-bottom: 16px;
+      }
+      .instrument .task::before {
+        content: "task › ";
+        color: var(--muted);
+      }
+      .caret {
+        display: inline-block;
+        width: 0.55em;
+        height: 1.05em;
+        vertical-align: -0.15em;
+        background: var(--ink);
+        animation: blink 1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      .q {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .levels {
+        display: grid;
+        gap: 8px;
+      }
+      .level {
+        display: grid;
+        grid-template-columns: 92px 1fr 44px;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.8rem;
+      }
+      .level .name {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+        color: var(--ink-2);
+      }
+      .level .track {
+        height: 14px;
+        background: var(--surface-2);
+        border-radius: 3px;
+        position: relative;
+        overflow: hidden;
+      }
+      .level .fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 0;
+        border-radius: 0 4px 4px 0;
+        transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .level .val {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-2);
+      }
+      .readout {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--rule);
+        font-size: 0.8rem;
+        min-height: 44px;
+      }
+      .readout .route {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .readout .route.show {
+        opacity: 1;
+      }
+      .readout .route b {
+        font-weight: 500;
+        color: var(--ink);
+      }
+      .readout .ms {
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 0.74rem;
+      }
+      .instrument .src {
+        font-size: 0.7rem;
+        color: var(--muted);
+        padding: 10px 18px 14px;
+        border-top: 1px solid var(--rule);
+      }
+
+      /* Question types */
+      .types {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .type h3 {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .type h3 .label {
+        margin-left: auto;
+      }
+      .type p {
+        font-size: 0.92rem;
+        color: var(--ink-2);
+      }
+      .type .ex {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--ink-2);
+        background: var(--surface-2);
+        border-radius: 4px;
+        padding: 10px 12px;
+        line-height: 1.6;
+      }
+      .type .ex .from {
+        display: block;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      @media (max-width: 860px) {
+        .types {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Specimen cards */
+      .specimens {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+      }
+      .specimen {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 24px;
+      }
+      .specimen .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .specimen h3 {
+        font-size: 1.3rem;
+        margin: 0;
+      }
+      .specimen .idea {
+        color: var(--ink-2);
+        margin: 0;
+      }
+      .specimen blockquote {
+        margin: 0;
+        padding: 2px 0 2px 14px;
+        border-left: 2px solid var(--rule-strong);
+        color: var(--ink-2);
+        font-size: 0.92rem;
+      }
+      .specimen dl {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 4px 14px;
+        margin: 0;
+        font-family: var(--sans);
+        font-size: 0.82rem;
+      }
+      .specimen dt {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--muted);
+        padding-top: 1px;
+      }
+      .specimen dd {
+        margin: 0;
+        color: var(--ink-2);
+      }
+      .specimen .links {
+        margin-top: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-top: 8px;
+      }
+      .specimen.featured {
+        grid-column: 1 / -1;
+        border-color: var(--rule-strong);
+        background:
+          radial-gradient(80% 120% at 100% 0, color-mix(in srgb, var(--stamp) 7%, transparent), transparent 60%),
+          var(--surface);
+      }
+      .specimen.featured .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 28px;
+      }
+      .finding-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .finding {
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        padding: 12px;
+        background: var(--surface);
+        font-family: var(--sans);
+      }
+      .finding .n {
+        font-size: 1.9rem;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      .finding .t {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.4;
+      }
+      @media (max-width: 1000px) {
+        .specimens {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .specimens > .specimen:last-child {
+          grid-column: 1 / -1;
+        }
+      }
+      @media (max-width: 860px) {
+        .specimens,
+        .specimen.featured .grid {
+          grid-template-columns: 1fr;
+        }
+        .specimens > .specimen:last-child {
+          grid-column: auto;
+        }
+      }
+      @media (max-width: 480px) {
+        .finding-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Protocol */
+      .protocol {
+        counter-reset: step;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0;
+        border-top: 1px solid var(--rule);
+        border-left: 1px solid var(--rule);
+      }
+      .protocol li {
+        list-style: none;
+        counter-increment: step;
+        padding: 22px 22px 24px;
+        border-right: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        background: var(--surface);
+      }
+      .protocol li::before {
+        content: "P" counter(step, decimal-leading-zero);
+        display: block;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--stamp);
+        margin-bottom: 10px;
+      }
+      .protocol h3 {
+        font-size: 1.15rem;
+      }
+      .protocol p {
+        font-size: 0.9rem;
+        color: var(--ink-2);
+        margin: 0;
+      }
+      .protocol {
+        padding: 0;
+        margin: 0;
+      }
+      @media (max-width: 1000px) {
+        .protocol {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .protocol li:last-child {
+          grid-column: 1 / -1;
+        }
+      }
+      @media (max-width: 560px) {
+        .protocol {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Notebook log */
+      .log {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      .log::before {
+        content: "";
+        position: absolute;
+        left: 118px;
+        top: 6px;
+        bottom: 6px;
+        width: 1px;
+        background: var(--rule-strong);
+      }
+      .log li {
+        display: grid;
+        grid-template-columns: 104px 28px 1fr;
+        gap: 0 0;
+        padding: 0 0 22px;
+      }
+      .log time {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        padding-top: 4px;
+      }
+      .log .node {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--paper);
+        border: 1.5px solid var(--ink-2);
+        margin: 8px 0 0 10px;
+        position: relative;
+        z-index: 1;
+      }
+      .log li.key .node {
+        background: var(--stamp);
+        border-color: var(--stamp);
+      }
+      .log .what {
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+      .log .what small {
+        display: block;
+        color: var(--ink-2);
+        font-size: 0.88rem;
+        font-weight: 400;
+      }
+      @media (max-width: 560px) {
+        .log::before {
+          left: 4px;
+        }
+        .log li {
+          grid-template-columns: 20px 1fr;
+        }
+        .log time {
+          grid-column: 2;
+          grid-row: 1;
+        }
+        .log .node {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+          margin: 6px 0 0;
+        }
+        .log .what {
+          grid-column: 2;
+        }
+      }
+
+      .limits {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 32px;
+        align-items: start;
+      }
+      .limits ul {
+        margin: 0;
+        padding-left: 1.1em;
+      }
+      .limits li {
+        margin-bottom: 0.6em;
+      }
+      @media (max-width: 760px) {
+        .limits {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="brand" href="./" aria-label="System One experiments, home">
+          <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="6" fill="currentColor" />
+            <rect x="7" y="18" width="4" height="7" fill="var(--paper)" />
+            <rect x="14" y="8" width="4" height="17" fill="var(--paper)" />
+            <rect x="21" y="14" width="4" height="11" fill="var(--paper)" />
+          </svg>
+          System One Experiments
+        </a>
+        <nav aria-label="Site">
+          <a class="hide-sm" href="#experiments">Experiments</a>
+          <a class="hide-sm" href="#protocol">Protocol</a>
+          <a class="hide-sm" href="#notebook">Notebook</a>
+          <a href="model-router/">Latest results</a>
+          <a class="hide-sm" href="https://github.com/AlteredCraft/system-one-experiments">GitHub</a>
+          <button class="theme-toggle" type="button" aria-label="Switch theme">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" />
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="hero graph-paper">
+        <div class="wrap">
+          <div>
+            <div class="eyebrow"><span class="dot"></span>Lab notebook · AlteredCraft · opened 2026-09-26</div>
+            <h1>What can a model do when it <em>can't write?</em></h1>
+            <p class="sub">
+              System One models don't generate text. They answer a typed question about some state with a
+              probability for every answer, in milliseconds. These experiments test where that's enough to stand in
+              for a parser, a grader, a release manager, or the choice of which model to call.
+            </p>
+            <div class="ctas">
+              <a class="cta primary" href="model-router/">Read the latest results →</a>
+              <a class="cta" href="#experiments">See all four experiments</a>
+            </div>
+          </div>
+
+          <figure class="instrument" aria-labelledby="inst-cap" style="margin: 0">
+            <div class="bar">
+              <span class="label">Score · route a sub-agent task</span>
+              <span class="leds" aria-hidden="true"><i id="led"></i><i></i><i></i></span>
+            </div>
+            <div class="body" aria-live="polite">
+              <div class="task" id="inst-task"><span class="caret"></span></div>
+              <div class="q">Which description fits the work this task asks for?</div>
+              <div class="levels" id="inst-levels"></div>
+              <div class="readout">
+                <span class="route" id="inst-route"></span>
+                <span class="ms" id="inst-ms"></span>
+              </div>
+            </div>
+            <figcaption class="src" id="inst-cap">
+              Replaying real answers from TypeSafe Jev (<code>jev-1.13.0</code>), model-router run of 2026-10-08.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <section id="system-one">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">01</div>
+            <div>
+              <h2>Three kinds of question, no prose</h2>
+              <p class="lede">
+                <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">Jev</a> is TypeSafe's System
+                One model, and <a href="https://huggingface.co/openjev">Open Jev</a> serves the same
+                <code>/v1/systemone</code> API from open weights on your own machine. You send state and questions; you
+                get back distributions. The code around it decides what to do with them.
+              </p>
+            </div>
+          </div>
+          <div class="types">
+            <article class="card type reveal">
+              <h3>Noul <span class="label">yes / no</span></h3>
+              <p>The probability that a statement about the state is true.</p>
+              <div class="ex">
+                attempt: "a genuine attempt?" → 0.97
+                <span class="from">example from misconception-gates' design</span>
+              </div>
+            </article>
+            <article class="card type reveal">
+              <h3>Choice <span class="label">one of ≤ 255</span></h3>
+              <p>A probability for each option. It can only pick something that's on the list.</p>
+              <div class="ex">
+                "grab the torch" → take__torch
+                <span class="from">godot-jev: options are the moves possible right now</span>
+              </div>
+            </article>
+            <article class="card type reveal">
+              <h3>Score <span class="label">2–10 levels</span></h3>
+              <p>Where the input sits on an ordered scale, with a probability per level.</p>
+              <div class="ex">
+                lookup 0.00 · standard 1.00 · open_ended 0.00
+                <span class="from">model-router, task 11, TypeSafe Jev</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="experiments">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">02</div>
+            <div>
+              <h2>The experiments</h2>
+              <p class="lede">
+                Each is a standalone directory with its own stack, a hypothesis, the checks that would confirm it, and
+                tests that run without an API key. <em>Skeleton</em> means the design is in code and tested against
+                scripted answers. <em>Live</em> means runs against real models are recorded, with dates.
+              </p>
+            </div>
+          </div>
+
+          <div class="specimens">
+            <article class="card specimen featured reveal">
+              <div class="head">
+                <span class="label">EXP-04 · model-router · Node</span>
+                <span class="stamp live">Live · 3 models</span>
+              </div>
+              <div class="grid">
+                <div>
+                  <h3>Which model should this sub-agent run on?</h3>
+                  <p class="idea" style="margin-top: 10px">
+                    An agent harness asks one Score question about a sub-agent's task, then takes the cheapest model
+                    whose chance of being too weak is acceptable. The orchestrator spends no tokens deciding.
+                  </p>
+                  <blockquote style="margin-top: 14px">
+                    One Jev call over the text of a sub-agent task chooses a model tier well enough to move a large
+                    share of work off the most capable model, while rarely sending a task to a model too weak for it.
+                  </blockquote>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <span class="label">First live run · 2026-10-08 · 24 tasks</span>
+                  <div class="finding-row">
+                    <div class="finding">
+                      <div class="n">0</div>
+                      <div class="t">tasks routed too low, by any of the three decision models</div>
+                    </div>
+                    <div class="finding">
+                      <div class="n">67%</div>
+                      <div class="t">kept off the most capable model, by all three</div>
+                    </div>
+                    <div class="finding">
+                      <div class="n">93<small style="font-size: 0.5em"> ms</small></div>
+                      <div class="t">median decision, TypeSafe Jev (Flash 9B 181, 27B 567)</div>
+                    </div>
+                  </div>
+                  <div class="links">
+                    <a class="cta primary" href="model-router/">Walk through the results →</a>
+                    <a class="cta" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/model-router">Code</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card specimen reveal">
+              <div class="head">
+                <span class="label">EXP-02 · godot-jev · Godot 4.7</span>
+                <span class="stamp live">Live · 2 models</span>
+              </div>
+              <h3>The Sunken Crypt</h3>
+              <p class="idea">
+                A dungeon crawl whose parser understands whatever you type but can only choose moves the author wrote.
+                Each turn, the possible moves become one Choice, plus "none of these".
+              </p>
+              <blockquote>
+                Players type naturally with few dead ends, the game stays fully authored, and it's fast enough to feel
+                like a parser, not a chat.
+              </blockquote>
+              <dl>
+                <dt>2026-09-30</dt>
+                <dd>TypeSafe Jev and Open Jev both landed 48 of 48 turns and ranked the same move first on all 48.</dd>
+                <dt>Speed</dt>
+                <dd>p95 502 ms hosted, 683 ms local. Neither met the 500 ms bar.</dd>
+              </dl>
+              <div class="links">
+                <a class="btn" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/godot-jev">README &amp; code</a>
+              </div>
+            </article>
+
+            <article class="card specimen reveal">
+              <div class="head">
+                <span class="label">EXP-01 · misconception-gates · Node</span>
+                <span class="stamp idle">Skeleton</span>
+              </div>
+              <h3>Grade the misunderstanding</h3>
+              <p class="idea">
+                Read a learner's free-text answer for <em>which</em> misconception it shows, and send them to the part
+                of the lesson written for it.
+              </p>
+              <blockquote>
+                With four to six authored misconceptions per gate, one Jev call diagnoses free-text answers accurately
+                enough to act on most of them automatically.
+              </blockquote>
+              <dl>
+                <dt>Next</dt>
+                <dd>Accuracy at a useful coverage on ≥ 50 labelled answers per gate.</dd>
+              </dl>
+              <div class="links">
+                <a class="btn" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/misconception-gates">README &amp; code</a>
+              </div>
+            </article>
+
+            <article class="card specimen reveal">
+              <div class="head">
+                <span class="label">EXP-03 · semver-judge · Python</span>
+                <span class="stamp idle">Skeleton</span>
+              </div>
+              <h3>The next version number</h3>
+              <p class="idea">
+                Decide the bump from the commits since the last tag. Code reads what messages declare, Jev judges what
+                they don't, and a human sees only commits that are uncertain and could change the answer.
+              </p>
+              <blockquote>
+                A single Jev call per commit agrees with the bump a maintainer would choose on commits without
+                Conventional prefixes.
+              </blockquote>
+              <dl>
+                <dt>Next</dt>
+                <dd>Replay the tagged history of public repos and compare with the bumps maintainers made.</dd>
+              </dl>
+              <div class="links">
+                <a class="btn" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/semver-judge">README &amp; code</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="protocol">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">03</div>
+            <div>
+              <h2>Protocol</h2>
+              <p class="lede">
+                Every experiment is built the same way. It keeps the model replaceable and the tests honest.
+              </p>
+            </div>
+          </div>
+          <ol class="protocol reveal">
+            <li>
+              <h3>A decider port</h3>
+              <p>Code asks <code>decide(state, questions)</code>. One adapter calls Jev; a scripted one drives the tests. No unit test calls the network.</p>
+            </li>
+            <li>
+              <h3>Policy in code</h3>
+              <p>Thresholds, arithmetic, dates and counting stay in ordinary code. A policy change is a code change, not a prompt rewrite.</p>
+            </li>
+            <li>
+              <h3>Ask only what's open</h3>
+              <p>Deterministic rules go first. The model answers only what they leave undecided.</p>
+            </li>
+            <li>
+              <h3>Confidence decides the path</h3>
+              <p>Act, ask or escalate by how sure the model is, with the bar set by the cost of being wrong.</p>
+            </li>
+            <li>
+              <h3>Fail safe</h3>
+              <p>If the model is unreachable, fall back to what the system did before it had one.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="notebook">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <div class="sec-num">04</div>
+            <div>
+              <h2>Notebook</h2>
+              <p class="lede">Dated entries, newest first. Each experiment's README records its evidence the same way.</p>
+            </div>
+          </div>
+          <ol class="log reveal">
+            <li class="key">
+              <time datetime="2026-10-08">2026-10-08</time><span class="node"></span>
+              <div class="what">
+                <a href="model-router/">model-router's first live run</a>
+                <small>TypeSafe Jev, Open Jev 27B and Open Jev Flash 9B route 24 sub-agent tasks. None goes too low; the three differ in how sure they are and how fast.</small>
+              </div>
+            </li>
+            <li>
+              <time datetime="2026-09-30">2026-09-30</time><span class="node"></span>
+              <div class="what">
+                The Sunken Crypt on TypeSafe Jev and Open Jev
+                <small>Same 16 lines, three rounds each. Both 48 of 48. p50 213 ms hosted, 600 ms local.</small>
+              </div>
+            </li>
+            <li>
+              <time datetime="2026-09-29">2026-09-29</time><span class="node"></span>
+              <div class="what">
+                A scripted 16-turn session through the crypt
+                <small>Every turn 197–300 ms on <code>jev-latest</code>, once the HTTP request moved off the main thread.</small>
+              </div>
+            </li>
+            <li>
+              <time datetime="2026-09-28">2026-09-28</time><span class="node"></span>
+              <div class="what">
+                godot-jev becomes a dungeon crawl
+                <small>Six rooms, five items, pixel-art rooms painted by code, and a status panel that shows what Jev heard.</small>
+              </div>
+            </li>
+            <li>
+              <time datetime="2026-09-27">2026-09-27</time><span class="node"></span>
+              <div class="what">
+                Three experiment skeletons
+                <small>Picked from areas <a href="https://github.com/yibie/awesome-jev">awesome-jev</a> had no entries for.</small>
+              </div>
+            </li>
+            <li>
+              <time datetime="2026-09-26">2026-09-26</time><span class="node"></span>
+              <div class="what">
+                Proof of concept: pattern matching on meaning
+                <small>The <code>fuzzymatch</code> library, now on the <code>archive/fuzzymatch</code> branch.</small>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="limits">
+        <div class="wrap limits">
+          <div class="reveal">
+            <div class="sec-head" style="grid-template-columns: 1fr; margin-bottom: 0">
+              <div class="sec-num" style="width: 48px; margin-bottom: 10px">05</div>
+              <div>
+                <h2>Read before trusting</h2>
+                <p class="lede">Limits that apply to every experiment here.</p>
+              </div>
+            </div>
+          </div>
+          <ul class="reveal">
+            <li>Jev takes text only and reads instructions literally.</li>
+            <li>It can't count or compare dates. That's why arithmetic and thresholds live in code.</li>
+            <li>Text inside the state can argue for an answer: a learner, a commit author, a player or an orchestrating model can write "this is trivial".</li>
+            <li>Where the state comes from someone with a reason to game it, keep the stakes of any automatic action low, or keep a human in the loop.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap">
+        <span>System One experiments · <a href="https://github.com/AlteredCraft/system-one-experiments">AlteredCraft/system-one-experiments</a> · MIT</span>
+        <span>Pin the model version for any run whose numbers you record.</span>
+      </div>
+    </footer>
+
+    <script src="model-router/data.js"></script>
+    <script>
+      /* The hero instrument: replays real answers from the model-router run, one task at a time. */
+      (function () {
+        const data = window.MR_DATA;
+        if (!data) return;
+        const run = data.runs.find((r) => r.id === "typesafe");
+        const picks = [1, 17, 9, 16, 3]; // task numbers: one of each route, plus the two least sure
+        const ids = data.routes.map((r) => r.id);
+        const models = data.routes.map((r) => r.model);
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const taskEl = document.getElementById("inst-task");
+        const levelsEl = document.getElementById("inst-levels");
+        const routeEl = document.getElementById("inst-route");
+        const msEl = document.getElementById("inst-ms");
+        const led = document.getElementById("led");
+
+        levelsEl.innerHTML = ids
+          .map(
+            (id, l) => `
+              <div class="level">
+                <span class="name">${id}</span>
+                <span class="track"><span class="fill" style="background: var(--r-${l})"></span></span>
+                <span class="val">0.00</span>
+              </div>`,
+          )
+          .join("");
+        const fills = levelsEl.querySelectorAll(".fill");
+        const vals = levelsEl.querySelectorAll(".val");
+
+        const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? Math.min(ms, 1200) : ms));
+
+        async function show(n) {
+          const row = run.rows[n - 1];
+          const text = data.tasks[n - 1];
+          routeEl.classList.remove("show");
+          msEl.textContent = "";
+          fills.forEach((f) => (f.style.width = "0"));
+          vals.forEach((v) => (v.textContent = "0.00"));
+          if (reduce) {
+            taskEl.textContent = text;
+          } else {
+            taskEl.innerHTML = '<span class="caret"></span>';
+            for (let i = 1; i <= text.length; i++) {
+              taskEl.innerHTML = escape(text.slice(0, i)) + '<span class="caret"></span>';
+              await wait(18);
+            }
+          }
+          led.classList.add("on");
+          await wait(Math.max(row.latencyMs, 120));
+          led.classList.remove("on");
+          row.p.forEach((p, l) => {
+            fills[l].style.width = `${(p * 100).toFixed(1)}%`;
+            vals[l].textContent = p.toFixed(2);
+          });
+          msEl.textContent = `${Math.round(row.latencyMs)} ms`;
+          await wait(700);
+          routeEl.innerHTML = `→ <b>${ids[row.route]}</b> · ${models[row.route]}`;
+          routeEl.classList.add("show");
+          await wait(3200);
+        }
+
+        function escape(s) {
+          return s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+        }
+
+        (async function loop() {
+          for (let i = 0; ; i = (i + 1) % picks.length) await show(picks[i]);
+        })();
+      })();
+    </script>
+  </body>
+</html>
