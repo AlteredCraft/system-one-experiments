@@ -1,0 +1,24 @@
+{"label":"lookup","task":"Find every file that imports parseConfig and list the paths with line numbers."}
+{"label":"lookup","task":"Read CHANGELOG.md and report the date and headline changes of the three most recent releases."}
+{"label":"lookup","task":"List the environment variables this service reads, with the file each is read in."}
+{"label":"lookup","task":"In package.json, change the version from 2.3.0 to 2.3.1. Change nothing else."}
+{"label":"lookup","task":"Run the test suite and report which tests fail, with the first line of each error. Do not fix anything."}
+{"label":"lookup","task":"Summarise what src/billing/invoice.ts does in five bullet points for someone new to the codebase."}
+{"label":"lookup","task":"Rename the constant MAX_RETRY to MAX_RETRIES in src/http/client.py, where it is defined and used twice."}
+{"label":"lookup","task":"Check whether the repo has a LICENSE file and say which licence it is."}
+{"label":"standard","task":"Add a --dry-run flag to the sync command. With it set, print each file that would be uploaded and upload nothing. Add a test."}
+{"label":"standard","task":"The date parser in utils/dates.py rejects ISO strings with a trailing Z. Accept them as UTC and add tests for both forms."}
+{"label":"standard","task":"Write unit tests for the existing slugify function covering empty input, accents, repeated dashes and very long titles."}
+{"label":"standard","task":"Add pagination to GET /api/orders: page and per_page query parameters, defaults 1 and 50, and a total count in the response."}
+{"label":"standard","task":"Convert the callbacks in src/storage/upload.js to async/await without changing behaviour. The existing tests must still pass."}
+{"label":"standard","task":"The settings form submits when Enter is pressed in the search box. Stop that, keeping Enter-to-submit in the other fields."}
+{"label":"standard","task":"Add a retry with exponential backoff, at most three attempts, to the webhook sender when the response is a 5xx."}
+{"label":"standard","task":"Write the README section for the new export command from its --help output and the two examples in docs/notes.md."}
+{"label":"open_ended","task":"Checkout intermittently double-charges customers, a few times a week, with nothing in the logs. Find the cause."}
+{"label":"open_ended","task":"We need to move the job queue off Redis. Compare the realistic options for our workload and recommend one, with a migration plan."}
+{"label":"open_ended","task":"Memory use of the worker grows by about 50 MB an hour in production but not locally. Work out why."}
+{"label":"open_ended","task":"Review the new authentication middleware for security problems. It handles session tokens, refresh and tenant isolation."}
+{"label":"open_ended","task":"Design how offline editing should work in the mobile app, including conflict resolution when two devices edit the same note."}
+{"label":"open_ended","task":"Split the monolith's billing module into its own service. Work out the boundary, the data it owns and the order to do it in."}
+{"label":"open_ended","task":"Two tests pass alone and fail when run together, in either order. Find what state they share and fix it properly."}
+{"label":"open_ended","task":"The search results page got three times slower after last week's release. Find which change did it and what to do about it."}

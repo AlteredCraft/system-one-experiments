@@ -15,8 +15,12 @@ node_modules/
 # Live eval output (commit a result deliberately with `git add -f` when it's evidence for a check)
 misconception-gates/eval/results-*.json
 godot-jev/eval/results-*.json
+model-router/eval/results-*.json
 
 .DS_Store
 
 # Temporary 2x window for recording a trailer (see godot-jev/README.md)
 godot-jev/override.cfg
+
+# Local API keys
+.env.*

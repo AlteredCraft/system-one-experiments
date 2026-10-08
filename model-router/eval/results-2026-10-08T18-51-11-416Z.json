@@ -1,0 +1,616 @@
+{
+  "backend": "TypeSafe Jev",
+  "config": {
+    "routes": [
+      {
+        "id": "lookup",
+        "model": "claude-haiku-5-5",
+        "suits": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting."
+      },
+      {
+        "id": "standard",
+        "model": "claude-sonnet-5-5",
+        "suits": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment."
+      },
+      {
+        "id": "open_ended",
+        "model": "claude-opus-5-5",
+        "suits": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+      }
+    ],
+    "fallback": "standard",
+    "maxUnderRouteRisk": 0.25,
+    "rules": [
+      {
+        "when": {
+          "agent_type": "Explore"
+        },
+        "route": "lookup"
+      }
+    ],
+    "decider": {
+      "backend": "typesafe",
+      "model": "jev-latest"
+    }
+  },
+  "summaries": [
+    {
+      "bar": 0.05,
+      "n": 24,
+      "agree": 22,
+      "under": 0,
+      "over": 2,
+      "routes": {
+        "lookup": 6,
+        "standard": 8,
+        "open_ended": 10
+      }
+    },
+    {
+      "bar": 0.1,
+      "n": 24,
+      "agree": 24,
+      "under": 0,
+      "over": 0,
+      "routes": {
+        "lookup": 8,
+        "standard": 8,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.15,
+      "n": 24,
+      "agree": 24,
+      "under": 0,
+      "over": 0,
+      "routes": {
+        "lookup": 8,
+        "standard": 8,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.25,
+      "n": 24,
+      "agree": 24,
+      "under": 0,
+      "over": 0,
+      "routes": {
+        "lookup": 8,
+        "standard": 8,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.35,
+      "n": 24,
+      "agree": 24,
+      "under": 0,
+      "over": 0,
+      "routes": {
+        "lookup": 8,
+        "standard": 8,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.5,
+      "n": 24,
+      "agree": 24,
+      "under": 0,
+      "over": 0,
+      "routes": {
+        "lookup": 8,
+        "standard": 8,
+        "open_ended": 8
+      }
+    }
+  ],
+  "rows": [
+    {
+      "label": "lookup",
+      "task": "Find every file that imports parseConfig and list the paths with line numbers.",
+      "answer": {
+        "type": "score",
+        "score": 0.01,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 1,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 131.995041
+    },
+    {
+      "label": "lookup",
+      "task": "Read CHANGELOG.md and report the date and headline changes of the three most recent releases.",
+      "answer": {
+        "type": "score",
+        "score": 0,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 1,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 80.823125
+    },
+    {
+      "label": "lookup",
+      "task": "List the environment variables this service reads, with the file each is read in.",
+      "answer": {
+        "type": "score",
+        "score": 0.17,
+        "confidence": 0.74,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9,
+          "1": 0.02,
+          "2": 0.08
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 115.73166700000002
+    },
+    {
+      "label": "lookup",
+      "task": "In package.json, change the version from 2.3.0 to 2.3.1. Change nothing else.",
+      "answer": {
+        "type": "score",
+        "score": 0,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 1,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 75.18466699999999
+    },
+    {
+      "label": "lookup",
+      "task": "Run the test suite and report which tests fail, with the first line of each error. Do not fix anything.",
+      "answer": {
+        "type": "score",
+        "score": 0.19,
+        "confidence": 0.72,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9,
+          "1": 0.01,
+          "2": 0.09
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 81.80833299999995
+    },
+    {
+      "label": "lookup",
+      "task": "Summarise what src/billing/invoice.ts does in five bullet points for someone new to the codebase.",
+      "answer": {
+        "type": "score",
+        "score": 0.01,
+        "confidence": 0.98,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.99,
+          "1": 0.01,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 101.03316599999994
+    },
+    {
+      "label": "lookup",
+      "task": "Rename the constant MAX_RETRY to MAX_RETRIES in src/http/client.py, where it is defined and used twice.",
+      "answer": {
+        "type": "score",
+        "score": 0.02,
+        "confidence": 0.97,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.98,
+          "1": 0.02,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 111.62466700000004
+    },
+    {
+      "label": "lookup",
+      "task": "Check whether the repo has a LICENSE file and say which licence it is.",
+      "answer": {
+        "type": "score",
+        "score": 0,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 1,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 107.32195800000011
+    },
+    {
+      "label": "standard",
+      "task": "Add a --dry-run flag to the sync command. With it set, print each file that would be uploaded and upload nothing. Add a test.",
+      "answer": {
+        "type": "score",
+        "score": 1,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 1,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 87.52324999999996
+    },
+    {
+      "label": "standard",
+      "task": "The date parser in utils/dates.py rejects ISO strings with a trailing Z. Accept them as UTC and add tests for both forms.",
+      "answer": {
+        "type": "score",
+        "score": 0.99,
+        "confidence": 0.98,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.01,
+          "1": 0.99,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 85.23250000000007
+    },
+    {
+      "label": "standard",
+      "task": "Write unit tests for the existing slugify function covering empty input, accents, repeated dashes and very long titles.",
+      "answer": {
+        "type": "score",
+        "score": 1,
+        "confidence": 0.99,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 1,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 110.77449999999999
+    },
+    {
+      "label": "standard",
+      "task": "Add pagination to GET /api/orders: page and per_page query parameters, defaults 1 and 50, and a total count in the response.",
+      "answer": {
+        "type": "score",
+        "score": 0.96,
+        "confidence": 0.94,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.04,
+          "1": 0.96,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 96.51754099999994
+    },
+    {
+      "label": "standard",
+      "task": "Convert the callbacks in src/storage/upload.js to async/await without changing behaviour. The existing tests must still pass.",
+      "answer": {
+        "type": "score",
+        "score": 1,
+        "confidence": 0.99,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 1,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 76.02891700000009
+    },
+    {
+      "label": "standard",
+      "task": "The settings form submits when Enter is pressed in the search box. Stop that, keeping Enter-to-submit in the other fields.",
+      "answer": {
+        "type": "score",
+        "score": 0.94,
+        "confidence": 0.91,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.06,
+          "1": 0.9400000000000001,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 91.92875000000004
+    },
+    {
+      "label": "standard",
+      "task": "Add a retry with exponential backoff, at most three attempts, to the webhook sender when the response is a 5xx.",
+      "answer": {
+        "type": "score",
+        "score": 0.99,
+        "confidence": 0.98,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.01,
+          "1": 0.99,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 89.41237499999988
+    },
+    {
+      "label": "standard",
+      "task": "Write the README section for the new export command from its --help output and the two examples in docs/notes.md.",
+      "answer": {
+        "type": "score",
+        "score": 0.63,
+        "confidence": 0.45,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.37,
+          "1": 0.63,
+          "2": 0
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 134.6427920000001
+    },
+    {
+      "label": "open_ended",
+      "task": "Checkout intermittently double-charges customers, a few times a week, with nothing in the logs. Find the cause.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 127.93162500000017
+    },
+    {
+      "label": "open_ended",
+      "task": "We need to move the job queue off Redis. Compare the realistic options for our workload and recommend one, with a migration plan.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 108.06312500000013
+    },
+    {
+      "label": "open_ended",
+      "task": "Memory use of the worker grows by about 50 MB an hour in production but not locally. Work out why.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 121.44341699999995
+    },
+    {
+      "label": "open_ended",
+      "task": "Review the new authentication middleware for security problems. It handles session tokens, refresh and tenant isolation.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 93.37712499999998
+    },
+    {
+      "label": "open_ended",
+      "task": "Design how offline editing should work in the mobile app, including conflict resolution when two devices edit the same note.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 84.71249999999964
+    },
+    {
+      "label": "open_ended",
+      "task": "Split the monolith's billing module into its own service. Work out the boundary, the data it owns and the order to do it in.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 96.21212500000001
+    },
+    {
+      "label": "open_ended",
+      "task": "Two tests pass alone and fail when run together, in either order. Find what state they share and fix it properly.",
+      "answer": {
+        "type": "score",
+        "score": 1.96,
+        "confidence": 0.94,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0.04,
+          "2": 0.96
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 75.9802080000004
+    },
+    {
+      "label": "open_ended",
+      "task": "The search results page got three times slower after last week's release. Find which change did it and what to do about it.",
+      "answer": {
+        "type": "score",
+        "score": 2,
+        "confidence": 1,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 1
+        }
+      },
+      "model": "jev-1.13.0",
+      "latencyMs": 90.64199999999983
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "model-router",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Pick the model for a sub-agent task with one System One call: rules first, then a Score over the configured routes, escalating when a weaker model is too likely to fall short.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node examples/demo.mjs",
+    "eval": "node eval/run.mjs"
+  }
+}

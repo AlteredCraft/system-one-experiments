@@ -1,0 +1,616 @@
+{
+  "backend": "Open Jev",
+  "config": {
+    "routes": [
+      {
+        "id": "lookup",
+        "model": "claude-haiku-5-5",
+        "suits": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting."
+      },
+      {
+        "id": "standard",
+        "model": "claude-sonnet-5-5",
+        "suits": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment."
+      },
+      {
+        "id": "open_ended",
+        "model": "claude-opus-5-5",
+        "suits": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+      }
+    ],
+    "fallback": "standard",
+    "maxUnderRouteRisk": 0.25,
+    "rules": [
+      {
+        "when": {
+          "agent_type": "Explore"
+        },
+        "route": "lookup"
+      }
+    ],
+    "decider": {
+      "backend": "typesafe",
+      "model": "jev-latest"
+    }
+  },
+  "summaries": [
+    {
+      "bar": 0.05,
+      "n": 24,
+      "agree": 21,
+      "under": 0,
+      "over": 3,
+      "routes": {
+        "lookup": 5,
+        "standard": 9,
+        "open_ended": 10
+      }
+    },
+    {
+      "bar": 0.1,
+      "n": 24,
+      "agree": 22,
+      "under": 0,
+      "over": 2,
+      "routes": {
+        "lookup": 6,
+        "standard": 10,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.15,
+      "n": 24,
+      "agree": 22,
+      "under": 0,
+      "over": 2,
+      "routes": {
+        "lookup": 6,
+        "standard": 10,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.25,
+      "n": 24,
+      "agree": 23,
+      "under": 0,
+      "over": 1,
+      "routes": {
+        "lookup": 7,
+        "standard": 9,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.35,
+      "n": 24,
+      "agree": 23,
+      "under": 0,
+      "over": 1,
+      "routes": {
+        "lookup": 7,
+        "standard": 9,
+        "open_ended": 8
+      }
+    },
+    {
+      "bar": 0.5,
+      "n": 24,
+      "agree": 23,
+      "under": 0,
+      "over": 1,
+      "routes": {
+        "lookup": 7,
+        "standard": 9,
+        "open_ended": 8
+      }
+    }
+  ],
+  "rows": [
+    {
+      "label": "lookup",
+      "task": "Find every file that imports parseConfig and list the paths with line numbers.",
+      "answer": {
+        "type": "score",
+        "score": 0.0081,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9956,
+          "1": 0.0006,
+          "2": 0.0037
+        },
+        "confidence": 0.9879
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 607.446334
+    },
+    {
+      "label": "lookup",
+      "task": "Read CHANGELOG.md and report the date and headline changes of the three most recent releases.",
+      "answer": {
+        "type": "score",
+        "score": 0.0015,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9991,
+          "1": 0.0004,
+          "2": 0.0006
+        },
+        "confidence": 0.9978
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 607.5963750000001
+    },
+    {
+      "label": "lookup",
+      "task": "List the environment variables this service reads, with the file each is read in.",
+      "answer": {
+        "type": "score",
+        "score": 0.1167,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9409,
+          "1": 0.0016,
+          "2": 0.0576
+        },
+        "confidence": 0.825
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 605.3740420000001
+    },
+    {
+      "label": "lookup",
+      "task": "In package.json, change the version from 2.3.0 to 2.3.1. Change nothing else.",
+      "answer": {
+        "type": "score",
+        "score": 0.0039,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9962,
+          "1": 0.0037,
+          "2": 0.0001
+        },
+        "confidence": 0.9941
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 595.124667
+    },
+    {
+      "label": "lookup",
+      "task": "Run the test suite and report which tests fail, with the first line of each error. Do not fix anything.",
+      "answer": {
+        "type": "score",
+        "score": 0.2397,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.8402,
+          "1": 0.0799,
+          "2": 0.0799
+        },
+        "confidence": 0.6405
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 594.5164159999999
+    },
+    {
+      "label": "lookup",
+      "task": "Summarise what src/billing/invoice.ts does in five bullet points for someone new to the codebase.",
+      "answer": {
+        "type": "score",
+        "score": 0.0085,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9939,
+          "1": 0.0037,
+          "2": 0.0024
+        },
+        "confidence": 0.9872
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 578.1792499999997
+    },
+    {
+      "label": "lookup",
+      "task": "Rename the constant MAX_RETRY to MAX_RETRIES in src/http/client.py, where it is defined and used twice.",
+      "answer": {
+        "type": "score",
+        "score": 0.8356,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.1654,
+          "1": 0.8337,
+          "2": 0.001
+        },
+        "confidence": 0.7505
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 563.6489590000001
+    },
+    {
+      "label": "lookup",
+      "task": "Check whether the repo has a LICENSE file and say which licence it is.",
+      "answer": {
+        "type": "score",
+        "score": 0.0036,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.9979,
+          "1": 0.0006,
+          "2": 0.0015
+        },
+        "confidence": 0.9945
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 572.5060000000003
+    },
+    {
+      "label": "standard",
+      "task": "Add a --dry-run flag to the sync command. With it set, print each file that would be uploaded and upload nothing. Add a test.",
+      "answer": {
+        "type": "score",
+        "score": 1.006,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0018,
+          "1": 0.9905,
+          "2": 0.0077
+        },
+        "confidence": 0.9857
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 575.4708329999994
+    },
+    {
+      "label": "standard",
+      "task": "The date parser in utils/dates.py rejects ISO strings with a trailing Z. Accept them as UTC and add tests for both forms.",
+      "answer": {
+        "type": "score",
+        "score": 0.9976,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0037,
+          "1": 0.9949,
+          "2": 0.0013
+        },
+        "confidence": 0.9924
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 567.8558750000002
+    },
+    {
+      "label": "standard",
+      "task": "Write unit tests for the existing slugify function covering empty input, accents, repeated dashes and very long titles.",
+      "answer": {
+        "type": "score",
+        "score": 0.9986,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0028,
+          "1": 0.9959,
+          "2": 0.0013
+        },
+        "confidence": 0.9938
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 565.9482499999995
+    },
+    {
+      "label": "standard",
+      "task": "Add pagination to GET /api/orders: page and per_page query parameters, defaults 1 and 50, and a total count in the response.",
+      "answer": {
+        "type": "score",
+        "score": 1.0071,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0032,
+          "1": 0.9865,
+          "2": 0.0103
+        },
+        "confidence": 0.9797
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 573.6158329999998
+    },
+    {
+      "label": "standard",
+      "task": "Convert the callbacks in src/storage/upload.js to async/await without changing behaviour. The existing tests must still pass.",
+      "answer": {
+        "type": "score",
+        "score": 1.0135,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0049,
+          "1": 0.9767,
+          "2": 0.0184
+        },
+        "confidence": 0.965
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 564.3928749999995
+    },
+    {
+      "label": "standard",
+      "task": "The settings form submits when Enter is pressed in the search box. Stop that, keeping Enter-to-submit in the other fields.",
+      "answer": {
+        "type": "score",
+        "score": 0.9622,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0434,
+          "1": 0.9511,
+          "2": 0.0055
+        },
+        "confidence": 0.9267
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 566.6510419999995
+    },
+    {
+      "label": "standard",
+      "task": "Add a retry with exponential backoff, at most three attempts, to the webhook sender when the response is a 5xx.",
+      "answer": {
+        "type": "score",
+        "score": 1.0096,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0024,
+          "1": 0.9857,
+          "2": 0.012
+        },
+        "confidence": 0.9785
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 563.4807079999991
+    },
+    {
+      "label": "standard",
+      "task": "Write the README section for the new export command from its --help output and the two examples in docs/notes.md.",
+      "answer": {
+        "type": "score",
+        "score": 0.9542,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0499,
+          "1": 0.946,
+          "2": 0.0041
+        },
+        "confidence": 0.9189
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 564.7785000000003
+    },
+    {
+      "label": "open_ended",
+      "task": "Checkout intermittently double-charges customers, a few times a week, with nothing in the logs. Find the cause.",
+      "answer": {
+        "type": "score",
+        "score": 1.9892,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.005,
+          "1": 0.0008,
+          "2": 0.9942
+        },
+        "confidence": 0.9838
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 563.4405830000014
+    },
+    {
+      "label": "open_ended",
+      "task": "We need to move the job queue off Redis. Compare the realistic options for our workload and recommend one, with a migration plan.",
+      "answer": {
+        "type": "score",
+        "score": 1.9902,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0028,
+          "1": 0.0043,
+          "2": 0.9929
+        },
+        "confidence": 0.9852
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 564.9477499999994
+    },
+    {
+      "label": "open_ended",
+      "task": "Memory use of the worker grows by about 50 MB an hour in production but not locally. Work out why.",
+      "answer": {
+        "type": "score",
+        "score": 1.9905,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0037,
+          "1": 0.0021,
+          "2": 0.9942
+        },
+        "confidence": 0.9857
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 562.884415999999
+    },
+    {
+      "label": "open_ended",
+      "task": "Review the new authentication middleware for security problems. It handles session tokens, refresh and tenant isolation.",
+      "answer": {
+        "type": "score",
+        "score": 1.9932,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0018,
+          "1": 0.0032,
+          "2": 0.995
+        },
+        "confidence": 0.9898
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 579.2152079999996
+    },
+    {
+      "label": "open_ended",
+      "task": "Design how offline editing should work in the mobile app, including conflict resolution when two devices edit the same note.",
+      "answer": {
+        "type": "score",
+        "score": 1.9913,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.001,
+          "1": 0.0067,
+          "2": 0.9923
+        },
+        "confidence": 0.987
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 565.7275829999999
+    },
+    {
+      "label": "open_ended",
+      "task": "Split the monolith's billing module into its own service. Work out the boundary, the data it owns and the order to do it in.",
+      "answer": {
+        "type": "score",
+        "score": 1.9772,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0089,
+          "1": 0.005,
+          "2": 0.9861
+        },
+        "confidence": 0.9658
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 566.7474590000002
+    },
+    {
+      "label": "open_ended",
+      "task": "Two tests pass alone and fail when run together, in either order. Find what state they share and fix it properly.",
+      "answer": {
+        "type": "score",
+        "score": 1.9864,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0016,
+          "1": 0.0103,
+          "2": 0.988
+        },
+        "confidence": 0.9795
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 563.9625420000011
+    },
+    {
+      "label": "open_ended",
+      "task": "The search results page got three times slower after last week's release. Find which change did it and what to do about it.",
+      "answer": {
+        "type": "score",
+        "score": 1.9583,
+        "legend": {
+          "0": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting.",
+          "1": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment.",
+          "2": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+        },
+        "probabilities": {
+          "0": 0.0184,
+          "1": 0.0049,
+          "2": 0.9767
+        },
+        "confidence": 0.9374
+      },
+      "model": "openjev-MLX-4bit T=0.85 noul=1.829074,0.0 flags={\"perms\":1,\"stagger\":true,\"loop_break\":false,\"compact\":false,\"compact_cap\":0,\"layout\":\"\",\"pad\":0,\"targeted\":true,\"instr_style\":\"pyrepr\"} shim=shim.py@81a22f1b1b89",
+      "latencyMs": 564.9089999999997
+    }
+  ]
+}

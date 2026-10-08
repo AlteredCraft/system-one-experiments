@@ -17,3 +17,4 @@ Commands per experiment:
 | misconception-gates | `node --test` | — |
 | godot-jev | `godot --headless --path . --import` then `godot --headless --path . --script res://tests/run_tests.gd` | — |
 | semver-judge | `uv run pytest` | `uv run ruff check . && uv run ruff format --check .` |
+| model-router | `node --test` | — |

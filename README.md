@@ -6,11 +6,11 @@ but answer typed questions (a Choice, a Score, a yes/no probability) about some 
 milliseconds, with calibrated confidence.
 
 [Open Jev](https://huggingface.co/openjev) is an open-weights model served through the same
-`/v1/systemone` API, so it can run on your own machine without a key. godot-jev runs against either
-and compares them; the other experiments call TypeSafe's API only so far.
+`/v1/systemone` API, so it can run on your own machine without a key. godot-jev and model-router
+run against either and compare them; the other experiments call TypeSafe's API only so far.
 
 Each directory is a standalone experiment with its own stack, a hypothesis, the checks that would
-confirm it, and tests that run without an API key. They were picked from areas that
+confirm it, and tests that run without an API key. The first three were picked from areas that
 [awesome-jev](https://github.com/yibie/awesome-jev) had no entries for as of 2026-09-27.
 
 | Experiment | The idea | Stack | Status |
@@ -18,6 +18,7 @@ confirm it, and tests that run without an API key. They were picked from areas t
 | [misconception-gates](misconception-gates/) | Grade a learner's free-text answer by *which misconception* it shows, and jump to the lesson section that fixes it | Node, no dependencies (drops into js-animation-sandbox) | Skeleton |
 | [godot-jev](godot-jev/) | A Godot 4 add-on for Jev, and a text adventure whose parser understands anything but can only choose moves the author wrote | Godot 4.7, GDScript | Live: TypeSafe Jev and Open Jev |
 | [semver-judge](semver-judge/) | Decide the next version from the commits since the last tag, flagging only the uncertain commits that could change the answer | Python, GitHub Action | Skeleton |
+| [model-router](model-router/) | Pick the model for a sub-agent task in an agent harness: rules first, then a Score over the configured routes, moving up when a weaker model is too likely to fall short | Node, no dependencies | Live: TypeSafe Jev, Open Jev 27B and Flash 9B, on starter tasks only |
 
 **Skeleton** means the design is in code and tested against scripted model answers, but nothing
 has been run against the live API yet. Each README's first Open item is that run. **Live** means
@@ -36,7 +37,8 @@ Every experiment is built the same way, because it keeps the model replaceable a
 - **Confidence decides the path.** Act, ask, or escalate by how sure the model is, with the bar set
   by the cost of being wrong.
 - **Fail safe.** If the model is unreachable, each experiment falls back to what it did before
-  (a gate's static explanation, an authored "not possible" line, Conventional Commits only).
+  (a gate's static explanation, an authored "not possible" line, Conventional Commits only, the
+  harness's default sub-agent model).
 
 ## Running them
 
@@ -47,17 +49,19 @@ export TYPESAFE_DEFAULT_MODEL=jev-1.13.0  # pin before comparing results
 cd misconception-gates && node --test && node eval/run.mjs
 cd godot-jev && godot --headless --path . --import && godot --headless --path . --script res://tests/run_tests.gd
 cd semver-judge && uv sync && uv run pytest && uv run semver-judge --repo /path/to/repo
+cd model-router && node --test && node eval/run.mjs
 ```
 
-godot-jev can use a local Open Jev server instead (`JEV_BACKEND=openjev`), and
-`eval/compare_backends.gd` asks both the same questions; see its README.
+godot-jev and model-router can use a local Open Jev server instead (`JEV_BACKEND=openjev`).
+godot-jev's `eval/compare_backends.gd` asks both the same questions, and model-router's
+`eval/compare.mjs` puts runs side by side; see their READMEs.
 
 ## Limits that apply to all of them
 
 Jev takes text only, reads instructions literally, can't count or compare dates, and text inside
 the state can argue for an answer. Where the state comes from someone with a reason to game it
-(a learner, a commit author, a player), keep the stakes of any automatic action low or keep a
-human in the loop.
+(a learner, a commit author, a player, an orchestrating model), keep the stakes of any automatic
+action low or keep a human in the loop.
 
 ## History
 

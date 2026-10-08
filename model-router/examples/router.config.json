@@ -1,0 +1,23 @@
+{
+  "routes": [
+    {
+      "id": "lookup",
+      "model": "claude-haiku-5-5",
+      "suits": "Finding, reading, listing or summarising what already exists, or making one small change whose exact content is given. Every step is known before starting."
+    },
+    {
+      "id": "standard",
+      "model": "claude-sonnet-5-5",
+      "suits": "Writing or changing code or text to a clear specification within a few files: a described feature, a bug with a known cause, tests for existing behaviour. The goal is settled, and how to reach it takes some judgment."
+    },
+    {
+      "id": "open_ended",
+      "model": "claude-opus-5-5",
+      "suits": "Work where the approach itself has to be worked out: a failure with an unknown cause, a design or plan with trade-offs, a change that reaches across many parts of a system, or a review that has to find subtle faults."
+    }
+  ],
+  "fallback": "standard",
+  "maxUnderRouteRisk": 0.25,
+  "rules": [{ "when": { "agent_type": "Explore" }, "route": "lookup" }],
+  "decider": { "backend": "typesafe", "model": "jev-latest" }
+}
