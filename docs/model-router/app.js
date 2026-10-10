@@ -50,7 +50,7 @@
     const offTop = runs.map((r) => N - atDefault(r).routes[ids[TOP]]);
     const sameOff = offTop.every((v) => v === offTop[0]);
     $("#hero-stats").innerHTML = `
-      <div class="stat"><div class="v">${N}<small> tasks</small></div><div class="k">hand-written sub-agent tasks, each asked once of ${runs.length} decision models</div></div>
+      <div class="stat"><div class="v">${N}<small> tasks</small></div><div class="k">sub-agent tasks written and labelled by Claude, each asked once of ${runs.length} decision models</div></div>
       <div class="stat"><div class="v">${under}</div><div class="k">tasks sent to a model too weak for them, by any of the three</div></div>
       <div class="stat"><div class="v">${sameOff ? pct(offTop[0]) : offTop.map(pct).join(" / ")}</div><div class="k">of tasks kept off the most capable model${sameOff ? ", by all three" : ""}. ${misses} miss in ${N * runs.length} decisions.</div></div>
       <div class="stat"><div class="v lat">${runs
@@ -73,7 +73,7 @@
         "1 · Routing",
         "On ≥ 100 real tasks, a bar where ≤ 5% go too low and ≥ 50% leave the top route",
         s.map((x) => `<span class="mark-na">${pct(x.under)} low · ${pct(N - x.routes[ids[TOP]])} off top</span>`),
-        `<span class="stamp">Not yet evidence</span><br><small>24 starter tasks, one author</small>`,
+        `<span class="stamp">Not yet evidence</span><br><small>24 starter tasks, all written by Claude</small>`,
       ],
       [
         "2 · Speed",

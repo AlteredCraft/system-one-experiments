@@ -351,6 +351,51 @@
         font-size: 0.78rem;
         color: var(--muted);
       }
+      .with-thumb {
+        display: grid;
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+        margin-top: 16px;
+      }
+      .thumb {
+        margin: 0;
+      }
+      .thumb a {
+        display: block;
+        border: 1px solid var(--rule);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .thumb a:hover {
+        border-color: var(--rule-strong);
+      }
+      .thumb img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .thumb figcaption {
+        margin-top: 6px;
+      }
+      .thumb .only-dark {
+        display: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .thumb .only-light {
+          display: none;
+        }
+        :root:not([data-theme="light"]) .thumb .only-dark {
+          display: block;
+        }
+      }
+      :root[data-theme="dark"] .thumb .only-light {
+        display: none;
+      }
+      :root[data-theme="dark"] .thumb .only-dark {
+        display: block;
+      }
       @media (max-width: 860px) {
         .specimens,
         .specimen.featured .grid {
@@ -358,7 +403,8 @@
         }
       }
       @media (max-width: 480px) {
-        .finding-row {
+        .finding-row,
+        .with-thumb {
           grid-template-columns: 1fr;
         }
       }
@@ -494,6 +540,21 @@
         margin-top: 0.9em;
       }
 
+      .ai-note {
+        max-width: var(--measure);
+        margin-top: 24px;
+        padding: 14px 16px;
+        border: 1px solid var(--rule);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .ai-note p {
+        margin: 4px 0 0;
+        font-size: 0.92rem;
+        color: var(--ink-2);
+      }
+
       .limits {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -528,7 +589,7 @@
         </a>
         <nav aria-label="Site">
           <a class="hide-sm" href="#experiments">Experiments</a>
-          <a class="hide-sm" href="#protocol">Protocol</a>
+          <a class="hide-sm" href="#process">Process</a>
           <a class="hide-sm" href="#notebook">Notebook</a>
           <a href="godot-jev/">Latest results</a>
           <a class="hide-sm" href="https://github.com/AlteredCraft/system-one-experiments">GitHub</a>
@@ -588,22 +649,25 @@
             <div>
               <h2>Why I ran these</h2>
               <p class="lede">
-                I wanted a quick, reasonably informed gut check on whether this class of model is viable. The jobs I
-                had in mind are small decisions that fixed rules can't make: which move a player meant, which model a
-                sub-agent task needs, which misconception an answer shows.
+                I wanted a quick, reasonably informed gut check on whether this class of model is viable for small
+                decisions that fixed rules can't make: which move a player meant, which model a sub-agent task needs,
+                which misconception an answer shows.
               </p>
               <p class="lede">
-                Each experiment follows the same method. It states a hypothesis and the checks that would confirm it,
-                pins the model version, records every answer, and builds its results page from those records. The
-                rigor still stops well short of a study. The samples are small and hand-written, the labels are one
-                person's opinion, and most of the checks are open. <a href="#limits">The limits are listed below.</a>
-              </p>
-              <p class="lede">
-                So far two of the four experiments have live runs. In both, a hosted model and two running on a laptop
+                Two of the four experiments have live runs so far. In both, a hosted model and two running on a laptop
                 handled a small set of mostly clear cases without a costly mistake, and differed in how sure they
-                were. That tells me the mechanism works. It doesn't give an accuracy figure. If one of these is close
-                to a problem you have, the code is there to run against your own data.
+                were. That tells me the mechanism works. It isn't an accuracy figure, and the
+                <a href="#rigor">note on rigor</a> says why.
               </p>
+              <aside class="ai-note">
+                <span class="label">On the use of AI</span>
+                <p>
+                  I leverage AI (with very close attention from myself), for the code and the documentation, this page
+                  included. I get real value from the write-ups: they are how I come to understand what a run showed.
+                  It is never my intention to publish slop, so if something here is wrong or reads as filler, please
+                  <a href="https://github.com/AlteredCraft/system-one-experiments/issues">open an issue</a>.
+                </p>
+              </aside>
             </div>
           </div>
         </div>
@@ -614,12 +678,17 @@
           <div class="sec-head reveal">
             <div class="sec-num">02</div>
             <div>
-              <h2>Three kinds of question, no prose</h2>
+              <h2>The premise: what Jev is</h2>
               <p class="lede">
-                <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">Jev</a> is TypeSafe's System
-                One model, and <a href="https://huggingface.co/openjev">Open Jev</a> serves the same
-                <code>/v1/systemone</code> API from open weights on your own machine. You send state and questions; you
-                get back distributions. The code around it decides what to do with them.
+                Jev is TypeSafe's System One model. It never writes a reply. You send it some state and typed
+                questions about that state, it returns a probability for every possible answer, and ordinary code
+                decides what to do with those numbers. <a href="https://huggingface.co/openjev">Open Jev</a> serves
+                the same API from open weights on your own machine.
+              </p>
+              <p class="lede">
+                It takes three kinds of question, and the experiments below use all three.
+                <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe's introduction</a>
+                covers the rest.
               </p>
             </div>
           </div>
@@ -661,7 +730,8 @@
               <p class="lede">
                 Each is a standalone directory with its own stack, a hypothesis, the checks that would confirm it, and
                 tests that run without an API key. <em>Skeleton</em> means the design is in code and tested against
-                scripted answers. <em>Live</em> means runs against real models are recorded, with dates.
+                scripted answers. <em>Live</em> means runs against real models are recorded, with dates. If one is
+                close to a problem you have, the code is there to run against your own data.
               </p>
             </div>
           </div>
@@ -679,10 +749,33 @@
                     An agent harness asks one Score question about a sub-agent's task, then takes the cheapest model
                     whose chance of being too weak is acceptable. The orchestrator spends no tokens deciding.
                   </p>
-                  <blockquote style="margin-top: 14px">
-                    One Jev call over the text of a sub-agent task chooses a model tier well enough to move a large
-                    share of work off the most capable model, while rarely sending a task to a model too weak for it.
-                  </blockquote>
+                  <div class="with-thumb">
+                    <figure class="thumb">
+                      <a href="model-router/">
+                        <img
+                          class="only-light"
+                          src="model-router/screenshot-light.png"
+                          width="640"
+                          height="360"
+                          loading="lazy"
+                          alt="The results page's route explorer: Open Jev Flash 9B's answer for task 15, moved up from lookup to standard"
+                        />
+                        <img
+                          class="only-dark"
+                          src="model-router/screenshot-dark.png"
+                          width="640"
+                          height="360"
+                          loading="lazy"
+                          alt="The results page's route explorer: Open Jev Flash 9B's answer for task 15, moved up from lookup to standard"
+                        />
+                      </a>
+                      <figcaption class="label">One decision, from the results page</figcaption>
+                    </figure>
+                    <blockquote>
+                      One Jev call over the text of a sub-agent task chooses a model tier well enough to move a large
+                      share of work off the most capable model, while rarely sending a task to a model too weak for it.
+                    </blockquote>
+                  </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px">
                   <span class="label">First live run · 2026-10-08 · 24 tasks</span>
@@ -700,7 +793,7 @@
                       <div class="t">median decision, TypeSafe Jev hosted (on one laptop: Flash 9B 181, 27B 567)</div>
                     </div>
                   </div>
-                  <p class="timing-note">Timings describe this setup, <a href="#limits">not how fast the models are</a>.</p>
+                  <p class="timing-note">Timings describe this setup, <a href="model-router/#latency-note">not how fast the models are</a>.</p>
                   <div class="links">
                     <a class="cta primary" href="model-router/">Walk through the results →</a>
                     <a class="cta" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/model-router">Code</a>
@@ -721,10 +814,24 @@
                     A dungeon crawl whose parser understands whatever you type but can only choose moves the author
                     wrote. Each turn, the possible moves become one Choice, plus "none of these".
                   </p>
-                  <blockquote style="margin-top: 14px">
-                    Players type naturally with few dead ends, the game stays fully authored, and it's fast enough to
-                    feel like a parser, not a chat.
-                  </blockquote>
+                  <div class="with-thumb">
+                    <figure class="thumb">
+                      <a href="godot-jev/">
+                        <img
+                          src="godot-jev/screenshot.png"
+                          width="1280"
+                          height="720"
+                          loading="lazy"
+                          alt="The Sunken Crypt: a pixel-art hall with a skeleton, the transcript, and a panel showing what Jev heard"
+                        />
+                      </a>
+                      <figcaption class="label">The game, asking "did you mean?"</figcaption>
+                    </figure>
+                    <blockquote>
+                      Players type naturally with few dead ends, the game stays fully authored, and it's fast enough to
+                      feel like a parser, not a chat.
+                    </blockquote>
+                  </div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 12px">
                   <span class="label">Three-model run · 2026-10-08 · 16 lines × 3 rounds</span>
@@ -742,7 +849,7 @@
                       <div class="t">median turn, TypeSafe Jev hosted (on one laptop: Flash 9B 185, 27B 579)</div>
                     </div>
                   </div>
-                  <p class="timing-note">Timings describe this setup, <a href="#limits">not how fast the models are</a>.</p>
+                  <p class="timing-note">Timings describe this setup, <a href="godot-jev/#latency-note">not how fast the models are</a>.</p>
                   <div class="links">
                     <a class="cta primary" href="godot-jev/">Walk through the results →</a>
                     <a class="cta" href="https://github.com/AlteredCraft/system-one-experiments/tree/main/godot-jev">Code</a>
@@ -800,37 +907,51 @@
         </div>
       </section>
 
-      <section id="protocol">
+      <section id="process">
         <div class="wrap">
           <div class="sec-head reveal">
             <div class="sec-num">04</div>
             <div>
-              <h2>Protocol</h2>
+              <h2>More about my process</h2>
               <p class="lede">
-                Every experiment is built the same way, so the model can be swapped and no test needs the network.
+                Each experiment's README states a hypothesis, the checks that would confirm it, and what is still
+                open. An AI coding agent does most of the building, tests first, working to a short set of rules kept
+                in the repository's
+                <a href="https://github.com/AlteredCraft/system-one-experiments/blob/main/AGENTS.md">AGENTS.md</a>.
+                One of them: loosening a check, or changing what an experiment is trying to show, is my decision and
+                not the agent's.
+              </p>
+              <p class="lede">
+                A live run is a script that pins the model version and writes every answer to a file. Each results
+                page is generated from those files, and the generator refuses to write if its totals differ from the
+                ones the run saved. When a check gets evidence, the README records it with the date.
+              </p>
+              <p class="lede">
+                The code follows the same five rules in every experiment, so the model can be swapped and no test
+                needs the network.
               </p>
             </div>
           </div>
           <ol class="protocol reveal">
             <li>
               <h3>A decider port</h3>
-              <p>Code asks <code>decide(state, questions)</code>. One adapter calls Jev; a scripted one drives the tests. No unit test calls the network.</p>
+              <p>Code asks <code>decide(state, questions)</code> and gets typed answers back. One adapter calls Jev and a scripted one drives the tests, so no unit test calls the network or needs a key.</p>
             </li>
             <li>
               <h3>Policy in code</h3>
-              <p>Thresholds, arithmetic, dates and counting stay in ordinary code. A policy change is a code change, not a prompt rewrite.</p>
+              <p>Thresholds, arithmetic, dates and counting stay in ordinary code. The model only makes the judgments, so a policy change is a code change, not a prompt rewrite.</p>
             </li>
             <li>
               <h3>Ask only what's open</h3>
-              <p>Deterministic rules go first. The model answers only what they leave undecided.</p>
+              <p>Deterministic rules go first: a Conventional Commit prefix, the moves possible in a room. The model answers only what they leave undecided.</p>
             </li>
             <li>
               <h3>Confidence decides the path</h3>
-              <p>Act, ask or escalate by how sure the model is, with the bar set by the cost of being wrong.</p>
+              <p>Act, ask or escalate by how sure the model is, with the bar set by the cost of being wrong. The crypt asks "did you mean?"; the router moves a task up a tier.</p>
             </li>
             <li>
               <h3>Fail safe</h3>
-              <p>If the model is unreachable, fall back to what the system did before it had one.</p>
+              <p>If the model is unreachable, each experiment falls back to what it did before: an authored "not possible" line, Conventional Commits only, the harness's default model.</p>
             </li>
           </ol>
         </div>
@@ -899,32 +1020,37 @@
         </div>
       </section>
 
-      <section id="limits">
+      <section id="rigor">
         <div class="wrap limits">
           <div class="reveal">
             <div class="sec-head" style="grid-template-columns: 1fr; margin-bottom: 0">
               <div class="sec-num" style="width: 48px; margin-bottom: 10px">06</div>
               <div>
-                <h2>Read before trusting</h2>
-                <p class="lede">Limits of the evidence, and of the models, that apply to every experiment here.</p>
+                <h2>A note on the current level of rigor</h2>
+                <p class="lede">
+                  The goal was a gut check, so the rigor is pragmatic: enough to tell whether an idea deserves more
+                  work, not enough to quote a number from. I plan to formalize it as the experiments continue, and
+                  each README's Open list says what comes next.
+                </p>
               </div>
             </div>
           </div>
           <ul class="reveal">
             <li>
-              <em>The evidence is thin.</em> The two live runs cover 24 tasks and 16 lines, hand-written for these
-              experiments, and most are clear cases. Nobody else has checked the labels, and nothing has been run on
-              input from real users.
+              <em>The samples are small.</em> The live runs cover 24 tasks and 16 lines, written for these experiments
+              and mostly clear cases.
             </li>
-            <li>Jev takes text only and reads instructions literally.</li>
-            <li>It can't count or compare dates. That's why arithmetic and thresholds live in code.</li>
-            <li>Text inside the state can argue for an answer: a learner, a commit author, a player or an orchestrating model can write "this is trivial".</li>
-            <li>Where the state comes from someone with a reason to game it, keep the stakes of any automatic action low, or keep a human in the loop.</li>
             <li>
-              <em>The latencies for the local models are not a statement of how fast those models are.</em> They come
-              from 4-bit MLX builds on one Apple M5 Pro laptop with other applications open. Server hardware, another
-              quantisation or another runtime would give different numbers. The hosted figures include a network
-              round trip from that laptop. Read every timing here as what a decision cost in this setup.
+              <em>AI did most of the work.</em> It wrote the code and these pages, and in model-router it also wrote
+              and labelled the tasks. Nobody else has checked the labels.
+            </li>
+            <li>
+              <em>The timings describe one laptop</em>, not how fast the models are. Each results page gives the
+              setup.
+            </li>
+            <li>
+              <em>Jev has limits of its own.</em> It can't count or compare dates, and text in its input can argue for
+              an answer, so keep the stakes of any automatic action low.
             </li>
           </ul>
         </div>
