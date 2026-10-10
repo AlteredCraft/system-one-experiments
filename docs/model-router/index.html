@@ -71,7 +71,7 @@
             One request to a System One model decides whether a sub-agent runs on Haiku, Sonnet or Opus. I asked
             three Jevs, one hosted and two running on a laptop, to make that call for the same tasks. Their routes
             nearly match. They differ in how sure they were, and in how long an answer took on this setup. This is
-            a gut check on a small, hand-written set of tasks, not a benchmark:
+            a gut check on a small set of tasks that Claude wrote and labelled, not a benchmark:
             <a href="#caveats">what it does and doesn't show</a>.
           </p>
           <div class="hero-stats" id="hero-stats"></div>
@@ -462,7 +462,7 @@
               <span class="label">It doesn't show</span>
               <ul>
                 <li><b>24 tasks, asked once each.</b> One task is 4 percentage points.</li>
-                <li><b>One author wrote everything.</b> The tasks, their labels and the route descriptions came from one sitting, so tasks echo the wording they're judged against ("find the cause" against "a failure with an unknown cause").</li>
+                <li><b>One author wrote everything.</b> Claude wrote the tasks, their labels and the route descriptions in one sitting, so tasks echo the wording they're judged against ("find the cause" against "a failure with an unknown cause").</li>
                 <li><b>Labels are opinions.</b> Nobody ran these tasks on the three Claude models to see which was enough. That needs a harness (check 4).</li>
                 <li><b>Flash 9B's 24 of 24 has little margin.</b> On tasks 13 to 16 it was close to an even split between two routes.</li>
                 <li><b>The tasks don't separate the models.</b> All three are at or near 24 of 24, so this says nothing about which decides best.</li>
